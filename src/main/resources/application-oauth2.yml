@@ -11,10 +11,10 @@ spring:
             client-id: 54767115914-gcla0mork6h3156h4qcutjerm0mdf4fu.apps.googleusercontent.com
             client-secret: 비밀키
             scope: profile,email
-          # 네이버는 spring security가 기본적을 제공해주지 않기 때문에 github, google과 달리 많은 정보를 적어줘야한다.
+          # 네이버는 spring security가 기본적으로 제공해주지 않기 때문에 github, google과 달리 많은 정보를 적어줘야한다.
           naver:
-            client-id: EEGXd3dZrJFkdwCQJ2gJ
-            client-secret: S_FLOO6KOF
+            client-id: ${OAUTH_CLIENT_ID}
+            client-secret: ${OAUTH_CLIENT_SECRET}
             redirect-uri: http://localhost:8000/auth
             authorization_grant_type: authorization_code
             scope: name,email,profile_image
