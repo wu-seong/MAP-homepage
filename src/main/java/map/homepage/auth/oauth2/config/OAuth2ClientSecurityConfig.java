@@ -21,8 +21,15 @@ public class OAuth2ClientSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .oauth2Client(oauth2 ->
-                        {}
+                .oauth2Login( oAuth2LoginConfigurer -> {
+                    oAuth2LoginConfigurer.
+                            authorizationEndpoint( authorizationEndpointConfig -> {
+                                authorizationEndpointConfig.baseUri("/oauth2/authorize");
+                            }).
+                            redirectionEndpoint( redirectionEndpointConfig -> {
+                                redirectionEndpointConfig.baseUri("/oauth2/callback/**");
+                            });
+                        }
                 );
         return http.build();
     }
