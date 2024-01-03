@@ -7,7 +7,7 @@ spring:
     active: dev #활성 프로필 설정
 ---
 spring:
-  confing:
+  config:
     activate:
       on-profile: "local"
   datasource:
@@ -29,19 +29,19 @@ spring:
             client-name: Naver
 ---
 spring:
-  confing:
+  config:
     activate:
       on-profile: "dev"
 
 ---
 spring:
-  confing:
+  config:
     activate:
       on-profile: "prod"
 
 ---
 spring:
-  confing:
+  config:
     activate:
       on-profile: "common"
   security:
