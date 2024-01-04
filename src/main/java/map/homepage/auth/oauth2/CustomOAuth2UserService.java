@@ -29,8 +29,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuthAttributes attributes = OAuthAttributes.of(provider, oAuth2User.getAttributes());
 
         //유저정보와 provider를 넘겨 db에 저장시킨다
-        System.out.println("oAuth2User = " + userNameAttributeName);
-        Member member = saveOrUpdate(attributes, oAuth2User.getName());
+        Member member = saveOrUpdate(attributes);
 
         // Security Context에 저장되는 유저객체
         return new DefaultOAuth2User(
@@ -41,8 +40,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         );
     }
 
-    private Member saveOrUpdate(OAuthAttributes attributes, String oauthId) {
-        Member member = memberRepository.findByOauthId(oauthId).orElseGet( () ->{
+    private Member saveOrUpdate(OAuthAttributes attributes) {
+        Member member = memberRepository.findByOauthId(attributes.getOauthId()).orElseGet( () ->{
             Member newMember = attributes.toEntity();
             return memberRepository.save(newMember);
         });
