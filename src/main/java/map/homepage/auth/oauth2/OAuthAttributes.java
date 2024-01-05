@@ -56,7 +56,7 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
-                .imageUri((String) attributes.get("profile_image"))
+                .imageUri((String) attributes.get("picture"))
                 .oauthId((String) attributes.get(("sub")))
                 .provider(provider)
                 //.attributes(attributes)
