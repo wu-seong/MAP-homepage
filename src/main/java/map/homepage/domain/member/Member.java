@@ -1,4 +1,4 @@
-package map.homepage.domain.user;
+package map.homepage.domain.member;
 
 
 import jakarta.persistence.*;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor  //모든 JPA 엔티티는 기본 생성자를 가지고 있어야 한다.
 @AllArgsConstructor //builder 사용을 위해서 추가
-public class User {
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,7 +34,7 @@ public class User {
     public void setOauthId(String oauthId){
         this.oauthId = oauthId;
     }
-    public User update(String name, String email, String imageUri) {
+    public Member update(String name, String email, String imageUri) {
         this.name = name;
         this.email = email;
         this.imageUri = imageUri;

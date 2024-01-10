@@ -1,4 +1,4 @@
-package map.homepage.auth.oauth2.handler;
+package map.homepage.domain.member.auth.oauth2.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

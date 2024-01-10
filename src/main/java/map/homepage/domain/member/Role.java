@@ -1,4 +1,4 @@
-package map.homepage.domain.user;
+package map.homepage.domain.member;
 
 
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 public enum Role {
     GUEST("ROLE_GUEST"),
-    USER("ROLE_USER"),
+    USER("ROLE_MEMBER"),
     ADMIN("ROLE_ADMIN");
 
     private String value;
