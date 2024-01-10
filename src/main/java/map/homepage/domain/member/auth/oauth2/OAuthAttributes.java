@@ -1,4 +1,4 @@
-package map.homepage.auth.oauth2;
+package map.homepage.domain.member.auth.oauth2;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

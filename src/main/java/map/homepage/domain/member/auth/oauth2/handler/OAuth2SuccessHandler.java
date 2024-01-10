@@ -1,23 +1,18 @@
-package map.homepage.auth.oauth2.handler;
+package map.homepage.domain.member.auth.oauth2.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import map.homepage.auth.jwt.service.JwtUtil;
-import map.homepage.auth.jwt.token.JwtToken;
-import org.springframework.context.annotation.Bean;
+import map.homepage.domain.member.auth.jwt.service.JwtUtil;
+import map.homepage.domain.member.auth.jwt.token.JwtToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 
 /*
@@ -43,6 +38,8 @@ public class OAuth2SuccessHandler extends SavedRequestAwareAuthenticationSuccess
                 .orElseThrow(IllegalAccessError::new) // 존재하지 않을 시 예외를 던진다.
                 .getAuthority(); // Role을 가져온다.
         log.info("role = {}", role);
+        //DB에 role확인해서 변경하는 로직 추가해야 함
+
         // 회원이 존재하면 jwt token 발행을 시작한다.
         JwtToken token = jwtUtil.generateToken(email, role);
         log.info("requesturI = {}", request.getRequestURI());
