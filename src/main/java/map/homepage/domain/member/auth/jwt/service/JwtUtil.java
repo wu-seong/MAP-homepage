@@ -1,15 +1,19 @@
-package map.homepage.auth.jwt.service;
+package map.homepage.domain.member.auth.jwt.service;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import map.homepage.auth.jwt.token.JwtToken;
+import lombok.extern.slf4j.Slf4j;
+import map.homepage.domain.member.auth.jwt.token.JwtToken;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.util.Base64;
 import java.util.Date;
 
@@ -17,15 +21,16 @@ import java.util.Date;
 /**
  토큰의 속성을 정의하고 생성하는 역할
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class JwtUtil {
     @Value("${spring.jwt.secret}")
     private String secret;
-
+    private SecretKey secretkey;
     @PostConstruct
-    protected void init() {
-        secret = Base64.getEncoder().encodeToString(secret.getBytes());
+    public void init() {
+        this.secretkey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
 
 
@@ -33,7 +38,7 @@ public class JwtUtil {
         // refreshToken과 accessToken을 생성한다.
         String refreshToken = generateRefreshToken(email, role);
         String accessToken = generateAccessToken(email, role);
-
+        log.info("accessToken = {}", accessToken);
         return new JwtToken(accessToken, refreshToken);
     }
 
@@ -57,13 +62,14 @@ public class JwtUtil {
                 // 토큰의 만료일시를 설정한다.
                 .setExpiration(new Date(now.getTime() + refreshPeriod))
                 // 지정된 서명 알고리즘과 비밀 키를 사용하여 토큰을 서명한다.
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(secretkey, SignatureAlgorithm.HS256)
                 // JWT의 각 부분을 Base64Url 인코딩하고 이들을 '.'으로 연결하여 최종적인 JWT 문자열을 생성합니다.(URL-safe 문자열로 압축)
                 .compact();
     }
 
 
     public String generateAccessToken(String email, String role) {
+
         long tokenPeriod = 1000L * 60L * 30L; // 30분
         Claims claims = Jwts.claims()
                 .subject(email)
@@ -80,7 +86,7 @@ public class JwtUtil {
                         // 토큰의 만료일시를 설정한다.
                         .setExpiration(new Date(now.getTime() + tokenPeriod))
                         // 지정된 서명 알고리즘과 비밀 키를 사용하여 토큰을 서명한다.
-                        .signWith(SignatureAlgorithm.HS256, secret)
+                        .signWith(secretkey, SignatureAlgorithm.HS256)
                         .compact();
 
     }

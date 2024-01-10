@@ -1,4 +1,4 @@
-package map.homepage.auth.jwt.token;
+package map.homepage.domain.member.auth.jwt.token;
 
 
 import lombok.*;
