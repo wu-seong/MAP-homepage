@@ -1,5 +1,6 @@
 package map.homepage.domain.post;
 
+import map.homepage.domain.post.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
