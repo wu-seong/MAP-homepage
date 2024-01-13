@@ -9,6 +9,7 @@ import map.homepage.domain.common.BaseEntity;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.Role;
 import map.homepage.domain.post.Post;
+import org.h2.engine.User;
 
 import java.time.LocalDateTime;
 
@@ -26,9 +27,9 @@ public class Comment extends BaseEntity {
     private String content;
 
     // 외래키
-    @ManyToOne
+    @ManyToOne // 지연 로딩
     @JoinColumn(name = "user_id")
-    private Member member;
+    private Member user;
 
     @ManyToOne
     @JoinColumn(name = "post_id")

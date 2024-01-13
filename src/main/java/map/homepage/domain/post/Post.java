@@ -21,8 +21,8 @@ public class Post {
     private Long id; // 게시글 ID
 
     @ManyToOne(fetch = FetchType.LAZY) // 지연 로딩
-    @JoinColumn // 외래키
-    private Member member; // 게시글 작성자
+    @JoinColumn(name = "user_id") // 외래키
+    private Member user; // 게시글 작성자
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
