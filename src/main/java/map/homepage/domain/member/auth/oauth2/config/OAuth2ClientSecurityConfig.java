@@ -15,6 +15,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity // spring security 설정을 활성화시켜주는 어노테이션
@@ -39,6 +44,9 @@ public class OAuth2ClientSecurityConfig {
                 })
                 .logout( out ->{
                     out.disable();
+                })
+                .cors( cors -> {
+                    cors.configurationSource(corsConfigurationSource());
                 })
                 // 세션기반 인증이 아니니 사용하지 않도록 설정
                 .sessionManagement( session ->{
@@ -71,6 +79,20 @@ public class OAuth2ClientSecurityConfig {
 
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        config.setAllowedMethods(Arrays.asList("HEAD","POST","GET","DELETE","PUT"));
+        config.setAllowedHeaders(Arrays.asList("*"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
