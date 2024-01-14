@@ -3,6 +3,7 @@ package map.homepage.domain.member.auth.oauth2;
 import lombok.RequiredArgsConstructor;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.MemberRepository;
+import map.homepage.domain.member.service.MemberService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -15,7 +16,7 @@ import java.util.Collections;
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     //1. 인증이 완료 됐으면 코드를 통해 토큰을 가져오고 토큰을 통해 유저 정보를 가져오기
     //2. 가져온 유저정보를 DB에 저장 혹은 갱신
     @Override
@@ -29,7 +30,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuthAttributes attributes = OAuthAttributes.of(provider, oAuth2User.getAttributes());
 
         //유저정보와 provider를 넘겨 db에 저장시킨다
-        Member member = saveOrUpdate(attributes);
+        Member member = memberService.saveOrUpdate(attributes);
 
         // Security Context에 저장되는 유저객체
         return new DefaultOAuth2User(
@@ -38,14 +39,5 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 oAuth2User.getAttributes(),
                 userNameAttributeName
         );
-    }
-
-    private Member saveOrUpdate(OAuthAttributes attributes) {
-        Member member = memberRepository.findByOauthId(attributes.getOauthId()).orElseGet( () ->{
-            Member newMember = attributes.toEntity();
-            return memberRepository.save(newMember);
-        });
-        member.update(attributes.getName(), attributes.getEmail(), attributes.getImageUri());
-        return memberRepository.save(member);
     }
 }
