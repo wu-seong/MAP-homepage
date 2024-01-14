@@ -21,15 +21,15 @@ import java.time.LocalDateTime;
 public class Comment extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String content;
 
     // 외래키
     @ManyToOne // 지연 로딩
-    @JoinColumn(name = "user_id")
-    private Member user;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
