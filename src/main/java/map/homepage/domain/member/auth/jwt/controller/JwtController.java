@@ -30,8 +30,8 @@ public class JwtController {
             return ResponseEntity.badRequest().build();
         }
         if( jwtTokenProvider.verifyToken(refreshToken) ){
-            String email = jwtTokenProvider.getEmail(refreshToken);
-            String role = jwtTokenProvider.getRole(refreshToken);
+            String email = jwtUtil.getEmail(refreshToken);
+            String role = jwtUtil.getRole(refreshToken);
             JwtToken jwtToken = jwtUtil.generateToken(email, role);
             log.info("accessToken = {}", jwtToken.getAccessToken());
 

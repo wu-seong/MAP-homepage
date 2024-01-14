@@ -90,4 +90,24 @@ public class JwtUtil {
                         .compact();
 
     }
+
+    // 토큰에서 Email을 추출한다.
+    public String getEmail(String token) {
+        return Jwts.parser()
+                .verifyWith(secretkey)
+                .build() // 비밀키를 설정하여 파서를 빌드.
+                .parseSignedClaims(token)// 주어진 토큰을 파싱하여 Claims 객체를 얻는다.
+                .getPayload()
+                .getSubject();
+    }
+
+    // 토큰에서 ROLE(권한)만 추출한다.
+    public String getRole(String token) {
+        return Jwts.parser()
+                .verifyWith(secretkey)
+                .build() // 비밀키를 설정하여 파서를 빌드.
+                .parseSignedClaims(token)// 주어진 토큰을 파싱하여 Claims 객체를 얻는다.
+                .getPayload()
+                .get("role", String.class);
+    }
 }
