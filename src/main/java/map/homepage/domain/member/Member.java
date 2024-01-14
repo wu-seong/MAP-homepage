@@ -50,6 +50,7 @@ public class Member {
     private Role role;
 
 
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Post> postList;
 
