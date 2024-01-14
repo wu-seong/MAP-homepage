@@ -22,7 +22,8 @@ import java.util.List;
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "member_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String oauthId;
@@ -49,13 +50,12 @@ public class Member {
     private Role role;
 
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Post> postList = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) 코멘트 완성 되면 주석 해제
-//    private List<Comment> commentList = new ArrayList<>();
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Post> postList;
 
-
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL) // 코멘트 완성 되면 주석 해제
+    private List<Comment> commentList;
 
     public void setOauthId(String oauthId){
         this.oauthId = oauthId;

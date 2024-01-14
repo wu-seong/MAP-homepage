@@ -17,7 +17,7 @@ import java.util.List;
 public class Post {
 
     @Id // 기본키
-    @GeneratedValue(strategy = GenerationType.AUTO) //기본키 자동 생성
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //기본키 자동 생성
     private Long id; // 게시글 ID
 
     @ManyToOne(fetch = FetchType.LAZY) // 지연 로딩
