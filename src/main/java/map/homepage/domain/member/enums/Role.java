@@ -1,4 +1,4 @@
-package map.homepage.domain.member;
+package map.homepage.domain.member.enums;
 
 
 import lombok.AllArgsConstructor;

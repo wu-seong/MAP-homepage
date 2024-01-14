@@ -7,11 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import map.homepage.domain.common.BaseEntity;
 import map.homepage.domain.member.Member;
-import map.homepage.domain.member.Role;
+import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.post.Post;
-import org.h2.engine.User;
-
-import java.time.LocalDateTime;
 
 @Entity // 해당 클래스가 JPA의 엔티티임을 명시
 @Builder // 빌더 패턴 (디자인 패턴)

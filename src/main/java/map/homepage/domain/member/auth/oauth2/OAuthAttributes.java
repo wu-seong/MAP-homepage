@@ -3,7 +3,7 @@ package map.homepage.domain.member.auth.oauth2;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import map.homepage.domain.member.Role;
+import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.member.Member;
 
 import java.util.Map;

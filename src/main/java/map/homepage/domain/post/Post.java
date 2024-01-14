@@ -3,7 +3,7 @@ package map.homepage.domain.post;
 import jakarta.persistence.*;
 import lombok.*;
 import map.homepage.domain.member.Member;
-import map.homepage.domain.member.Role;
+import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.post.comment.Comment;
 
 import java.util.List;
