@@ -10,6 +10,8 @@ import map.homepage.domain.member.Member;
 import map.homepage.domain.member.Role;
 import map.homepage.domain.post.Post;
 import org.h2.engine.User;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -29,10 +31,12 @@ public class Comment extends BaseEntity {
     // 외래키
     @ManyToOne // 지연 로딩
     @JoinColumn(name = "member_id")
+    @OnDelete(action = OnDeleteAction.CASCADE) // 연관된 member가 삭제 되면 같이 삭제
     private Member member;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
 
     // 읽기 권한
