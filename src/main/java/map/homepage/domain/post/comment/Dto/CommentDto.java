@@ -1,8 +1,9 @@
-package map.homepage.domain.post.comment;
+package map.homepage.domain.post.comment.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import map.homepage.domain.post.comment.Comment;
 
 @Data // getter, setter 만들어줌
 @NoArgsConstructor // 파라미터가 없는 기본 생성자를 생성
