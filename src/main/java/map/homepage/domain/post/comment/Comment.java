@@ -42,4 +42,14 @@ public class Comment extends BaseEntity {
     // 읽기 권한
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public Comment(final String content, final Member member, final Post post) {
+        this.content = content;
+        this.member = member;
+        this.post = post;
+    }
+    // Role이 있어서 안해도 되는 것인지?
+    //    public boolean isOwnComment(final Member member) {
+    //        return this.member.equals(member);
+    //    }
 }
