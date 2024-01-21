@@ -24,9 +24,10 @@ public class LoginService {
     */
     public String getAccessToken(String code){
         KakaoOauth2DTO.TokenResponseDTO tokenResponseDTO = kakaoOauth2Client.getAccessToken("authorization_code",
-                "32c0787d1b1e9fcabcc24af247903ba8",
-                "http://localhost:8080/oauth2/login/kakao",
+                "a646059593978bf76530118502f575f3",
+                "http://localhost:3000/oauth2/login/kakao",
                 code);
+        log.info("token = {}", tokenResponseDTO.getAccessToken());
         return tokenResponseDTO.getAccessToken();
     }
 
@@ -42,6 +43,7 @@ public class LoginService {
         ObjectMapper objectMapper = new ObjectMapper();
         String propertyKeys = objectMapper.writeValueAsString(propertyKeysList);
         KakaoOauth2DTO.UserInfoResponseDTO userInfoResponseDTO = kakaoApiClient.getUserInfo(accessToken, propertyKeys);
+        log.info("userInfo ={}", userInfoResponseDTO.getKakaoAccount());
         return userInfoResponseDTO;
     }
 }

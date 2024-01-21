@@ -50,6 +50,8 @@ public class LoginController {
          4. 응답 헤더에 Jwt 토큰 추가
       */
     @Operation(summary = "소셜 로그인 인증 API", description = "토큰으로 정보 조회 및 저장, 성공시 응답 헤더에 jwt토큰 추가")
+    @CrossOrigin(origins = "http://localhost:3000")
+    @ResponseBody
     @GetMapping("/oauth2/login/kakao")
     public ApiResponse<?> getAccessToken(HttpServletResponse response, @RequestParam(name = "code") String code){
         String accessToken = loginService.getAccessToken(code);

@@ -19,12 +19,8 @@ public class CustomErrorDecoder implements ErrorDecoder {
         // 응답 본문 파싱
         ObjectMapper objectMapper = new ObjectMapper();
         ErrorResponseDTO errorResponseDTO = null;
-        try {
-            errorResponseDTO = objectMapper.readValue(response.body().asInputStream(), ErrorResponseDTO.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        int code = errorResponseDTO.getCode();
+        log.info("body ={}", response);
+
 
         String path = response.request().url();
         // 토큰 유효성 응답에 대한 처리
