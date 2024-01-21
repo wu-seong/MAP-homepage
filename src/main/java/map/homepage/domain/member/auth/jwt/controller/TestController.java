@@ -1,14 +1,18 @@
 package map.homepage.domain.member.auth.jwt.controller;
 
 
+import lombok.extern.slf4j.Slf4j;
+import map.homepage.domain.member.Member;
+import map.homepage.domain.member.auth.MemberContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Slf4j
 public class TestController {
     @GetMapping("/test")
-    public String test(){
-        System.out.println("요청 무사 전달");
-        return "ok!";
+    public Member test(){
+        Member member = MemberContext.getMember();
+        return member;
     }
 }
