@@ -14,8 +14,8 @@ public class TestController {
 
     @Operation(summary = "테스트 API",description = "토큰검증 후 파싱하여 유저 객체 전역적으로 생성하는지 테스트")
     @GetMapping("/test")
-    public Member test(){
+    public String test(){
         Member member = MemberContext.getMember();
-        return member;
+        return member.getName();
     }
 }
