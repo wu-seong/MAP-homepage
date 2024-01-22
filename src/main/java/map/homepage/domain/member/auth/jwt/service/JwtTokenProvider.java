@@ -1,6 +1,5 @@
 package map.homepage.domain.member.auth.jwt.service;
 
-import com.nimbusds.oauth2.sdk.auth.JWTAuthentication;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -10,10 +9,6 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -31,11 +26,9 @@ public class JwtTokenProvider {
     @Value("${spring.jwt.secret}")
     private String secret;
     private SecretKey secretkey;
-    private NimbusJwtDecoder jwtDecoder;
     @PostConstruct
     public void init() {
         this.secretkey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-        this.jwtDecoder = NimbusJwtDecoder.withSecretKey(secretkey).build();
     }
 
     public boolean verifyToken(String token) {
@@ -52,35 +45,5 @@ public class JwtTokenProvider {
             log.info("토큰 만료 = {}", token);
             return false;
         }
-    }
-
-
-    // 토큰에서 Email을 추출한다.
-    public String getEmail(String token) {
-        return Jwts.parser()
-                .verifyWith(secretkey)
-                .build() // 비밀키를 설정하여 파서를 빌드.
-                .parseSignedClaims(token)// 주어진 토큰을 파싱하여 Claims 객체를 얻는다.
-                .getPayload()
-                .getSubject();
-    }
-
-    // 토큰에서 ROLE(권한)만 추출한다.
-    public String getRole(String token) {
-        return Jwts.parser()
-                .verifyWith(secretkey)
-                .build() // 비밀키를 설정하여 파서를 빌드.
-                .parseSignedClaims(token)// 주어진 토큰을 파싱하여 Claims 객체를 얻는다.
-                .getPayload()
-                .get("role", String.class);
-    }
-
-    //accessToken decode하여 인증객체 생성
-    public Authentication getAuthentication(String token) {
-        Jwt jwt = jwtDecoder.decode(token);
-        JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(jwt);
-        jwtAuthenticationToken.setAuthenticated(true);
-
-        return jwtAuthenticationToken;
     }
 }

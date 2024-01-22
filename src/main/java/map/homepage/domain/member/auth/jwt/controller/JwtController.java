@@ -3,6 +3,7 @@ package map.homepage.domain.member.auth.jwt.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import map.homepage.domain.member.Role;
 import map.homepage.domain.member.auth.jwt.service.JwtTokenProvider;
 import map.homepage.domain.member.auth.jwt.service.JwtUtil;
 import map.homepage.domain.member.auth.jwt.token.JwtToken;
@@ -30,9 +31,9 @@ public class JwtController {
             return ResponseEntity.badRequest().build();
         }
         if( jwtTokenProvider.verifyToken(refreshToken) ){
-            String email = jwtTokenProvider.getEmail(refreshToken);
-            String role = jwtTokenProvider.getRole(refreshToken);
-            JwtToken jwtToken = jwtUtil.generateToken(email, role);
+            String memberId = jwtUtil.getMemberId(refreshToken);
+            String role = jwtUtil.getRole(refreshToken);
+            JwtToken jwtToken = jwtUtil.generateToken(memberId, Enum.valueOf(Role.class, role));
             log.info("accessToken = {}", jwtToken.getAccessToken());
 
             HttpHeaders headers = new HttpHeaders();
