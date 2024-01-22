@@ -1,18 +1,26 @@
 package map.homepage.domain.post;
 
 import map.homepage.domain.post.PostRepository;
+import map.homepage.domain.post.dto.PostResponseDTO;
+import map.homepage.domain.post.dto.PostRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
-public class PostService { // 비즈니스 로직 처리 (예외 처리)
-    private final PostRepository postRepository;
+public interface PostService {
 
-    @Autowired
-    public PostService(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
+    List<PostResponseDTO> getPostList();
 
-    // 비즈니스 로직 메서드들
+//    PostResponseDTO getPostDetails(Long postId);
+//
+//    Long createPost(PostRequestDTO postRequestDTO);
+//
+//    boolean updatePost(Long postId, PostRequestDTO postRequestDTO);
+//
+//    boolean deletePost(Long postId);
 }
 

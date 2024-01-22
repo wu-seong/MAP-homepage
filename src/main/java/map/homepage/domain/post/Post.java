@@ -2,6 +2,7 @@ package map.homepage.domain.post;
 
 import jakarta.persistence.*;
 import lombok.*;
+import map.homepage.domain.common.BaseEntity;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.Role;
 import map.homepage.domain.post.comment.Comment;
@@ -14,14 +15,16 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post {
+@Table(name = "post")
+public class Post extends BaseEntity {
 
     @Id // 기본키
+    @Column(name = "post_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY) //기본키 자동 생성
     private Long id; // 게시글 ID
 
     @ManyToOne(fetch = FetchType.LAZY) // 지연 로딩
-    @JoinColumn // 외래키
+    @JoinColumn(name = "MEMBER_MEMBER_ID") // 외래키
     private Member member; // 게시글 작성자
 
     @OneToMany(mappedBy = "post")
