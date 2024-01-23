@@ -30,6 +30,4 @@ public class PostResponseDTO {
         dto.setCreatedAt(post.getCreatedAt());
         return dto;
     }
-
-    //
 }

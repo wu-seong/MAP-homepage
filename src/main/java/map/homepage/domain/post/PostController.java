@@ -35,12 +35,20 @@ public class PostController {
     }
 
     // 게시글 추가
-    @PostMapping("/{memberId}/add")
-    public PostResponseDTO addPost(
+    @PostMapping("/{memberId}/create")
+    public PostResponseDTO createPost(@PathVariable Long memberId,
+                                      @RequestBody PostRequestDTO postRequestDTO) {
+        return postService.createPost(memberId, postRequestDTO);
+    }
+
+    // 게시글 수정
+    @PutMapping("/{memberId}/{postId}/update")
+    public PostResponseDTO updatePost(
             @PathVariable Long memberId,
+            @PathVariable Long postId,
             @RequestBody PostRequestDTO postRequestDTO
     ) {
-        return postService.addPost(memberId, postRequestDTO);
+        return postService.updatePost(memberId, postId, postRequestDTO);
     }
 }
 
