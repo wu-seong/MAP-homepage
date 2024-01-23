@@ -9,7 +9,7 @@ import map.homepage.domain.common.BaseEntity;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.Role;
 import map.homepage.domain.post.Post;
-import org.h2.engine.User;
+//import org.h2.engine.User;
 
 import java.time.LocalDateTime;
 
