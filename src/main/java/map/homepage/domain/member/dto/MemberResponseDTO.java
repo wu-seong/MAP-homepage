@@ -29,7 +29,7 @@ public class MemberResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UserDetailDTO{
+    public static class MemberDetailDTO{
         private Long id;
         private Long oauthId;
         private boolean infoSet;

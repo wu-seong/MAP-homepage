@@ -1,14 +1,9 @@
 package map.homepage.domain.member.converter;
 
 import map.homepage.domain.member.Member;
-import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.member.auth.oauth2.feignClient.dto.KakaoOauth2DTO;
 import map.homepage.domain.member.dto.MemberResponseDTO;
-import map.homepage.domain.member.enums.SocialType;
-import map.homepage.domain.member.enums.Status;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class MemberConverter {
     public static Member toMember(KakaoOauth2DTO.UserInfoResponseDTO response){
@@ -29,8 +24,8 @@ public class MemberConverter {
 
     }
 
-    public static MemberResponseDTO.UserDetailDTO toMemberDetailDTO(Member member){
-        return MemberResponseDTO.UserDetailDTO.builder()
+    public static MemberResponseDTO.MemberDetailDTO toMemberDetailDTO(Member member){
+        return MemberResponseDTO.MemberDetailDTO.builder()
                 .id(member.getId())
                 .oauthId(member.getOauthId())
                 .email(member.getEmail())
