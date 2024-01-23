@@ -4,8 +4,10 @@ import map.homepage.domain.post.Post;
 import map.homepage.domain.post.PostRepository;
 import map.homepage.domain.post.dto.PostRequestDTO;
 import map.homepage.domain.post.dto.PostResponseDTO;
+import map.homepage.domain.post.exception.PostNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +23,7 @@ public class PostServiceImpl implements PostService {
         this.postRepository = postRepository;
     }
 
+    // 게시글 목록 조회
     @Override
     public List<PostResponseDTO> getPostList() {
         List<Post> posts = postRepository.findAll();
@@ -29,38 +32,20 @@ public class PostServiceImpl implements PostService {
                 .collect(Collectors.toList());
     }
 
-//    @Override
-//    public PostResponseDTO getPostDetails(Long postId) {
-//        Optional<Post> optionalPost = postRepository.findById(postId);
-//        return optionalPost.map(PostResponseDTO::fromEntity).orElse(null);
-//    }
-//
-//    @Override
-//    public Long createPost(PostRequestDTO postRequestDTO) {
-//        Post post = new Post();
-//        Post savedPost = postRepository.save(post);
-//        return savedPost.getId();
-//    }
-//
-//    @Override
-//    public boolean updatePost(Long postId, PostRequestDTO postRequestDTO) {
-//        Optional<Post> optionalPost = postRepository.findById(postId);
-//        if (optionalPost.isPresent()) {
-//            Post post = optionalPost.get();
-//            post.setTitle(postRequestDTO.getTitle());
-//            post.setContent(postRequestDTO.getContent());
-//            postRepository.save(post);
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean deletePost(Long postId) {
-//        if (postRepository.existsById(postId)) {
-//            postRepository.deleteById(postId);
-//            return true;
-//        }
-//        return false;
-//    }
+    // 단일 게시글 조회
+    @Override
+    @Transactional
+    public PostResponseDTO viewPost(Long postId) {
+        Optional<Post> optionalPost = postRepository.findById(postId);
+        if (optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+
+            // 조회 수 증가
+            post.setViews(post.getViews() + 1);
+
+            return PostResponseDTO.fromEntity(post);
+        } else {
+            throw new PostNotFoundException("삭제된 게시글입니다 :" + postId);
+        }
+    }
 }

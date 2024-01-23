@@ -1,29 +1,33 @@
 package map.homepage.domain.post.dto;
 
 import lombok.*;
+import map.homepage.domain.member.Role;
 import map.homepage.domain.post.Post;
+import org.springframework.web.bind.annotation.RestController;
 
-@Setter
+import java.time.LocalDateTime;
+
+@Data
 public class PostResponseDTO {
 
-    private Long id;
-    private String title;
+    private Long postId;
+    private int views;
     private String content;
+    private String dtype;
+    private Role role;
+    private String title;
+    private LocalDateTime createdAt;
 
-    // 생성자
-    public PostResponseDTO(Long id, String title, String content) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-    }
-
-    // 엔티티로부터 DTO 생성
     public static PostResponseDTO fromEntity(Post post) {
-        return new PostResponseDTO(post.getId(), post.getTitle(), post.getContent());
+        PostResponseDTO dto = new PostResponseDTO();
+        dto.setPostId(post.getId());
+        dto.setViews(post.getViews());
+        dto.setContent(post.getContent());
+        dto.setDtype(post.getDtype());
+        dto.setRole(post.getRole());
+        dto.setTitle(post.getTitle());
+        dto.setCreatedAt(post.getCreatedAt());
+        return dto;
     }
 
-    // Getter 메서드들은 필요에 따라 추가
-    public Long getId() {return id;}
-    public String getTitle() {return title;}
-    public String getContent() {return content;}
 }

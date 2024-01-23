@@ -13,14 +13,7 @@ import java.util.stream.Collectors;
 @Service
 public interface PostService {
 
-    List<PostResponseDTO> getPostList();
-
-//    PostResponseDTO getPostDetails(Long postId);
-//
-//    Long createPost(PostRequestDTO postRequestDTO);
-//
-//    boolean updatePost(Long postId, PostRequestDTO postRequestDTO);
-//
-//    boolean deletePost(Long postId);
+    List<PostResponseDTO> getPostList(); // 게시글 목록 조회
+    PostResponseDTO viewPost(Long postId); // 단일 게시글 조회
 }
 
