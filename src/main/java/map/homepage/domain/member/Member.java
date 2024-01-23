@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import map.homepage.domain.common.BaseEntity;
+import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.member.enums.SocialType;
 import map.homepage.domain.member.enums.Status;
 import map.homepage.domain.post.Post;

@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import map.homepage.apiPayload.ApiResponse;
 import map.homepage.apiPayload.code.status.SuccessStatus;
 import map.homepage.domain.member.Member;
-import map.homepage.domain.member.Role;
+import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.member.auth.jwt.service.JwtUtil;
 import map.homepage.domain.member.auth.jwt.token.JwtToken;
 import map.homepage.domain.member.auth.oauth2.feignClient.dto.KakaoOauth2DTO;
