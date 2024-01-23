@@ -39,7 +39,7 @@ public class LoginController {
     public String login(){
         String redirectUri = UriComponentsBuilder.fromUriString("https://kauth.kakao.com/oauth/authorize")
                 .queryParam("response_type", "code")
-                .queryParam("client_id", "32c0787d1b1e9fcabcc24af247903ba8")
+                .queryParam("client_id", "a646059593978bf76530118502f575f3")
                 .queryParam("redirect_uri", "http://localhost:3000/oauth2/login/kakao")
                 .toUriString();
         return "redirect:" + redirectUri;

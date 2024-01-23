@@ -13,7 +13,7 @@ public class MemberRequestDTO {
     @Builder
     @Getter
     @AllArgsConstructor
-    public static class MemberSignUpDTO{
+    public static class MemberUpdateDTO{
         private String studentId;
         private String nickname;
         private String birth;
