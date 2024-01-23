@@ -1,6 +1,5 @@
 package map.homepage.domain.member.auth.jwt.service;
 
-import com.nimbusds.oauth2.sdk.auth.JWTAuthentication;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -10,10 +9,6 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -31,11 +26,9 @@ public class JwtTokenProvider {
     @Value("${spring.jwt.secret}")
     private String secret;
     private SecretKey secretkey;
-    private NimbusJwtDecoder jwtDecoder;
     @PostConstruct
     public void init() {
         this.secretkey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-        this.jwtDecoder = NimbusJwtDecoder.withSecretKey(secretkey).build();
     }
 
     public boolean verifyToken(String token) {
@@ -52,15 +45,5 @@ public class JwtTokenProvider {
             log.info("토큰 만료 = {}", token);
             return false;
         }
-    }
-
-
-    //accessToken decode하여 인증객체 생성
-    public Authentication getAuthentication(String token) {
-        Jwt jwt = jwtDecoder.decode(token);
-        JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(jwt);
-        jwtAuthenticationToken.setAuthenticated(true);
-
-        return jwtAuthenticationToken;
     }
 }

@@ -7,14 +7,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import map.homepage.domain.common.BaseEntity;
-import map.homepage.domain.member.enums.Role;
+import map.homepage.domain.member.enums.SocialType;
 import map.homepage.domain.member.enums.Status;
 import map.homepage.domain.post.Post;
 import map.homepage.domain.post.comment.Comment;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity // -> JPA가 인식하고 테이블로 변환시킬 객체에 써주면 됨
@@ -29,9 +29,10 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String oauthId;
+    private Long oauthId;
 
-    private String studentId;
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
+    private boolean infoSet; //추가 정보 기입 여부
 
     private String name;
 
@@ -39,7 +40,7 @@ public class Member extends BaseEntity {
 
     private String email; // oauth2 제공자가 알려준 email
 
-    @Column(columnDefinition = "VARCHAR(10) default 'ACTIVE'")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     private LocalDateTime inactiveDate;
@@ -50,7 +51,8 @@ public class Member extends BaseEntity {
 
     private String imageUri; //프로필 이미지 경로
 
-    private String provider; //oauth2 제공자
+    @Enumerated(EnumType.STRING)
+    private SocialType socialType; //oauth2 제공자
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -62,10 +64,6 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL) // 코멘트 완성 되면 주석 해제
     private List<Comment> commentList;
-
-    public void setOauthId(String oauthId){
-        this.oauthId = oauthId;
-    }
     public Member update(String name, String email, String imageUri) {
         this.name = name;
         this.email = email;

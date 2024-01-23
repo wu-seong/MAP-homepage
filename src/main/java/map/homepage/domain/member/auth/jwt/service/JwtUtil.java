@@ -8,13 +8,12 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import map.homepage.domain.member.Role;
 import map.homepage.domain.member.auth.jwt.token.JwtToken;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.util.Base64;
 import java.util.Date;
 
 
@@ -34,21 +33,21 @@ public class JwtUtil {
     }
 
 
-    public JwtToken generateToken(String email, String role) {
+    public JwtToken generateToken(String memberId, Role role) {
         // refreshToken과 accessToken을 생성한다.
-        String refreshToken = generateRefreshToken(email, role);
-        String accessToken = generateAccessToken(email, role);
+        String refreshToken = generateRefreshToken(memberId, role);
+        String accessToken = generateAccessToken(memberId, role);
         log.info("accessToken = {}", accessToken);
         return new JwtToken(accessToken, refreshToken);
     }
 
-    public String generateRefreshToken(String email, String role) {
+    public String generateRefreshToken(String memberId, Role role) {
         // 토큰의 유효 기간을 밀리초 단위로 설정.
         long refreshPeriod = 1000L * 60L * 60L * 24L * 14; // 2주
 
         // 새로운 클레임 객체를 생성하고, 이메일과 역할(권한)을 셋팅
         Claims claims = Jwts.claims()
-                .subject(email)
+                .subject(memberId)
                 .add("role", role)
                 .build();
         // 현재 시간과 날짜를 가져온다.
@@ -68,11 +67,11 @@ public class JwtUtil {
     }
 
 
-    public String generateAccessToken(String email, String role) {
+    public String generateAccessToken(String memberId, Role role) {
 
         long tokenPeriod = 1000L * 60L * 30L; // 30분
         Claims claims = Jwts.claims()
-                .subject(email)
+                .subject(memberId)
                 .add("role", role)
                 .build();
 
@@ -90,9 +89,8 @@ public class JwtUtil {
                         .compact();
 
     }
-
     // 토큰에서 Email을 추출한다.
-    public String getEmail(String token) {
+    public String getMemberId(String token) {
         return Jwts.parser()
                 .verifyWith(secretkey)
                 .build() // 비밀키를 설정하여 파서를 빌드.
