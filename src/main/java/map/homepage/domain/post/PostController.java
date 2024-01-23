@@ -36,9 +36,10 @@ public class PostController {
 
     // 게시글 추가
     @PostMapping("/{memberId}/create")
-    public PostResponseDTO createPost(@PathVariable Long memberId,
-                                      @RequestBody PostRequestDTO postRequestDTO) {
-        return postService.createPost(memberId, postRequestDTO);
+    public PostResponseDTO createPost(
+            @PathVariable Long memberId,
+            @RequestBody PostRequestDTO postRequestDTO
+    ) { return postService.createPost(memberId, postRequestDTO);
     }
 
     // 게시글 수정
@@ -47,8 +48,16 @@ public class PostController {
             @PathVariable Long memberId,
             @PathVariable Long postId,
             @RequestBody PostRequestDTO postRequestDTO
-    ) {
-        return postService.updatePost(memberId, postId, postRequestDTO);
+    ) { return postService.updatePost(memberId, postId, postRequestDTO);
+    }
+
+    // 게시글 삭제
+    @DeleteMapping("/{memberId}/{postId}/delete")
+    public ResponseEntity<String> deletePost(
+            @PathVariable Long memberId,
+            @PathVariable Long postId
+    ) { postService.deletePost(memberId, postId);
+        return ResponseEntity.ok("성공적으로 삭제되었습니다.");
     }
 }
 

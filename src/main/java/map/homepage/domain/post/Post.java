@@ -30,24 +30,13 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
+    @Enumerated(EnumType.STRING) // Role에서 enum으로 가져옴
+    private Role role; // 읽기 권한
+
     private String title; // 게시글 제목
     private String content; // 게시글 내용
     private String dtype; // 게시글 타입
     private int views; // 게시글 조회 수
 
-    @Enumerated(EnumType.STRING) // Role에서 enum으로 가져옴
-    private Role role; // 읽기 권한
 
-
-    /* 데이터 정합성을 위한 편의 메소드
-    public void addComment(Comment comment){
-        comments.add(comment);
-        comment.setPost(this);
-    }
-
-    public void removeComment(Comment comment){
-        comments.remove(comment);
-        comment.setPost(null);
-    }
-    */
 }

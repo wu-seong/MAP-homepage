@@ -47,7 +47,7 @@ public class PostServiceImpl implements PostService {
             post.setViews(post.getViews() + 1); // 조회 수 증가
             return PostResponseDTO.fromEntity(post);
         } else {
-            throw new PostNotFoundException("삭제된 게시글입니다 :" + postId);
+            throw new PostNotFoundException("게시글을 찾을 수 없습니다.");
         }
     }
 
@@ -97,10 +97,29 @@ public class PostServiceImpl implements PostService {
         return PostResponseDTO.fromEntity(post);
     }
 
+    // 게시글 삭제
+    @Override
+    @Transactional
+    public void deletePost(Long memberId, Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
+
+        // 현재 사용자의 memberId와 게시글의 작성자의 memberId를 비교하거나 ADMIN 권한 확인
+        if (!memberId.equals(post.getMember().getId()) && !isAdmin(memberId)) {
+            try {
+                throw new AccessDeniedException("권한이 없습니다.");
+            } catch (AccessDeniedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        postRepository.delete(post);
+    }
+
+    // 권한 확인
     @Override
     public boolean isAdmin(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException("Member not found with id: " + memberId));
+                .orElseThrow(() -> new MemberNotFoundException("사용자를 확인할 수 없습니다." + memberId));
 
         return member.isAdmin();
     }
