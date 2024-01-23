@@ -1,6 +1,7 @@
 package map.homepage.domain.post;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import map.homepage.domain.post.dto.PostRequestDTO;
 import map.homepage.domain.post.dto.PostResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,15 @@ public class PostController {
     @GetMapping("/{postId}/view")
     public PostResponseDTO viewPost(@PathVariable Long postId) {
         return postService.viewPost(postId);
+    }
+
+    // 게시글 추가
+    @PostMapping("/{memberId}/add")
+    public PostResponseDTO addPost(
+            @PathVariable Long memberId,
+            @RequestBody PostRequestDTO postRequestDTO
+    ) {
+        return postService.addPost(memberId, postRequestDTO);
     }
 }
 

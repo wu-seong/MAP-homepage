@@ -7,8 +7,10 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    // 게시글 조회
-    List<Post> findAll();
-    Optional<Post> findById(Long postId);
+
+    List<Post> findAll(); // 게시글 목록 조회
+
+    Optional<Post> findById(Long postId); // 단일 게시물 조회
+    Post save(Post post); // 게시글 저장
 }
 

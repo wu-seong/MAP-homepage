@@ -18,7 +18,8 @@ public class PostResponseDTO {
     private String title;
     private LocalDateTime createdAt;
 
-    public static PostResponseDTO fromEntity(Post post) {
+    // 게시글 목록 조회
+    public static PostResponseDTO fromEntity(Post post) { 
         PostResponseDTO dto = new PostResponseDTO();
         dto.setPostId(post.getId());
         dto.setViews(post.getViews());
@@ -30,4 +31,5 @@ public class PostResponseDTO {
         return dto;
     }
 
+    //
 }

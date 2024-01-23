@@ -15,5 +15,6 @@ public interface PostService {
 
     List<PostResponseDTO> getPostList(); // 게시글 목록 조회
     PostResponseDTO viewPost(Long postId); // 단일 게시글 조회
+    PostResponseDTO addPost(Long memberId, PostRequestDTO postRequestDTO); // 게시글 추가
 }
 

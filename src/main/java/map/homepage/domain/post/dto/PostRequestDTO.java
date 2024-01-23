@@ -13,15 +13,15 @@ import map.homepage.domain.member.Member;
 public class PostRequestDTO {
 
     private String title;
+    private String dtype;
     private String content;
 
     // 생성자
-    public PostRequestDTO(String title, String content) {
+    public PostRequestDTO(String title, String dtype, String content) {
         this.title = title;
+        this.dtype = dtype;
         this.content = content;
     }
-
-    // Getter와 Setter 메서드는 필요에 따라 추가
 
 }
 
