@@ -70,5 +70,10 @@ public class Member extends BaseEntity {
         this.imageUri = imageUri;
         return this;
     }
+
+    // 관리자 권한인지 확인하는 메소드
+    public boolean isAdmin() {
+        return Role.ADMIN.equals(this.role);
+    }
 }
 
