@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.security.Timestamp;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
@@ -15,8 +16,8 @@ import java.time.LocalDateTime;
 public abstract class BaseEntity {
 
     @CreatedDate
-    private LocalDateTime createdAt; // 생성 시간
+    protected LocalDateTime createdAt; // 생성 시간
 
     @LastModifiedDate
-    private LocalDateTime updatedAt; // 수정 시간
+    protected LocalDateTime updatedAt; // 수정 시간
 }
