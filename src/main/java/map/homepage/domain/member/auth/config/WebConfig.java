@@ -50,7 +50,7 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(new MemberInterceptor(memberService, jwtUtil))
                 .addPathPatterns("/**")
-                .excludePathPatterns("/swagger-ui/**", "/v3/api-docs/**", "/oauth2/**", "/post/**");
+                .excludePathPatterns("/swagger-ui/**", "/v3/api-docs/**", "/oauth2/**", "/posts/**");
 
     }
 
