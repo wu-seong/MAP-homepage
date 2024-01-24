@@ -24,17 +24,23 @@ public class Comment extends BaseEntity {
     private String content;
 
     // 외래키
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
     // 읽기 권한
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public Comment(String content, Member member, Post post) {
+        this.content = content;
+        this.member = member;
+        this.post = post;
+    }
 
     public boolean isOwnComment(Member member) {
         return this.member.equals(member);

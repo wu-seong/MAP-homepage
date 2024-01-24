@@ -2,11 +2,13 @@ package map.homepage.domain.post.comment;
 
 import jakarta.transaction.Transactional;
 import map.homepage.domain.member.Member;
+import map.homepage.domain.post.Post;
 import map.homepage.domain.post.PostRepository;
 import map.homepage.domain.post.comment.Dto.CommentCreateRequest;
 import map.homepage.domain.post.comment.Dto.CommentDto;
 import map.homepage.domain.post.comment.Dto.CommentReadCondition;
 import map.homepage.exception.MemberNotEqualsException;
+import map.homepage.exception.PostNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,10 +32,12 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    // 도하 오빠 작업 후
     @Transactional
     public CommentDto writeComment(final CommentCreateRequest commentCreateRequest, Member memberId) {
-       return null;
+        Post post = postRepository.findById(commentCreateRequest.getPostId()).orElseThrow(()->new PostNotFoundException("게시물 id를 찾을 수 없습니다."));
+        Comment comment = new Comment(commentCreateRequest.getContent(), memberId, post);
+        commentRepository.save(comment);
+        return CommentDto.toDto(comment);
     }
 
     @Transactional

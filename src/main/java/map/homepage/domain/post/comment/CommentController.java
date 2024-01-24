@@ -36,7 +36,7 @@ public class CommentController {
     // 댓글 생성
     @PostMapping("/comment/{post_id}")
     @ResponseStatus(HttpStatus.OK)
-    public CommentDto writeComment(@Valid @RequestBody CommentCreateRequest commentCreateRequest, Member memberId) {
+    public CommentDto writeComment(@Valid @RequestBody @PathVariable("post_id") CommentCreateRequest commentCreateRequest, Member memberId) {
         return commentService.writeComment(commentCreateRequest, memberId);
     }
 
