@@ -13,7 +13,7 @@ import java.util.Map;
 public class OAuthAttributes {
     //private Map<String,Object> attributes;
     private String provider;
-    private String oauthId;
+    private Long oauthId;
     private String name;
     private String email;
     private String imageUri;
@@ -31,7 +31,6 @@ public class OAuthAttributes {
         return Member.builder()
                 .name(name)
                 .email(email)
-                .provider(provider)
                 .oauthId(oauthId)
                 .imageUri(imageUri)
                 .role(Role.USER)
@@ -45,7 +44,7 @@ public class OAuthAttributes {
                 .name((String) response.get("name"))
                 .email((String) response.get("email"))
                 .imageUri((String) response.get("profile_image"))
-                .oauthId((String) response.get(("id")))
+                .oauthId((Long) response.get(("id")))
                 .provider(provider)
                 //.attributes(response)
                 .build();
@@ -57,7 +56,7 @@ public class OAuthAttributes {
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
                 .imageUri((String) attributes.get("picture"))
-                .oauthId((String) attributes.get(("sub")))
+                .oauthId((Long) attributes.get(("sub")))
                 .provider(provider)
                 //.attributes(attributes)
                 .build();
