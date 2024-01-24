@@ -3,6 +3,10 @@ package map.homepage.domain.member.converter;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.auth.oauth2.feignClient.dto.KakaoOauth2DTO;
 import map.homepage.domain.member.dto.MemberResponseDTO;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class MemberConverter {
@@ -23,10 +27,31 @@ public class MemberConverter {
                 .build();
 
     }
+    public static MemberResponseDTO.MemberPreviewDTO toMemberPreviewDTO(Member member){
+        return MemberResponseDTO.MemberPreviewDTO.builder()
+                .name(member.getName())
+                .nickname(member.getNickname())
+                .grade(member.getGrade())
+                .build();
+    }
+    public static MemberResponseDTO.MemberPreviewListDTO memberPreviewListDTO(Page<Member> memberPage){
+        List<MemberResponseDTO.MemberPreviewDTO> memberPreviewDTOList = memberPage.stream()
+                .map(MemberConverter::toMemberPreviewDTO).collect(Collectors.toList());
+        return MemberResponseDTO.MemberPreviewListDTO.builder()
+                .isLast(memberPage.isLast())
+                .isFirst(memberPage.isFirst())
+                .totalPage(memberPage.getTotalPages())
+                .totalElements(memberPage.getTotalElements())
+                .listSize(memberPreviewDTOList.size())
+                .memberPreviewDTOList(memberPreviewDTOList)
+                .build();
+
+    }
 
     public static MemberResponseDTO.MemberDetailDTO toMemberDetailDTO(Member member){
         return MemberResponseDTO.MemberDetailDTO.builder()
                 .id(member.getId())
+                .studentId(member.getStudentId())
                 .oauthId(member.getOauthId())
                 .email(member.getEmail())
                 .name(member.getName())
@@ -42,5 +67,19 @@ public class MemberConverter {
                 .createdAt(member.getCreatedAt())
                 .updatedAt(member.getUpdatedAt())
                 .build();
+    }
+
+    public static MemberResponseDTO.MemberDetailListDTO memberDetailListDTO(Page<Member> memberPage){
+        List<MemberResponseDTO.MemberDetailDTO> memberDetailDTOList = memberPage.stream()
+                .map(MemberConverter::toMemberDetailDTO).collect(Collectors.toList());
+        return MemberResponseDTO.MemberDetailListDTO.builder()
+                .isLast(memberPage.isLast())
+                .isFirst(memberPage.isFirst())
+                .totalPage(memberPage.getTotalPages())
+                .totalElements(memberPage.getTotalElements())
+                .listSize(memberDetailDTOList.size())
+                .memberDetailDTOList(memberDetailDTOList)
+                .build();
+
     }
 }

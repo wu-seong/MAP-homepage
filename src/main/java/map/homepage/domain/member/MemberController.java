@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import lombok.RequiredArgsConstructor;
 import map.homepage.apiPayload.ApiResponse;
+import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.member.converter.MemberConverter;
 import map.homepage.domain.member.dto.MemberRequestDTO;
 import map.homepage.domain.member.dto.MemberResponseDTO;
@@ -22,8 +23,8 @@ public class MemberController {
     private final MemberQueryService memberQueryService;
     private final MemberCommandService memberCommandService;
 
-    @PatchMapping("/")
-    @Operation(summary = "추가 정보 입력 API",description = "소셜 로그인 인증 성공 이후에 호출할 API")
+    @PatchMapping("/me")
+    @Operation(summary = "추가 정보 입력/수정 API",description = "소셜 로그인 인증 성공 이후에 호출할 API")
     @ApiResponses(value = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description =" 추가 정보 입력 성공", content = @Content(schema = @Schema(implementation = MemberResponseDTO.MemberDetailDTO.class))),
         //@ApiResponse(responseCode = "404", description = "인증 토큰이 존재하지 않음", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
@@ -32,5 +33,18 @@ public class MemberController {
         // 추가 정보 받아와서 유저에 넣어준뒤에 DB에 저장
         Member updatedMember = memberCommandService.update(memberUpdateDTO);
         return ApiResponse.onSuccess(MemberConverter.toMemberDetailDTO(updatedMember));
+    }
+
+    @DeleteMapping("/me")
+    @Operation(summary = "멤버 삭제 API",description = "softDelete로 삭제 했지만 ?일 뒤에 완전 삭제")
+    public ApiResponse<MemberResponseDTO.MemberPreviewDTO> deleteMember(){
+        Member deletedMember = memberCommandService.delete();
+        return ApiResponse.onSuccess(MemberConverter.toMemberPreviewDTO(deletedMember));
+    }
+
+    @GetMapping("/")
+    public ApiResponse<?> getMembers(){
+        Member member = MemberContext.getMember();
+        memberQueryService.getAll();
     }
 }

@@ -14,6 +14,8 @@ import map.homepage.domain.post.Post;
 import map.homepage.domain.post.comment.Comment;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,6 +29,8 @@ import java.util.List;
 @AllArgsConstructor //builder 사용을 위해서 추가, 빌더만 추가하면 오류남
 @DynamicInsert // null이 아닌 속성만을 SQL 쿼리에 포함
 @DynamicUpdate // 변경 속성만 쿼리에 포함
+@SQLDelete(sql = "UPDATE member SET status = 'INACTIVE' WHERE id = ?") //soft delete
+@Where(clause = "status = 'ACTIVE") // soft delete를 조회에 적용 시킴
 public class Member extends BaseEntity {
 
     @Id

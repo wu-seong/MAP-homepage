@@ -7,6 +7,8 @@ import map.homepage.domain.member.MemberRepository;
 import map.homepage.exception.GeneralException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -25,11 +27,19 @@ public class MemberQueryServiceImpl implements MemberQueryService{
         return memberRepository.findByOauthId(oauthId).isPresent();
     }
 
-
     public Member getMemberByOauthId(Long oauthId) {
         Member member = memberRepository.findByOauthId(oauthId).orElseThrow(() ->
                 new GeneralException(ErrorStatus.USER_NOT_FOUND)
         );
         return member;
+    }
+    @Override
+    public List<Member> getAllActive() {
+        return memberRepository.findAll();
+    }
+
+    @Override
+    public List<Member> getAll() {
+        return null;
     }
 }

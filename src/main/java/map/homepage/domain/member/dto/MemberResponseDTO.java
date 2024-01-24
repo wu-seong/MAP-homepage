@@ -13,8 +13,11 @@ import map.homepage.domain.member.enums.Status;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class MemberResponseDTO {
+
+    // 첫 로그인 응답
     @Builder
     @Getter
     @NoArgsConstructor
@@ -25,6 +28,30 @@ public class MemberResponseDTO {
         private LocalDateTime createdAt;
     }
 
+    // 멤버 기본 정보
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class MemberPreviewDTO{
+        private String studentId;
+        private String name;
+        private String nickname;
+        private String grade;
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @Getter
+    public static class MemberPreviewListDTO{
+        private List<MemberPreviewDTO> memberPreviewDTOList;
+        private Integer listSize;
+        private Integer totalPage;
+        private Long totalElements;
+        private Boolean isFirst;
+        private Boolean isLast;
+    }
+
+    // 멤버 세부 정보
     @Builder
     @Getter
     @NoArgsConstructor
@@ -32,6 +59,7 @@ public class MemberResponseDTO {
     public static class MemberDetailDTO{
         private Long id;
         private Long oauthId;
+        private String studentId;
         private boolean infoSet;
         private String name;
         private String grade;
@@ -45,5 +73,17 @@ public class MemberResponseDTO {
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
         private Role role;
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @Getter
+    public static class MemberDetailListDTO{
+        private List<MemberDetailDTO> memberDetailDTOList;
+        private Integer listSize;
+        private Integer totalPage;
+        private Long totalElements;
+        private Boolean isFirst;
+        private Boolean isLast;
     }
 }

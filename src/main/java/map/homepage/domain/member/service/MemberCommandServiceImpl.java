@@ -33,4 +33,11 @@ public class MemberCommandServiceImpl implements MemberCommandService{
             member.setMember();
         return member;
     }
+
+    @Override
+    public Member delete() {
+        Member member = MemberContext.getMember();
+        memberRepository.delete(member);
+        return member;
+    }
 }
