@@ -1,12 +1,10 @@
 package map.homepage.domain.member.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import map.homepage.apiPayload.ApiResponse;
 import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.member.enums.SocialType;
 import map.homepage.domain.member.enums.Status;
@@ -85,5 +83,17 @@ public class MemberResponseDTO {
         private Long totalElements;
         private Boolean isFirst;
         private Boolean isLast;
+    }
+
+    // ---------- 아래는 스웨거 응답에 제네릭 타입 적용을 위한 클래스 정의 ----------
+    public static class ApiResponseMemberDetailListDTO extends ApiResponse<MemberDetailListDTO>{
+        public ApiResponseMemberDetailListDTO(Boolean isSuccess, String code, String message, MemberDetailListDTO result) {
+            super(isSuccess, code, message, result);
+        }
+    }
+    public static class ApiResponseMemberPreviewListDTO extends  ApiResponse<MemberPreviewListDTO>{
+        public ApiResponseMemberPreviewListDTO(Boolean isSuccess, String code, String message, MemberPreviewListDTO result) {
+            super(isSuccess, code, message, result);
+        }
     }
 }

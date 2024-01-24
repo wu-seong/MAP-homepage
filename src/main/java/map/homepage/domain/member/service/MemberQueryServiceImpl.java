@@ -16,8 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class MemberQueryServiceImpl implements MemberQueryService{
-    private final static Integer countPerPage = 10;  // 페이지 당 나타낼 유저 수
-    private final EntityManager entityManager;
+    private static Integer countPerPage = 10;  // 페이지 당 나타낼 유저 수
     private final MemberRepository memberRepository;
 
 
