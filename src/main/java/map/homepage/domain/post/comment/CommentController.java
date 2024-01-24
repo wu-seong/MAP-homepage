@@ -5,11 +5,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import map.homepage.domain.member.MemberRepository;
 import map.homepage.domain.post.comment.Dto.CommentCreateRequest;
+import map.homepage.domain.post.comment.Dto.CommentDto;
 import map.homepage.domain.post.comment.Dto.CommentReadCondition;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 // 사용자(Front-End) 와 백엔드를 연결해주는 역할
 @RestController // RestApi 사용 시
@@ -25,10 +28,10 @@ public class CommentController {
 
     // 댓글 조회 (불러오기)
     @ApiResponses
-    @GetMapping("/comment/{post_id}")
+    @GetMapping("/comment")
     @ResponseStatus(HttpStatus.OK)
-    public Response getComment(@Valid CommentReadCondition commentReadCondition) {
-        return new Response();
+    public List<CommentDto> getComment(@RequestParam @Valid CommentReadCondition commentReadCondition) {
+        return commentService.getComment(commentReadCondition);
     }
 
     // 댓글 생성
@@ -41,7 +44,7 @@ public class CommentController {
     // 댓글 삭제
     @DeleteMapping("/comment/{post_id}/{comment_id}")
     @ResponseStatus(HttpStatus.OK)
-    public Response deleteComment(@PathVariable("post_id") Long postId, @PathVariable("comment_id") Long commentId, Authentication authentication){
-        return new Response();
+    public String deleteComment(@PathVariable("post_id") Long postId, @PathVariable("comment_id") Long commentId, Authentication authentication){
+        return commentService.deleteComment(commentId);
     }
 }

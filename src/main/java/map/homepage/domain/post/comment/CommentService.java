@@ -35,9 +35,10 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(final Long id) {
+    public String deleteComment(final Long id) {
         Comment comment = commentRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("댓글 id를 찾을 수 없습니다."));
         commentRepository.delete(comment);
+        return "댓글 삭제";
     }
 
 }
