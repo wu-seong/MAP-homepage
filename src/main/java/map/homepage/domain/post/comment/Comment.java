@@ -9,11 +9,8 @@ import map.homepage.domain.common.BaseEntity;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.Role;
 import map.homepage.domain.post.Post;
-import org.h2.engine.User;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
-import java.time.LocalDateTime;
 
 @Entity // 해당 클래스가 JPA의 엔티티임을 명시
 @Builder // 빌더 패턴 (디자인 패턴)
@@ -48,8 +45,8 @@ public class Comment extends BaseEntity {
         this.member = member;
         this.post = post;
     }
-    // Role이 있어서 안해도 되는 것인지?
-    //    public boolean isOwnComment(final Member member) {
-    //        return this.member.equals(member);
-    //    }
+
+    public boolean isOwnComment(Member member) {
+        return this.member.equals(member);
+    }
 }

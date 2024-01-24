@@ -3,13 +3,12 @@ package map.homepage.domain.post.comment;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import map.homepage.domain.member.Member;
 import map.homepage.domain.member.MemberRepository;
 import map.homepage.domain.post.comment.Dto.CommentCreateRequest;
 import map.homepage.domain.post.comment.Dto.CommentDto;
 import map.homepage.domain.post.comment.Dto.CommentReadCondition;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,14 +36,14 @@ public class CommentController {
     // 댓글 생성
     @PostMapping("/comment/{post_id}")
     @ResponseStatus(HttpStatus.OK)
-    public Response writeComment(@Valid @RequestBody CommentCreateRequest commentCreateRequest, Authentication authentication) {
-        return new Response();
+    public CommentDto writeComment(@Valid @RequestBody CommentCreateRequest commentCreateRequest, Member memberId) {
+        return commentService.writeComment(commentCreateRequest, memberId);
     }
 
     // 댓글 삭제
-    @DeleteMapping("/comment/{post_id}/{comment_id}")
+    @DeleteMapping("/comment/{comment_id}")
     @ResponseStatus(HttpStatus.OK)
-    public String deleteComment(@PathVariable("post_id") Long postId, @PathVariable("comment_id") Long commentId, Authentication authentication){
-        return commentService.deleteComment(commentId);
+    public String deleteComment(@PathVariable("comment_id") Long commentId, Member memberId){
+        return commentService.deleteComment(commentId, memberId);
     }
 }
