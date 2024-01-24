@@ -7,12 +7,11 @@ import map.homepage.domain.member.auth.jwt.filter.JwtAuthFilter;
 import map.homepage.domain.member.auth.jwt.filter.MemberInterceptor;
 import map.homepage.domain.member.auth.jwt.service.JwtTokenProvider;
 import map.homepage.domain.member.auth.jwt.service.JwtUtil;
-import map.homepage.domain.member.service.MemberService;
+import map.homepage.domain.member.service.MemberQueryService;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -21,7 +20,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtUtil jwtUtil;
-    private final MemberService memberService;
+    private final MemberQueryService memberQueryService;
     private final EntityManagerFactory entityManagerFactory;
 
     @Bean
@@ -48,7 +47,7 @@ public class WebConfig implements WebMvcConfigurer {
         openEntityManagerInViewInterceptor.setEntityManagerFactory(entityManagerFactory);
         registry.addWebRequestInterceptor(openEntityManagerInViewInterceptor);
 
-        registry.addInterceptor(new MemberInterceptor(memberService, jwtUtil))
+        registry.addInterceptor(new MemberInterceptor(memberQueryService, jwtUtil))
                 .addPathPatterns("/**")
                 .excludePathPatterns("/swagger-ui/**", "/v3/api-docs/**", "/oauth2/**", "/posts/**");
 

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import map.homepage.domain.common.BaseEntity;
 import map.homepage.domain.member.Member;
-import map.homepage.domain.member.Role;
+import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.post.comment.Comment;
 
 import java.security.Timestamp;

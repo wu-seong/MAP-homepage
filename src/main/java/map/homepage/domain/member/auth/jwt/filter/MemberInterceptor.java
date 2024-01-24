@@ -7,14 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.member.auth.jwt.service.JwtUtil;
-import map.homepage.domain.member.service.MemberService;
+import map.homepage.domain.member.service.MemberQueryService;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @RequiredArgsConstructor
 public class MemberInterceptor implements HandlerInterceptor {
-    private final MemberService memberService;
+    private final MemberQueryService memberQueryService;
     private final JwtUtil jwtUtil;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -27,7 +27,7 @@ public class MemberInterceptor implements HandlerInterceptor {
         try{
             // 얻은 아이디로 유저 조회하기
             String memberId = jwtUtil.getMemberId(accessToken);
-            Member member = memberService.getMemberById(Long.valueOf(memberId));
+            Member member = memberQueryService.getMemberById(Long.valueOf(memberId));
 
             // 조회한 유저 ThreadLocal에 저장하기
             MemberContext.setMember(member);

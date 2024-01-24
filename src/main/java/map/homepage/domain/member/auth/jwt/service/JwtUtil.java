@@ -8,7 +8,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import map.homepage.domain.member.Role;
+import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.member.auth.jwt.token.JwtToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

@@ -8,14 +8,14 @@ import lombok.extern.slf4j.Slf4j;
 import map.homepage.apiPayload.ApiResponse;
 import map.homepage.apiPayload.code.status.SuccessStatus;
 import map.homepage.domain.member.Member;
-import map.homepage.domain.member.Role;
+import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.member.auth.jwt.service.JwtUtil;
 import map.homepage.domain.member.auth.jwt.token.JwtToken;
 import map.homepage.domain.member.auth.oauth2.feignClient.dto.KakaoOauth2DTO;
 import map.homepage.domain.member.auth.oauth2.service.LoginService;
 import map.homepage.domain.member.converter.MemberConverter;
-import map.homepage.domain.member.service.MemberService;
-import org.springframework.http.ResponseEntity;
+import map.homepage.domain.member.service.MemberCommandService;
+import map.homepage.domain.member.service.MemberQueryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -25,7 +25,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class LoginController {
     private final LoginService loginService;
-    private final MemberService memberService;
+    private final MemberQueryService memberQueryService;
+    private final MemberCommandService memberCommandService;
     private final JwtUtil jwtUtil;
 
 
@@ -38,7 +39,7 @@ public class LoginController {
     public String login(){
         String redirectUri = UriComponentsBuilder.fromUriString("https://kauth.kakao.com/oauth/authorize")
                 .queryParam("response_type", "code")
-                .queryParam("client_id", "32c0787d1b1e9fcabcc24af247903ba8")
+                .queryParam("client_id", "a646059593978bf76530118502f575f3")
                 .queryParam("redirect_uri", "http://localhost:3000/oauth2/login/kakao")
                 .toUriString();
         return "redirect:" + redirectUri;
@@ -65,8 +66,8 @@ public class LoginController {
         }
         // 유저 정보에 DB 조회하고 정보 있으면 응답만, 없으면 저장까지, 추가정보 입력 여부에 따라서 응답 다르게
         Long oauthId = userInfoResponseDTO.getId();
-        if( memberService.isExistByOauthId(oauthId)){
-            Member member = memberService.getMemberByOauthId(oauthId);
+        if( memberQueryService.isExistByOauthId(oauthId)){
+            Member member = memberQueryService.getMemberByOauthId(oauthId);
             // 응답헤더에 토큰 추가
             JwtToken token = jwtUtil.generateToken(String.valueOf(member.getId()), Role.USER);
             response.addHeader("Access-Token", token.getAccessToken());
@@ -78,7 +79,7 @@ public class LoginController {
         }
         else{
             Member user = MemberConverter.toMember(userInfoResponseDTO);
-            Long id = memberService.create(user);
+            Long id = memberCommandService.create(user);
             // 응답헤더에 토큰 추가
             JwtToken token = jwtUtil.generateToken(String.valueOf(id), Role.USER);
             response.addHeader("Access-Token", token.getAccessToken());

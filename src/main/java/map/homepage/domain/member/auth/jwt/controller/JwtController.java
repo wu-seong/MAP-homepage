@@ -3,7 +3,7 @@ package map.homepage.domain.member.auth.jwt.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import map.homepage.domain.member.Role;
+import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.member.auth.jwt.service.JwtTokenProvider;
 import map.homepage.domain.member.auth.jwt.service.JwtUtil;
 import map.homepage.domain.member.auth.jwt.token.JwtToken;
