@@ -1,5 +1,6 @@
 package map.homepage.domain.post;
 
+import lombok.RequiredArgsConstructor;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.MemberRepository;
 import map.homepage.domain.post.dto.PostRequestDTO;
@@ -17,16 +18,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
-
-    @Autowired
-    public PostServiceImpl(PostRepository postRepository, MemberRepository memberRepository) {
-        this.postRepository = postRepository;
-        this.memberRepository = memberRepository;
-    }
 
     // 게시글 목록 조회
     @Override

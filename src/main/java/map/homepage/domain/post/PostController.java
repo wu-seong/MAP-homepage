@@ -11,7 +11,7 @@ import java.util.List;
 
 //http://localhost:8080/swagger-ui/index.html
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/posts")
 public class PostController {
 
     private PostService postService;
@@ -22,20 +22,20 @@ public class PostController {
     }
 
     // 게시글 목록 조회
-    @GetMapping("/list")
+    @GetMapping("/")
     public ResponseEntity<List<PostResponseDTO>> getPostList() {
         List<PostResponseDTO> postList = postService.getPostList();
         return ResponseEntity.ok(postList);
     }
 
     // 단일 게시글 조회
-    @GetMapping("/{postId}/view")
+    @GetMapping("/{postId}")
     public PostResponseDTO viewPost(@PathVariable Long postId) {
         return postService.viewPost(postId);
     }
 
     // 게시글 추가
-    @PostMapping("/{memberId}/create")
+    @PostMapping("/{memberId}")
     public PostResponseDTO createPost(
             @PathVariable Long memberId,
             @RequestBody PostRequestDTO postRequestDTO
@@ -43,7 +43,7 @@ public class PostController {
     }
 
     // 게시글 수정
-    @PutMapping("/{memberId}/{postId}/update")
+    @PutMapping("/{memberId}/{postId}")
     public PostResponseDTO updatePost(
             @PathVariable Long memberId,
             @PathVariable Long postId,
@@ -52,7 +52,7 @@ public class PostController {
     }
 
     // 게시글 삭제
-    @DeleteMapping("/{memberId}/{postId}/delete")
+    @DeleteMapping("/{memberId}/{postId}")
     public ResponseEntity<String> deletePost(
             @PathVariable Long memberId,
             @PathVariable Long postId

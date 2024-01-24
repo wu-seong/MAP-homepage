@@ -26,7 +26,7 @@ public class Post extends BaseEntity {
     private Long id; // 게시글 ID
 
     @ManyToOne(fetch = FetchType.LAZY) // 지연 로딩
-    @JoinColumn(name = "MEMBER_ID") // 외래키
+    @JoinColumn(name = "member_id") // 외래키
     private Member member; // 게시글 작성자
 
     @OneToMany(mappedBy = "post")
@@ -46,7 +46,4 @@ public class Post extends BaseEntity {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-
-
 }
