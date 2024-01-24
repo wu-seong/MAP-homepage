@@ -7,6 +7,8 @@ import map.homepage.domain.member.Member;
 import map.homepage.domain.member.Role;
 import map.homepage.domain.post.comment.Comment;
 
+import java.security.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -24,7 +26,7 @@ public class Post extends BaseEntity {
     private Long id; // 게시글 ID
 
     @ManyToOne(fetch = FetchType.LAZY) // 지연 로딩
-    @JoinColumn(name = "MEMBER_MEMBER_ID") // 외래키
+    @JoinColumn(name = "MEMBER_ID") // 외래키
     private Member member; // 게시글 작성자
 
     @OneToMany(mappedBy = "post")
@@ -37,6 +39,14 @@ public class Post extends BaseEntity {
     private String content; // 게시글 내용
     private String dtype; // 게시글 타입
     private int views; // 게시글 조회 수
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
 
 
 }
