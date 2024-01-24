@@ -35,4 +35,8 @@ public class Comment extends BaseEntity {
     // 읽기 권한
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public boolean isOwnComment(Member member) {
+        return this.member.equals(member);
+    }
 }
