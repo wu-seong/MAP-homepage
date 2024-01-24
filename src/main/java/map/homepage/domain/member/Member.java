@@ -30,7 +30,6 @@ import java.util.List;
 @DynamicInsert // null이 아닌 속성만을 SQL 쿼리에 포함
 @DynamicUpdate // 변경 속성만 쿼리에 포함
 @SQLDelete(sql = "UPDATE member SET status = 'INACTIVE' WHERE id = ?") //soft delete
-@Where(clause = "status = 'ACTIVE") // soft delete를 조회에 적용 시킴
 public class Member extends BaseEntity {
 
     @Id

@@ -34,7 +34,7 @@ public class MemberConverter {
                 .grade(member.getGrade())
                 .build();
     }
-    public static MemberResponseDTO.MemberPreviewListDTO memberPreviewListDTO(Page<Member> memberPage){
+    public static MemberResponseDTO.MemberPreviewListDTO toMemberPreviewListDTO(Page<Member> memberPage){
         List<MemberResponseDTO.MemberPreviewDTO> memberPreviewDTOList = memberPage.stream()
                 .map(MemberConverter::toMemberPreviewDTO).collect(Collectors.toList());
         return MemberResponseDTO.MemberPreviewListDTO.builder()
@@ -69,7 +69,7 @@ public class MemberConverter {
                 .build();
     }
 
-    public static MemberResponseDTO.MemberDetailListDTO memberDetailListDTO(Page<Member> memberPage){
+    public static MemberResponseDTO.MemberDetailListDTO toMemberDetailListDTO(Page<Member> memberPage){
         List<MemberResponseDTO.MemberDetailDTO> memberDetailDTOList = memberPage.stream()
                 .map(MemberConverter::toMemberDetailDTO).collect(Collectors.toList());
         return MemberResponseDTO.MemberDetailListDTO.builder()

@@ -1,18 +1,23 @@
 package map.homepage.domain.member.service;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import map.homepage.apiPayload.code.status.ErrorStatus;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.MemberRepository;
+import map.homepage.domain.member.enums.Status;
 import map.homepage.exception.GeneralException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 
 @Service
 @RequiredArgsConstructor
 public class MemberQueryServiceImpl implements MemberQueryService{
+    private final static Integer countPerPage = 10;  // 페이지 당 나타낼 유저 수
+    private final EntityManager entityManager;
     private final MemberRepository memberRepository;
 
 
@@ -34,12 +39,12 @@ public class MemberQueryServiceImpl implements MemberQueryService{
         return member;
     }
     @Override
-    public List<Member> getAllActive() {
-        return memberRepository.findAll();
+    public Page<Member> getAllActive(Integer page) {
+        return memberRepository.findAllByStatus(Status.ACTIVE,PageRequest.of(page, countPerPage));
     }
 
     @Override
-    public List<Member> getAll() {
-        return null;
+    public Page<Member> getAll(Integer page) {
+        return memberRepository.findAll(PageRequest.of(page, countPerPage));
     }
 }

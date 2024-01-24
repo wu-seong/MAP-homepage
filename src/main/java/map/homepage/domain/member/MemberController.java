@@ -14,7 +14,10 @@ import map.homepage.domain.member.dto.MemberRequestDTO;
 import map.homepage.domain.member.dto.MemberResponseDTO;
 import map.homepage.domain.member.service.MemberCommandService;
 import map.homepage.domain.member.service.MemberQueryService;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,8 +46,15 @@ public class MemberController {
     }
 
     @GetMapping("/")
-    public ApiResponse<?> getMembers(){
+    public ApiResponse<?> getMembers(@RequestParam Integer page){
         Member member = MemberContext.getMember();
-        memberQueryService.getAll();
+        if(!member.isAdmin()){
+            Page<Member> activeMemberPage = memberQueryService.getAllActive(page);
+            return ApiResponse.onSuccess(MemberConverter.toMemberPreviewListDTO(activeMemberPage));
+        }
+        else{
+            Page<Member> MemberPage = memberQueryService.getAll(page);
+            return ApiResponse.onSuccess(MemberConverter.toMemberDetailListDTO(MemberPage)); //관리자는 세부 정보를 획득
+        }
     }
 }
