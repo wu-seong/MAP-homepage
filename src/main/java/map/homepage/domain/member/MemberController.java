@@ -44,9 +44,24 @@ public class MemberController {
         Member deletedMember = memberCommandService.delete();
         return ApiResponse.onSuccess(MemberConverter.toMemberPreviewDTO(deletedMember));
     }
+    @GetMapping("/me/preview")
+    public ApiResponse<MemberResponseDTO.MemberPreviewDTO> getMemberPreview(){
+        Member member = MemberContext.getMember();
+        return ApiResponse.onSuccess(MemberConverter.toMemberPreviewDTO(member));
+    }
+    @GetMapping("/me/detail")
+    public ApiResponse<MemberResponseDTO.MemberDetailDTO> getMemberDetail(){
+        Member member = MemberContext.getMember();
+        return ApiResponse.onSuccess(MemberConverter.toMemberDetailDTO(member));
+    }
+    @GetMapping("/{member-id}/preview") // 다른 사용자 프로필 조회
+    public ApiResponse<MemberResponseDTO.MemberPreviewDTO> getOtherMemberPreview(@PathVariable(name = "member-id") Long otherId){
+        Member other = memberQueryService.getMemberById(otherId);
+        return ApiResponse.onSuccess(MemberConverter.toMemberPreviewDTO(other));
+    }
 
-    @GetMapping("/")
-    public ApiResponse<?> getMembers(@RequestParam Integer page){
+    @GetMapping("")
+    public ApiResponse<?> getMemberInfos(@RequestParam Integer page){
         Member member = MemberContext.getMember();
         if(!member.isAdmin()){
             Page<Member> activeMemberPage = memberQueryService.getAllActive(page);

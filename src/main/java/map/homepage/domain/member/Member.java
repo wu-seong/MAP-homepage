@@ -15,11 +15,9 @@ import map.homepage.domain.post.comment.Comment;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity // -> JPA가 인식하고 테이블로 변환시킬 객체에 써주면 됨
@@ -28,7 +26,7 @@ import java.util.List;
 @NoArgsConstructor  //모든 JPA 엔티티는 기본 생성자를 가지고 있어야 한다.
 @AllArgsConstructor //builder 사용을 위해서 추가, 빌더만 추가하면 오류남
 @DynamicInsert // null이 아닌 속성만을 SQL 쿼리에 포함
-@DynamicUpdate // 변경 속성만 쿼리에 포함
+@DynamicUpdate // 변경 속성만 쿼리에 포함 -> 성능 향상
 @SQLDelete(sql = "UPDATE member SET status = 'INACTIVE' WHERE id = ?") //soft delete
 public class Member extends BaseEntity {
 
@@ -84,7 +82,6 @@ public class Member extends BaseEntity {
         this.infoSet = true;
         this.role = Role.USER;
     }
-
 
     // 관리자 권한인지 확인하는 메소드
     public boolean isAdmin() {
