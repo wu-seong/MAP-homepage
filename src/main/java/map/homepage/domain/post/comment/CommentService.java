@@ -2,6 +2,7 @@ package map.homepage.domain.post.comment;
 
 import jakarta.transaction.Transactional;
 import map.homepage.domain.member.Member;
+import map.homepage.domain.member.MemberRepository;
 import map.homepage.domain.post.Post;
 import map.homepage.domain.post.PostRepository;
 import map.homepage.domain.post.comment.Dto.CommentCreateRequest;
@@ -20,36 +21,39 @@ import java.util.stream.Collectors;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
-    public CommentService(final CommentRepository commentRepository, final PostRepository postRepository) {
+    private final MemberRepository memberRepository;
+    public CommentService(final CommentRepository commentRepository, final PostRepository postRepository, MemberRepository memberRepository) {
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Transactional
-    public List<CommentDto> getComment(final CommentReadCondition condition) {
+    public List<CommentDto> getComment(CommentReadCondition condition) {
         return commentRepository.findAllByPostId(condition.getPostId()).stream()
                 .map(CommentDto::toDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public CommentDto writeComment(final CommentCreateRequest commentCreateRequest, Member memberId) {
-        Post post = postRepository.findById(commentCreateRequest.getPostId()).orElseThrow(()->new PostNotFoundException("게시물 id를 찾을 수 없습니다."));
-        Comment comment = new Comment(commentCreateRequest.getContent(), memberId, post);
+    public CommentDto writeComment(final CommentCreateRequest commentCreateRequest, Long postId) {
+        // Post post = postRepository.findById(commentCreateRequest.getPostId()).orElseThrow(()->new PostNotFoundException("게시물 id를 찾을 수 없습니다."));
+        Post post = postRepository.findById(postId).orElseThrow(()->new PostNotFoundException("게시물을 찾을 수 없습니다."));
+        Comment comment = new Comment(commentCreateRequest.getContent(), post);
         commentRepository.save(comment);
         return CommentDto.toDto(comment);
     }
 
     @Transactional
-    public String deleteComment(final Long id, Member memberId) {
+    public void deleteComment(final Long id) {
         Comment comment = commentRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("댓글 id를 찾을 수 없습니다."));
-        validateOwnComment(comment, memberId);
+        // Member member = memberRepository.findById(memberId).orElseThrow(()-> new MemberNotFoundException("회원을 찾을 수 없습니다."));
+        // validateOwnComment(comment, member);
         commentRepository.delete(comment);
-        return "댓글 삭제";
     }
 
     private void validateOwnComment(Comment comment, Member member) {
-        if (!comment.isOwnComment(member)) {
+        if (!comment.isOwnMember(member.getId())) {
             throw new MemberNotEqualsException();
         }
     }

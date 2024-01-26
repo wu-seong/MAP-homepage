@@ -18,7 +18,8 @@ import map.homepage.domain.post.Post;
 public class Comment extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //기본키 자동 생성
     private Long id;
 
     private String content;
@@ -36,13 +37,15 @@ public class Comment extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public Comment(String content, Member member, Post post) {
-        this.content = content;
-        this.member = member;
-        this.post = post;
+    public Comment(String content, Post post) {
+        super();
     }
 
-    public boolean isOwnComment(Member member) {
-        return this.member.equals(member);
+    // public boolean isOwnComment(Member member) {
+    //    return this.member.equals(member);
+    // }
+
+    public boolean isOwnMember(Long memberId) {
+        return this.member.getId().equals(memberId);  // Member 엔티티의 ID를 비교합니다.
     }
 }
