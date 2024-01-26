@@ -1,4 +1,4 @@
-package map.homepage.domain.post.comment.Dto;
+package map.homepage.domain.post.comment.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

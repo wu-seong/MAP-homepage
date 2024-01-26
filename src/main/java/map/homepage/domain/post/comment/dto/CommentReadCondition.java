@@ -1,4 +1,4 @@
-package map.homepage.domain.post.comment.Dto;
+package map.homepage.domain.post.comment.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

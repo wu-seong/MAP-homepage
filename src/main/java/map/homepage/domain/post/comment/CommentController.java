@@ -2,11 +2,10 @@ package map.homepage.domain.post.comment;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import map.homepage.domain.member.Member;
 import map.homepage.domain.member.MemberRepository;
-import map.homepage.domain.post.comment.Dto.CommentCreateRequest;
-import map.homepage.domain.post.comment.Dto.CommentDto;
-import map.homepage.domain.post.comment.Dto.CommentReadCondition;
+import map.homepage.domain.post.comment.dto.CommentCreateRequest;
+import map.homepage.domain.post.comment.dto.CommentDto;
+import map.homepage.domain.post.comment.dto.CommentReadCondition;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
