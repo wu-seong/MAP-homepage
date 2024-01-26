@@ -2,7 +2,6 @@ package map.homepage.domain.post.comment;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import map.homepage.domain.member.MemberRepository;
 import map.homepage.domain.post.comment.dto.CommentCreateRequest;
 import map.homepage.domain.post.comment.dto.CommentDto;
 import map.homepage.domain.post.comment.dto.CommentReadCondition;
@@ -17,12 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor // final이나 @NonNull인 필드 값만 파라미터로 받는 생성자 만듦
 @RequestMapping("/comments") // 들어온 요청을 특정 method와 매핑하기 위해 사용
 public class CommentController {
-    private  CommentService commentService;
-    private  MemberRepository memberRepository;
-
-    public CommentController(CommentService commentService) {
-        this.commentService = commentService;
-    }
+    private  final CommentService commentService;
 
     // 댓글 조회 (불러오기)
     @GetMapping("/")
@@ -44,5 +38,6 @@ public class CommentController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteComment(@PathVariable("comment_id") Long commentId){
         commentService.deleteComment(commentId);
+        // MemberContext.getMember() -> 이후에
     }
 }

@@ -1,6 +1,7 @@
 package map.homepage.domain.post.comment;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.MemberRepository;
 import map.homepage.domain.post.Post;
@@ -16,20 +17,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 // Repository에게 받은 정보를 가공해서 Controller에게 주거나, Controller에게 받은 정보를 Repository한테 주는 역할
-// @RequiredArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
-    public CommentService(final CommentRepository commentRepository, final PostRepository postRepository, MemberRepository memberRepository) {
-        this.commentRepository = commentRepository;
-        this.postRepository = postRepository;
-        this.memberRepository = memberRepository;
-    }
 
     @Transactional
     public List<CommentDto> getComment(CommentReadCondition condition) {
+        // return 해주기 전에
         return commentRepository.findAllByPostId(condition.getPostId()).stream()
                 .map(CommentDto::toDto)
                 .collect(Collectors.toList());
@@ -37,7 +34,6 @@ public class CommentService {
 
     @Transactional
     public CommentDto writeComment(final CommentCreateRequest commentCreateRequest, Long postId) {
-        // Post post = postRepository.findById(commentCreateRequest.getPostId()).orElseThrow(()->new PostNotFoundException("게시물 id를 찾을 수 없습니다."));
         Post post = postRepository.findById(postId).orElseThrow(()->new PostNotFoundException("게시물을 찾을 수 없습니다."));
         Comment comment = new Comment(commentCreateRequest.getContent(), post);
         commentRepository.save(comment);
