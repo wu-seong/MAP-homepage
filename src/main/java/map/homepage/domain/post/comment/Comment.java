@@ -9,9 +9,6 @@ import map.homepage.domain.common.BaseEntity;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.post.Post;
-//import org.h2.engine.User;
-
-import java.time.LocalDateTime;
 
 @Entity // 해당 클래스가 JPA의 엔티티임을 명시
 @Builder // 빌더 패턴 (디자인 패턴)
@@ -21,21 +18,34 @@ import java.time.LocalDateTime;
 public class Comment extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //기본키 자동 생성
     private Long id;
 
     private String content;
 
     // 외래키
-    @ManyToOne // 지연 로딩
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
     // 읽기 권한
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public Comment(String content, Post post) {
+        super();
+    }
+
+    // public boolean isOwnComment(Member member) {
+    //    return this.member.equals(member);
+    // }
+
+    public boolean isOwnMember(Long memberId) {
+        return this.member.getId().equals(memberId);  // Member 엔티티의 ID를 비교합니다.
+    }
 }
