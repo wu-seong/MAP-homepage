@@ -56,7 +56,7 @@ public class MemberResponseDTO {
     @AllArgsConstructor
     public static class MemberDetailDTO{
         private Long id;
-        private Long oauthId;
+        private String oauthId;
         private String studentId;
         private boolean infoSet;
         private String name;
