@@ -17,8 +17,8 @@ public class MemberCommandServiceImpl implements MemberCommandService{
 
 
     @Override
-    public Long create(Member member){
-        return memberRepository.save(member).getId();
+    public Member create(Member member){
+        return memberRepository.save(member);
     }
 
     @Override
