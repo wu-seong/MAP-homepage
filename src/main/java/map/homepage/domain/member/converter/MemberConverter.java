@@ -2,7 +2,9 @@ package map.homepage.domain.member.converter;
 
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.auth.oauth2.feignClient.dto.KakaoOauth2DTO;
+import map.homepage.domain.member.auth.oauth2.feignClient.dto.NaverOauth2DTO;
 import map.homepage.domain.member.dto.MemberResponseDTO;
+import map.homepage.domain.member.enums.SocialType;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -16,6 +18,16 @@ public class MemberConverter {
                 .oauthId(response.getId())
                 .email(kakaoAccount.getEmail())
                 .name(kakaoAccount.getName())
+                .socialType(SocialType.KAKAO)
+                .build();
+    }
+    public static Member toMember(NaverOauth2DTO.UserInfoResponseDTO response){
+        NaverOauth2DTO.NaverAccountDTO naverAccount = response.getNaverAccount();
+        return Member.builder()
+                .oauthId(naverAccount.getId())
+                .email(naverAccount.getEmail())
+                .name(naverAccount.getName())
+                .socialType(SocialType.NAVER)
                 .build();
     }
 

@@ -20,7 +20,7 @@ public class KakaoOauth2DTO {
     @Getter
     @ToString
     public static class UserInfoResponseDTO{
-        private Long id;
+        private String id;
         @JsonProperty("connected_at")
         private LocalDateTime connectedAt;
         @JsonProperty("kakao_account")

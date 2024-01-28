@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import map.homepage.apiPayload.ApiResponse;
 import map.homepage.apiPayload.code.status.SuccessStatus;
 import map.homepage.domain.member.Member;
+import map.homepage.domain.member.auth.oauth2.feignClient.dto.NaverOauth2DTO;
+import map.homepage.domain.member.dto.MemberResponseDTO;
 import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.member.auth.jwt.service.JwtUtil;
 import map.homepage.domain.member.auth.jwt.token.JwtToken;
@@ -16,6 +18,7 @@ import map.homepage.domain.member.auth.oauth2.service.LoginService;
 import map.homepage.domain.member.converter.MemberConverter;
 import map.homepage.domain.member.service.MemberCommandService;
 import map.homepage.domain.member.service.MemberQueryService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -28,6 +31,10 @@ public class LoginController {
     private final MemberQueryService memberQueryService;
     private final MemberCommandService memberCommandService;
     private final JwtUtil jwtUtil;
+    @Value("${naver.client-id}")
+    private String naverClientId;
+    @Value("${naver.redirect-uri}")
+    private String naverRedirectUri;
 
 
     /*
@@ -36,11 +43,22 @@ public class LoginController {
 
     @Operation(summary = "카카오 인증 페이지 이동 API", description = "redirect를 통해 카카오 인증 페이지로 이동")
     @GetMapping("/oauth2/authorize/kakao")
-    public String login(){
+    public String kakaoLogin(){
         String redirectUri = UriComponentsBuilder.fromUriString("https://kauth.kakao.com/oauth/authorize")
                 .queryParam("response_type", "code")
                 .queryParam("client_id", "a646059593978bf76530118502f575f3")
-                .queryParam("redirect_uri", "http://localhost:3000/oauth2/login/kakao")
+                .queryParam("redirect_uri", "http://localhost:8080/oauth2/login/kakao")
+                .toUriString();
+        return "redirect:" + redirectUri;
+    }
+    @Operation(summary = "네이버 인증 페이지 이동 API", description = "redirect를 통해 네이버 인증 페이지로 이동")
+    @GetMapping("/oauth2/authorize/naver")
+    public String naverLogin(){
+        String redirectUri = UriComponentsBuilder.fromUriString("https://nid.naver.com/oauth2.0/authorize")
+                .queryParam("response_type", "code")
+                .queryParam("client_id", naverClientId)
+                .queryParam("redirect_uri", naverRedirectUri)
+                .queryParam("state", "map")
                 .toUriString();
         return "redirect:" + redirectUri;
     }
@@ -53,41 +71,64 @@ public class LoginController {
     @Operation(summary = "소셜 로그인 인증 API", description = "토큰으로 정보 조회 및 저장, 성공시 응답 헤더에 jwt토큰 추가")
     @ResponseBody
     @GetMapping("/oauth2/login/kakao")
-    public ApiResponse<?> getAccessToken(HttpServletResponse response, @RequestParam(name = "code") String code){
-        String accessToken = loginService.getAccessToken(code);
+    public ApiResponse<MemberResponseDTO.LoginDTO> getKakaoAccessToken(HttpServletResponse response, @RequestParam(name = "code") String code){
+        String accessToken = loginService.getKakaoAccessToken(code);
         accessToken = "Bearer " + accessToken;
         // ok -> 유저 정보 가져오기
         KakaoOauth2DTO.UserInfoResponseDTO userInfoResponseDTO = null;
         try {
-            userInfoResponseDTO = loginService.getUserInfo(accessToken);
+            userInfoResponseDTO = loginService.getKakaoUserInfo(accessToken);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
         // 유저 정보에 DB 조회하고 정보 있으면 응답만, 없으면 저장까지, 추가정보 입력 여부에 따라서 응답 다르게
-        Long oauthId = userInfoResponseDTO.getId();
+        String oauthId = userInfoResponseDTO.getId();
+
+        Member member;
         if( memberQueryService.isExistByOauthId(oauthId)){
-            Member member = memberQueryService.getMemberByOauthId(oauthId);
-            // 응답헤더에 토큰 추가
-            JwtToken token = jwtUtil.generateToken(String.valueOf(member.getId()), Role.USER);
-            response.addHeader("Access-Token", token.getAccessToken());
-            response.addHeader("Refresh-Token", token.getRefreshToken());
-            if(member.isInfoSet()){
-                return ApiResponse.onSuccess(MemberConverter.toLoginDTO(member));
-            }
-            return ApiResponse.of(SuccessStatus.NEED_USER_DETAIL, MemberConverter.toLoginDTO(member));
+            member = memberQueryService.getMemberByOauthId(oauthId);
         }
         else{
-            Member user = MemberConverter.toMember(userInfoResponseDTO);
-            Long id = memberCommandService.create(user);
-            // 응답헤더에 토큰 추가
-            JwtToken token = jwtUtil.generateToken(String.valueOf(id), Role.USER);
-            response.addHeader("Access-Token", token.getAccessToken());
-            response.addHeader("Refresh-Token", token.getRefreshToken());
-            return ApiResponse.of(SuccessStatus.NEED_USER_DETAIL, MemberConverter.toLoginDTO(user));
+            member = MemberConverter.toMember(userInfoResponseDTO);
+            member = memberCommandService.create(member);
         }
+        JwtToken token = jwtUtil.generateToken(String.valueOf(member.getId()), Role.USER);
+        response.addHeader("Access-Token", token.getAccessToken());
+        response.addHeader("Refresh-Token", token.getRefreshToken());
+        return ApiResponse.of(SuccessStatus._OK, MemberConverter.toLoginDTO(member));
     }
 
+    @Operation(summary = "소셜 로그인 인증 API", description = "토큰으로 정보 조회 및 저장, 성공시 응답 헤더에 jwt토큰 추가")
+    @ResponseBody
+    @GetMapping("/oauth2/login/naver")
+    public ApiResponse<MemberResponseDTO.LoginDTO> getNaverAccessToken(HttpServletResponse response, @RequestParam(name = "code") String code){
+        String accessToken = loginService.getNaverAccessToken(code);
+        accessToken = "Bearer " + accessToken;
+        // ok -> 유저 정보 가져오기
+        NaverOauth2DTO.UserInfoResponseDTO userInfoResponseDTO = null;
+        try {
+            userInfoResponseDTO = loginService.getNaverUserInfo(accessToken);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        // 유저 정보에 DB 조회하고 정보 있으면 응답만, 없으면 저장까지, 추가정보 입력 여부에 따라서 응답 다르게
+        String oauthId = userInfoResponseDTO.getNaverAccount().getId();
+
+        Member member;
+        if( memberQueryService.isExistByOauthId(oauthId)){
+            member = memberQueryService.getMemberByOauthId(oauthId);
+        }
+        else{
+            member = MemberConverter.toMember(userInfoResponseDTO);
+            member = memberCommandService.create(member);
+        }
+        JwtToken token = jwtUtil.generateToken(String.valueOf(member.getId()), Role.USER);
+        response.addHeader("Access-Token", token.getAccessToken());
+        response.addHeader("Refresh-Token", token.getRefreshToken());
+        return ApiResponse.of(SuccessStatus._OK, MemberConverter.toLoginDTO(member));
+    }
 
     /*
    테스트용 API

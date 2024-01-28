@@ -37,7 +37,7 @@ public class Member extends BaseEntity {
 
     private String studentId;
 
-    private Long oauthId;
+    private String oauthId;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean infoSet; //추가 정보 기입 여부

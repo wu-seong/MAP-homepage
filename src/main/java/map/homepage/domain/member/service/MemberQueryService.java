@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface MemberQueryService {
     public Member getMemberById(Long id);
-    public Member getMemberByOauthId(Long oauthId);
-    public boolean isExistByOauthId(Long oauthId);
+    public Member getMemberByOauthId(String oauthId);
+    public boolean isExistByOauthId(String oauthId);
     public Page<Member> getAllActive(Integer page);
     public Page<Member> getAll(Integer page);
 }

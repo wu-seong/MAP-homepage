@@ -27,11 +27,11 @@ public class MemberQueryServiceImpl implements MemberQueryService{
         return member;
     }
 
-    public boolean isExistByOauthId(Long oauthId) {
+    public boolean isExistByOauthId(String oauthId) {
         return memberRepository.findByOauthId(oauthId).isPresent();
     }
 
-    public Member getMemberByOauthId(Long oauthId) {
+    public Member getMemberByOauthId(String oauthId) {
         Member member = memberRepository.findByOauthId(oauthId).orElseThrow(() ->
                 new GeneralException(ErrorStatus.USER_NOT_FOUND)
         );
