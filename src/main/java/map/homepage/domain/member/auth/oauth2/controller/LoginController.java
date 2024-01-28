@@ -9,6 +9,7 @@ import map.homepage.apiPayload.ApiResponse;
 import map.homepage.apiPayload.code.status.SuccessStatus;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.auth.oauth2.feignClient.dto.NaverOauth2DTO;
+import map.homepage.domain.member.dto.MemberResponseDTO;
 import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.member.auth.jwt.service.JwtUtil;
 import map.homepage.domain.member.auth.jwt.token.JwtToken;
@@ -70,7 +71,7 @@ public class LoginController {
     @Operation(summary = "소셜 로그인 인증 API", description = "토큰으로 정보 조회 및 저장, 성공시 응답 헤더에 jwt토큰 추가")
     @ResponseBody
     @GetMapping("/oauth2/login/kakao")
-    public ApiResponse<?> getKakaoAccessToken(HttpServletResponse response, @RequestParam(name = "code") String code){
+    public ApiResponse<MemberResponseDTO.LoginDTO> getKakaoAccessToken(HttpServletResponse response, @RequestParam(name = "code") String code){
         String accessToken = loginService.getKakaoAccessToken(code);
         accessToken = "Bearer " + accessToken;
         // ok -> 유저 정보 가져오기
@@ -83,32 +84,25 @@ public class LoginController {
         }
         // 유저 정보에 DB 조회하고 정보 있으면 응답만, 없으면 저장까지, 추가정보 입력 여부에 따라서 응답 다르게
         String oauthId = userInfoResponseDTO.getId();
+
+        Member member;
         if( memberQueryService.isExistByOauthId(oauthId)){
-            Member member = memberQueryService.getMemberByOauthId(oauthId);
-            // 응답헤더에 토큰 추가
-            JwtToken token = jwtUtil.generateToken(String.valueOf(member.getId()), Role.USER);
-            response.addHeader("Access-Token", token.getAccessToken());
-            response.addHeader("Refresh-Token", token.getRefreshToken());
-            if(member.isInfoSet()){
-                return ApiResponse.onSuccess(MemberConverter.toLoginDTO(member));
-            }
-            return ApiResponse.of(SuccessStatus.NEED_USER_DETAIL, MemberConverter.toLoginDTO(member));
+            member = memberQueryService.getMemberByOauthId(oauthId);
         }
         else{
-            Member user = MemberConverter.toMember(userInfoResponseDTO);
-            Long id = memberCommandService.create(user);
-            // 응답헤더에 토큰 추가
-            JwtToken token = jwtUtil.generateToken(String.valueOf(id), Role.USER);
-            response.addHeader("Access-Token", token.getAccessToken());
-            response.addHeader("Refresh-Token", token.getRefreshToken());
-            return ApiResponse.of(SuccessStatus.NEED_USER_DETAIL, MemberConverter.toLoginDTO(user));
+            member = MemberConverter.toMember(userInfoResponseDTO);
+            member = memberCommandService.create(member);
         }
+        JwtToken token = jwtUtil.generateToken(String.valueOf(member.getId()), Role.USER);
+        response.addHeader("Access-Token", token.getAccessToken());
+        response.addHeader("Refresh-Token", token.getRefreshToken());
+        return ApiResponse.of(SuccessStatus._OK, MemberConverter.toLoginDTO(member));
     }
 
     @Operation(summary = "소셜 로그인 인증 API", description = "토큰으로 정보 조회 및 저장, 성공시 응답 헤더에 jwt토큰 추가")
     @ResponseBody
     @GetMapping("/oauth2/login/naver")
-    public ApiResponse<?> getNaverAccessToken(HttpServletResponse response, @RequestParam(name = "code") String code){
+    public ApiResponse<MemberResponseDTO.LoginDTO> getNaverAccessToken(HttpServletResponse response, @RequestParam(name = "code") String code){
         String accessToken = loginService.getNaverAccessToken(code);
         accessToken = "Bearer " + accessToken;
         // ok -> 유저 정보 가져오기
@@ -121,26 +115,19 @@ public class LoginController {
         }
         // 유저 정보에 DB 조회하고 정보 있으면 응답만, 없으면 저장까지, 추가정보 입력 여부에 따라서 응답 다르게
         String oauthId = userInfoResponseDTO.getNaverAccount().getId();
+
+        Member member;
         if( memberQueryService.isExistByOauthId(oauthId)){
-            Member member = memberQueryService.getMemberByOauthId(oauthId);
-            // 응답헤더에 토큰 추가
-            JwtToken token = jwtUtil.generateToken(String.valueOf(member.getId()), Role.USER);
-            response.addHeader("Access-Token", token.getAccessToken());
-            response.addHeader("Refresh-Token", token.getRefreshToken());
-            if(member.isInfoSet()){
-                return ApiResponse.onSuccess(MemberConverter.toLoginDTO(member));
-            }
-            return ApiResponse.of(SuccessStatus.NEED_USER_DETAIL, MemberConverter.toLoginDTO(member));
+            member = memberQueryService.getMemberByOauthId(oauthId);
         }
         else{
-            Member user = MemberConverter.toMember(userInfoResponseDTO);
-            Long id = memberCommandService.create(user);
-            // 응답헤더에 토큰 추가
-            JwtToken token = jwtUtil.generateToken(String.valueOf(id), Role.USER);
-            response.addHeader("Access-Token", token.getAccessToken());
-            response.addHeader("Refresh-Token", token.getRefreshToken());
-            return ApiResponse.of(SuccessStatus.NEED_USER_DETAIL, MemberConverter.toLoginDTO(user));
+            member = MemberConverter.toMember(userInfoResponseDTO);
+            member = memberCommandService.create(member);
         }
+        JwtToken token = jwtUtil.generateToken(String.valueOf(member.getId()), Role.USER);
+        response.addHeader("Access-Token", token.getAccessToken());
+        response.addHeader("Refresh-Token", token.getRefreshToken());
+        return ApiResponse.of(SuccessStatus._OK, MemberConverter.toLoginDTO(member));
     }
 
     /*
