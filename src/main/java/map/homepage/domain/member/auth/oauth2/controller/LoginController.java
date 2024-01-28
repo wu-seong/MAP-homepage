@@ -35,7 +35,10 @@ public class LoginController {
     private String naverClientId;
     @Value("${naver.redirect-uri}")
     private String naverRedirectUri;
-
+    @Value("${KAKAO_CLIENT_ID")
+    private String kakaoClientId;
+    @Value("${kakao.redirect-uri}")
+    private String kakaoRedirectUri;
 
     /*
     테스트용 API, CORS 때문에 직접 호출하지 않고 redirect
@@ -46,8 +49,8 @@ public class LoginController {
     public String kakaoLogin(){
         String redirectUri = UriComponentsBuilder.fromUriString("https://kauth.kakao.com/oauth/authorize")
                 .queryParam("response_type", "code")
-                .queryParam("client_id", "a646059593978bf76530118502f575f3")
-                .queryParam("redirect_uri", "http://localhost:8080/oauth2/login/kakao")
+                .queryParam("client_id", kakaoClientId)
+                .queryParam("redirect_uri", kakaoRedirectUri)
                 .toUriString();
         return "redirect:" + redirectUri;
     }
@@ -102,8 +105,10 @@ public class LoginController {
     @Operation(summary = "소셜 로그인 인증 API", description = "토큰으로 정보 조회 및 저장, 성공시 응답 헤더에 jwt토큰 추가")
     @ResponseBody
     @GetMapping("/oauth2/login/naver")
-    public ApiResponse<MemberResponseDTO.LoginDTO> getNaverAccessToken(HttpServletResponse response, @RequestParam(name = "code") String code){
-        String accessToken = loginService.getNaverAccessToken(code);
+    public ApiResponse<MemberResponseDTO.LoginDTO> getNaverAccessToken(HttpServletResponse response,
+                                                                       @RequestParam(name = "code") String code,
+                                                                       @RequestParam(name = "state") String state){
+        String accessToken = loginService.getNaverAccessToken(code, state);
         accessToken = "Bearer " + accessToken;
         // ok -> 유저 정보 가져오기
         NaverOauth2DTO.UserInfoResponseDTO userInfoResponseDTO = null;

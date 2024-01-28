@@ -29,25 +29,30 @@ public class LoginService {
     @Value("${naver.client-id}")
     private String naverClientId;
     @Value("${naver.redirect-uri}")
-    private String redirectUri;
+    private String naverRedirectUri;
     @Value("${naver.client-secret}")
     private String naverClientSecret;
+    @Value("${kakao.client-id}")
+    private String kakaoClientId;
+    @Value("${kakao.redirect-uri}")
+    private String kakaoRedirectUri;
     /*
         테스트 용으로 만든거, 실제로는 프론트에서 처리해서 액세스 토큰만 가져다 줌
     */
     public String getKakaoAccessToken(String code){
         KakaoOauth2DTO.TokenResponseDTO tokenResponseDTO = kakaoOauth2Client.getAccessToken("authorization_code",
-                "a646059593978bf76530118502f575f3",
-                "http://localhost:8080/oauth2/login/kakao",
+                kakaoClientId,
+                kakaoRedirectUri,
                 code);
         log.info("token = {}", tokenResponseDTO.getAccessToken());
         return tokenResponseDTO.getAccessToken();
     }
-    public String getNaverAccessToken(String code){
+    public String getNaverAccessToken(String code, String state){
+        log.info("state={}", state);
         NaverOauth2DTO.TokenResponseDTO tokenResponseDTO = naverOauth2Client.getToken("authorization_code",
                 naverClientId,
                 naverClientSecret,
-                redirectUri,
+                naverRedirectUri,
                 code);
         log.info("token = {}", tokenResponseDTO.getAccessToken());
         return tokenResponseDTO.getAccessToken();
