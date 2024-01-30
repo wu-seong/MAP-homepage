@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local #활성 프로필 설정
+    active: dev #활성 프로필 설정
   config:
     cloud:
       openfeign:
