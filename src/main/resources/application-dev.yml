@@ -1,0 +1,18 @@
+spring:
+  config:
+    activate:
+      on-profile: "dev"
+  datasource:
+    url: jdbc:mysql://mapdb-dev.cfbrdgww2cly.ap-northeast-2.rds.amazonaws.com/map?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${DEV_DB_USERNAME}
+    password: ${DEV_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # JPA 설정
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update        # DB 초기화 전략 (none, create, create-drop, update, validate)
+    properties:
+      hibernate:
+        format_sql: true      # 쿼리 로그 포맷 (정렬)
+        show_sql: true        # 쿼리 로그 출력
