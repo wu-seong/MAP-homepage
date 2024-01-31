@@ -4,12 +4,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.MemberRepository;
+import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.post.Post;
 import map.homepage.domain.post.PostRepository;
 import map.homepage.domain.post.comment.dto.CommentCreateRequest;
 import map.homepage.domain.post.comment.dto.CommentDto;
 import map.homepage.domain.post.comment.dto.CommentReadCondition;
-import map.homepage.exception.MemberNotEqualsException;
 import map.homepage.exception.PostNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -33,25 +33,25 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentDto writeComment(final CommentCreateRequest commentCreateRequest, Long postId) {
+    public Comment writeComment(final CommentCreateRequest commentCreateRequest, Long postId) {
+        Member member = MemberContext.getMember();
         Post post = postRepository.findById(postId).orElseThrow(()->new PostNotFoundException("게시물을 찾을 수 없습니다."));
-        Comment comment = new Comment(commentCreateRequest.getContent(), post);
-        commentRepository.save(comment);
-        return CommentDto.toDto(comment);
+        Comment comment = new Comment(commentCreateRequest.getContent(), member, post);
+        return commentRepository.save(comment);
     }
 
     @Transactional
-    public void deleteComment(final Long id) {
-        Comment comment = commentRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("댓글 id를 찾을 수 없습니다."));
-        // Member member = memberRepository.findById(memberId).orElseThrow(()-> new MemberNotFoundException("회원을 찾을 수 없습니다."));
-        // validateOwnComment(comment, member);
+    public Comment deleteComment(final Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()-> new IllegalArgumentException("댓글 id를 찾을 수 없습니다."));
+        Post post = postRepository.findById(comment.getPost().getId()).orElseThrow();
         commentRepository.delete(comment);
+        return comment;
     }
 
-    private void validateOwnComment(Comment comment, Member member) {
+    /* private void validateOwnComment(Comment comment, Member member) {
         if (!comment.isOwnMember(member.getId())) {
             throw new MemberNotEqualsException();
         }
-    }
+    } */
 
 }

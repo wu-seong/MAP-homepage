@@ -37,13 +37,9 @@ public class Comment extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public Comment(String content, Post post) {
+    public Comment(String content, Member member, Post post) {
         super();
     }
-
-    // public boolean isOwnComment(Member member) {
-    //    return this.member.equals(member);
-    // }
 
     public boolean isOwnMember(Long memberId) {
         return this.member.getId().equals(memberId);  // Member 엔티티의 ID를 비교합니다.
