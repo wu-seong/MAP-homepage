@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor // final이나 @NonNull인 필드 값만 파라미터로 받는 생성자 만듦
 @RequestMapping("/comments") // 들어온 요청을 특정 method와 매핑하기 위해 사용
 public class CommentController {
-    private  final CommentService commentService;
+    private  final CommentServiceImpl commentService;
 
     // 댓글 조회 (불러오기)
     @GetMapping("/")
