@@ -67,24 +67,24 @@ public class Member extends BaseEntity {
     private Role role;
 
 
-
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Post> postList;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL) // 코멘트 완성 되면 주석 해제
     private List<Comment> commentList;
+
     public void update(String stuId, String nickname, String grade) {
         this.studentId = stuId;
         this.nickname = nickname;
         this.grade = grade;
     }
-    public void setMember(){
+
+    public void setMember() {
         this.infoSet = true;
         this.role = Role.USER;
     }
 
-    // 관리자 권한인지 확인하는 메소드
-    public boolean isAdmin() {
+    public boolean isAdmin() { //권한 확인
         return Role.ADMIN.equals(this.role);
     }
 }

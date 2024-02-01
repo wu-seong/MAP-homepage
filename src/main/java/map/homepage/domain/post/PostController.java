@@ -2,6 +2,8 @@
 package map.homepage.domain.post;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import map.homepage.domain.member.Member;
+import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.post.dto.PostRequestDTO;
 import map.homepage.domain.post.dto.PostResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.bouncycastle.asn1.x500.style.RFC4519Style.member;
 
 //http://localhost:8080/swagger-ui/index.html
 @RestController
@@ -23,7 +27,7 @@ public class PostController {
     }
 
     // 게시글 목록 조회
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<PostResponseDTO>> getPostList() {
         List<PostResponseDTO> postList = postService.getPostList();
         return ResponseEntity.ok(postList);
@@ -36,28 +40,31 @@ public class PostController {
     }
 
     // 게시글 추가
-    @PostMapping("/{memberId}")
+    @PostMapping("")
     public PostResponseDTO createPost(
-            @PathVariable Long memberId,
             @RequestBody PostRequestDTO postRequestDTO
-    ) { return postService.createPost(memberId, postRequestDTO);
+    ) {
+        Member member = MemberContext.getMember();
+        return postService.createPost(member,postRequestDTO);
     }
 
     // 게시글 수정
-    @PutMapping("/{memberId}/{postId}")
+    @PutMapping("/{postId}")
     public PostResponseDTO updatePost(
-            @PathVariable Long memberId,
             @PathVariable Long postId,
             @RequestBody PostRequestDTO postRequestDTO
-    ) { return postService.updatePost(memberId, postId, postRequestDTO);
+    ) {
+        Member member = MemberContext.getMember();
+        return postService.updatePost(member, postId, postRequestDTO);
     }
 
     // 게시글 삭제
-    @DeleteMapping("/{memberId}/{postId}")
+    @DeleteMapping("/{postId}")
     public ResponseEntity<String> deletePost(
-            @PathVariable Long memberId,
             @PathVariable Long postId
-    ) { postService.deletePost(memberId, postId);
+    ) {
+        Member member = MemberContext.getMember();
+        postService.deletePost(member, postId);
         return ResponseEntity.ok("성공적으로 삭제되었습니다.");
     }
 }
