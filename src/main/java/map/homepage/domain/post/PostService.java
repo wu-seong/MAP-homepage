@@ -1,3 +1,4 @@
+// PostService.java
 package map.homepage.domain.post;
 
 import map.homepage.domain.post.PostRepository;
@@ -19,7 +20,4 @@ public interface PostService {
     PostResponseDTO updatePost(Long memberId, Long postId, PostRequestDTO postRequestDTO); // 게시글 수정
     void deletePost(Long memberId, Long postId); // 게시글 삭제
     boolean isAdmin(Long memberId); // 관리자 권한 확인
-
-
 }
-
