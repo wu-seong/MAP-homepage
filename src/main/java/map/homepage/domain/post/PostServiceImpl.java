@@ -1,3 +1,4 @@
+// PostServiceImpl.java
 package map.homepage.domain.post;
 
 import lombok.RequiredArgsConstructor;
@@ -48,11 +49,8 @@ public class PostServiceImpl implements PostService {
     }
 
     // 게시물 추가
-    @Override
     @Transactional
-    public PostResponseDTO createPost(Long memberId, PostRequestDTO postRequestDTO) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow();
+    public PostResponseDTO createPost(Member member, PostRequestDTO postRequestDTO) {
 
         Post post = new Post();
         post.setMember(member);
@@ -71,12 +69,12 @@ public class PostServiceImpl implements PostService {
     // 게시글 수정
     @Override
     @Transactional
-    public PostResponseDTO updatePost(Long memberId, Long postId, PostRequestDTO postRequestDTO) {
+    public PostResponseDTO updatePost(Member member, Long postId, PostRequestDTO postRequestDTO) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
 
         // 현재 사용자의 memberId와 게시글의 작성자의 memberId를 비교하거나 ADMIN 권한 확인
-        if (!memberId.equals(post.getMember().getId()) && !isAdmin(memberId)) {
+        if (!isAuthorOrAdmin(member, post)) {
             try {
                 throw new AccessDeniedException("권한이 없습니다.");
             } catch (AccessDeniedException e) {
@@ -94,14 +92,13 @@ public class PostServiceImpl implements PostService {
     }
 
     // 게시글 삭제
-    @Override
     @Transactional
-    public void deletePost(Long memberId, Long postId) {
+    public void deletePost(Member member, Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
 
         // 현재 사용자의 memberId와 게시글의 작성자의 memberId를 비교하거나 ADMIN 권한 확인
-        if (!memberId.equals(post.getMember().getId()) && !isAdmin(memberId)) {
+        if (!isAuthorOrAdmin(member, post)) {
             try {
                 throw new AccessDeniedException("권한이 없습니다.");
             } catch (AccessDeniedException e) {
@@ -111,12 +108,8 @@ public class PostServiceImpl implements PostService {
         postRepository.delete(post);
     }
 
-    // 권한 확인
-    @Override
-    public boolean isAdmin(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException("사용자를 확인할 수 없습니다." + memberId));
-
-        return member.isAdmin();
+    public boolean isAuthorOrAdmin(Member member, Post post) {
+        // 현재 사용자의 memberId와 게시글의 작성자의 memberId를 비교하거나 ADMIN 권한 확인
+        return member.getId().equals(post.getMember().getId()) || member.isAdmin();
     }
 }

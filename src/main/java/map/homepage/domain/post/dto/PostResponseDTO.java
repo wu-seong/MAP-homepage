@@ -1,3 +1,4 @@
+// PostResponseDTO.java
 package map.homepage.domain.post.dto;
 
 import lombok.*;
