@@ -1,3 +1,4 @@
+// PostController.java
 package map.homepage.domain.post;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
