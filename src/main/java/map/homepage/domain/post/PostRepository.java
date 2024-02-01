@@ -1,3 +1,4 @@
+// PostRepositoy.java
 package map.homepage.domain.post;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,3 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findById(Long postId); // 단일 게시물 조회
     Post save(Post post); // 게시글 저장
 }
-

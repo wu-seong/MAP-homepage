@@ -30,6 +30,7 @@ public class MemberInterceptor implements HandlerInterceptor {
             Member member = memberQueryService.getMemberById(Long.valueOf(memberId));
 
             // 조회한 유저 ThreadLocal에 저장하기
+
             MemberContext.setMember(member);
             return true;
         }

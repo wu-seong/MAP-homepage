@@ -1,5 +1,7 @@
+// PostService.java
 package map.homepage.domain.post;
 
+import map.homepage.domain.member.Member;
 import map.homepage.domain.post.PostRepository;
 import map.homepage.domain.post.dto.PostResponseDTO;
 import map.homepage.domain.post.dto.PostRequestDTO;
@@ -15,11 +17,8 @@ public interface PostService {
 
     List<PostResponseDTO> getPostList(); // 게시글 목록 조회
     PostResponseDTO viewPost(Long postId); // 단일 게시글 조회
-    PostResponseDTO createPost(Long memberId, PostRequestDTO postRequestDTO); // 게시글 추가
-    PostResponseDTO updatePost(Long memberId, Long postId, PostRequestDTO postRequestDTO); // 게시글 수정
-    void deletePost(Long memberId, Long postId); // 게시글 삭제
-    boolean isAdmin(Long memberId); // 관리자 권한 확인
-
-
+    PostResponseDTO createPost(Member member, PostRequestDTO postRequestDTO); // 게시글 추가
+    PostResponseDTO updatePost(Member member, Long postId, PostRequestDTO postRequestDTO); // 게시글 수정
+    void deletePost(Member member, Long postId); // 게시글 삭제
+    boolean isAuthorOrAdmin(Member member, Post post); //권한 확인
 }
-

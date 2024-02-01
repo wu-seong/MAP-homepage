@@ -1,3 +1,4 @@
+// Post.java
 package map.homepage.domain.post;
 
 import jakarta.persistence.*;
@@ -39,6 +40,8 @@ public class Post extends BaseEntity {
     private String content; // 게시글 내용
     private String dtype; // 게시글 타입
     private int views; // 게시글 조회 수
+
+    private String accessUrl; // S3 이미지 접근 URL
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;

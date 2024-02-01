@@ -1,3 +1,4 @@
+// PostRequestDTO.java
 package map.homepage.domain.post.dto;
 
 import lombok.Getter;
@@ -14,4 +15,3 @@ public class PostRequestDTO {
     private String dtype;
     private String content;
 }
-
