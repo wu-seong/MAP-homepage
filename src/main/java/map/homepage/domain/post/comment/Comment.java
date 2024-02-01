@@ -38,10 +38,8 @@ public class Comment extends BaseEntity {
     private Role role;
 
     public Comment(String content, Member member, Post post) {
-        super();
-    }
-
-    public boolean isOwnMember(Long memberId) {
-        return this.member.getId().equals(memberId);  // Member 엔티티의 ID를 비교합니다.
+        this.content = content;
+        this.member = member;
+        this.post = post;
     }
 }
