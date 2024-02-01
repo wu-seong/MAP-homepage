@@ -4,7 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import map.homepage.apiPayload.ApiResponse;
-import map.homepage.domain.post.comment.dto.CommentCreateRequest;
+import map.homepage.domain.member.Member;
+import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.post.comment.dto.CommentDto;
 import map.homepage.domain.post.comment.dto.CommentReadCondition;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +28,8 @@ public class CommentController {
     // 댓글 생성
     @PostMapping("/{post_id}")
     @Operation(summary = "댓글 작성 API",description = "게시물에 대한 새로운 댓글 작성")
-    public ApiResponse<CommentDto> writeComment(@RequestBody CommentCreateRequest commentCreateRequest, @PathVariable("post_id") Long postId) {
-        Comment createComment = commentService.writeComment(commentCreateRequest, postId);
+    public ApiResponse<CommentDto> writeComment(@RequestBody String content, @PathVariable("post_id") Long postId) {
+        Comment createComment = commentService.writeComment(content, postId);
         return ApiResponse.onSuccess(CommentDto.toDto(createComment));
     }
 
@@ -36,8 +37,8 @@ public class CommentController {
     @DeleteMapping("/{comment_id}")
     @Operation(summary = "댓글 삭제 API",description = "softDelete")
     public ApiResponse<CommentDto> deleteComment(@PathVariable("comment_id") Long commentId){
-        Comment deleteComment = commentService.deleteComment(commentId);
+        Member member = MemberContext.getMember();
+        Comment deleteComment = commentService.deleteComment(commentId, member);
         return ApiResponse.onSuccess(CommentDto.toDto(deleteComment));
-        // MemberContext.getMember() -> 이후에
     }
 }
