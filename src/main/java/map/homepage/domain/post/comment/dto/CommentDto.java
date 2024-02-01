@@ -17,15 +17,10 @@ public class CommentDto {
 
     public static CommentDto toDto(Comment comment) {
         String writer = (comment.getMember() != null) ? comment.getMember().getName() : null;
-        return new CommentDto(
-                comment.getId(),
-                comment.getContent(),
-                writer
-        );
-//        return CommentDto.builder()
-//                .id(comment.getId())
-//                .content(comment.getContent())
-//                .writer(comment.getMember().getName())
-//                .build();
+        return CommentDto.builder()
+                .id(comment.getId())
+                .content(comment.getContent())
+                .writer(writer)
+                .build();
     }
 }

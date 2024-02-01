@@ -23,7 +23,7 @@ permitAll이면 다음 필터로 넘기기(dofilter)
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
-    private final static String[] ignorePrefix = {"/swagger-ui", "/v3/api-docs", "/oauth2", "/posts"};
+    private final static String[] ignorePrefix = {"/swagger-ui", "/v3/api-docs", "/oauth2", "/posts", "/health", "/comments"};
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
