@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import map.homepage.domain.member.auth.jwt.service.JwtTokenProvider;
+import map.homepage.domain.member.auth.jwt.service.JwtUtil;
+import map.homepage.domain.member.enums.Role;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -23,6 +25,7 @@ permitAll이면 다음 필터로 넘기기(dofilter)
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtUtil jwtUtil;
     private final static String[] ignorePrefix = {"/swagger-ui", "/v3/api-docs", "/oauth2", "/posts", "/health", "/comments"};
 
     @Override
@@ -42,7 +45,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             accessToken = authHeader.substring(7);
         }
         if (jwtTokenProvider.verifyToken(accessToken)){
-            log.info("인증성공");
+            log.info("토큰 검증 성공");
+            if( currentPath.startsWith("/admin")) {
+                // admin role이 필요한 요청
+                String requesterRole = jwtUtil.getRole(accessToken);
+                log.info("requesterRole = {} ", requesterRole);
+                if(!requesterRole.endsWith(Role.ADMIN.getValue())){
+                    // 요청자가 admin Role이 아니면 인가하지 않음
+                    response.sendError(401, "Unauthorized");
+                }
+            }
             filterChain.doFilter(request, response);
         }
         else{
