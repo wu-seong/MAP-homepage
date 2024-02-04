@@ -7,7 +7,6 @@ import io.jsonwebtoken.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import map.homepage.config.AmazonConfig;
-import map.homepage.domain.photo.Uuid;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,9 +33,5 @@ public class AmazonS3Manager{
         }
 
         return amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();
-    }
-
-    public String generatePhotoKeyName(Uuid uuid) {
-        return amazonConfig.getPhotoPath() + '/' + uuid.getUuid();
     }
 }

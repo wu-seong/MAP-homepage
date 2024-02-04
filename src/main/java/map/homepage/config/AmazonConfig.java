@@ -1,5 +1,6 @@
 package map.homepage.config;
 
+import com.amazonaws.services.s3.AmazonS3Client;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 
@@ -13,12 +14,10 @@ import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import org.springframework.data.convert.ValueConverter;
 
 @Configuration
 @Getter
 public class AmazonConfig {
-
 
     private AWSCredentials awsCredentials;
 
@@ -34,25 +33,22 @@ public class AmazonConfig {
     @Value("$cloud.aws.s3.bucket")
     private String bucket;
 
-    @Value("${cloud.aws.path.photo")
-    private String photoPath;
-
-    @PostConstruct
-    public void init() {
-        this.awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
-    }
-
     @Bean
-    public AmazonS3 amazonS3() {
-        AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
-        return AmazonS3ClientBuilder.standard()
+    public AmazonS3Client amazonS3Client() {
+        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
+        return (AmazonS3Client)AmazonS3ClientBuilder.standard()
                 .withRegion(region)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
     }
 
-    @Bean
-    public AWSCredentialsProvider awsCredentialsProvider() {
-        return new AWSStaticCredentialsProvider(awsCredentials);
-    }
+//    @Bean
+//    public AmazonS3 s3Builder() {
+//        AWSCredentials basicAWSCredentials = new BasicAWSCredentials(accessKey, secretKey);
+//
+//
+//        return AmazonS3ClientBuilder.standard()
+//                .withCredentials(new AWSStaticCredentialsProvider(basicAWSCredentials))
+//                .withRegion(region).build();
+//    }
 }

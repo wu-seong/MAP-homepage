@@ -21,8 +21,6 @@ cloud:
   aws:
     s3:
       bucket: test-map-s3 #나중에 수정
-      path :
-        photo : photos
     region:
       static: ap-northeast-2
     stack:

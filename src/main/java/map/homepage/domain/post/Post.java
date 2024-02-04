@@ -30,8 +30,11 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "member_id") // 외래키
     private Member member; // 게시글 작성자
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
+
+    //@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    //private List<Image> images;
 
     @Enumerated(EnumType.STRING) // Role에서 enum으로 가져옴
     private Role role; // 읽기 권한
@@ -40,8 +43,6 @@ public class Post extends BaseEntity {
     private String content; // 게시글 내용
     private String dtype; // 게시글 타입
     private int views; // 게시글 조회 수
-
-    private String accessUrl; // S3 이미지 접근 URL
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
