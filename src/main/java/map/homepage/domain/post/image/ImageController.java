@@ -16,6 +16,7 @@ public class ImageController {
 
     private final ImageService imageService;
 
+    // 사진 업로드
     @PostMapping("/{post_id}")
     public ResponseEntity<String> uploadImage(
             @PathVariable("post_id") Long postId,
@@ -25,7 +26,14 @@ public class ImageController {
             String imageUrl = imageService.uploadImage(postId, file);
             return ResponseEntity.ok(imageUrl);
         } catch (IOException e) {
-            throw new ImageUploadException("이미지 업로드 중 오류가 발생했습니다.");
+            throw new ImageUploadException("사진 업로드 중 오류가 발생했습니다.");
         }
+    }
+
+    // 사진 삭제
+    @DeleteMapping("/{image_id}")
+    public ResponseEntity<String> deleteImage(@PathVariable("image_id") Long imageId) {
+        imageService.deleteImage(imageId);
+        return ResponseEntity.ok("사진이 성공적으로 삭제되었습니다.");
     }
 }

@@ -6,9 +6,9 @@ import map.homepage.domain.member.Member;
 import map.homepage.domain.member.MemberRepository;
 import map.homepage.domain.post.dto.PostRequestDTO;
 import map.homepage.domain.post.dto.PostResponseDTO;
-import map.homepage.exception.MemberNotFoundException;
+import map.homepage.domain.post.image.Image;
+import map.homepage.domain.post.image.ImageService;
 import map.homepage.exception.PostNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+    private final ImageService imageService;
     private final MemberRepository memberRepository;
 
     // 게시글 목록 조회
@@ -105,6 +106,11 @@ public class PostServiceImpl implements PostService {
                 throw new RuntimeException(e);
             }
         }
+        List<Image> images = post.getImages(); // 해당 게시글의 사진도 삭제
+        for (Image image : images) {
+            imageService.deleteImage(image.getId());
+        }
+
         postRepository.delete(post);
     }
 

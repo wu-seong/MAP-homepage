@@ -50,4 +50,16 @@ public class ImageServiceImpl implements ImageService {
         // 업로드된 이미지의 URL 반환
         return "https://" + bucket + "/" + storagePath;
     }
+
+    @Override
+    public void deleteImage(Long imageId) {
+        // 이미지 정보를 데이터베이스에서 삭제
+        Image image = imageRepository.findById(imageId)
+                .orElseThrow(() -> new PostNotFoundException("해당 ID의 Image를 찾을 수 없습니다."));
+        imageRepository.delete(image);
+
+        // AWS S3에서 이미지 삭제
+        String storagePath = image.getStoragePath();
+        amazonS3Client.deleteObject(bucket, storagePath);
+    }
 }
