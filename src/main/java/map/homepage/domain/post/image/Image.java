@@ -1,3 +1,4 @@
+//Image.java
 package map.homepage.domain.post.image;
 
 import jakarta.persistence.*;
