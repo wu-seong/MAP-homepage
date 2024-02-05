@@ -7,8 +7,8 @@ import map.homepage.domain.common.BaseEntity;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.post.comment.Comment;
+import map.homepage.domain.post.image.Image;
 
-import java.security.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,8 +33,8 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
-    //@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    //private List<Image> images;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Image> images;
 
     @Enumerated(EnumType.STRING) // Role에서 enum으로 가져옴
     private Role role; // 읽기 권한
