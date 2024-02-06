@@ -11,7 +11,6 @@ import map.homepage.domain.post.PostRepository;
 import map.homepage.domain.post.comment.dto.CommentDto;
 import map.homepage.domain.post.comment.dto.CommentReadCondition;
 import map.homepage.exception.GeneralException;
-import map.homepage.exception.PostNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,14 +36,14 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public Comment writeComment(final String content, Long postId) {
         Member member = MemberContext.getMember();
-        Post post = postRepository.findById(postId).orElseThrow(()->new PostNotFoundException("게시물을 찾을 수 없습니다."));
+        Post post = postRepository.findById(postId).orElseThrow(()->new GeneralException(ErrorStatus.USER_NOT_FOUND));
         Comment comment = new Comment(content, member, post);
         return commentRepository.save(comment);
     }
 
     @Override
     public Comment deleteComment(final Long commentId, Member member) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(()-> new IllegalArgumentException("댓글 id를 찾을 수 없습니다."));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()-> new GeneralException(ErrorStatus.USER_NOT_FOUND));
         validateOwnComment(comment, member);
         commentRepository.delete(comment);
         return comment;
