@@ -18,24 +18,24 @@ public class CommentController {
     private  final CommentServiceImpl commentService;
 
     // 댓글 조회 (불러오기)
-    @GetMapping("/{post_id}")
+    @GetMapping("/{post-id}")
     @Operation(summary = "댓글 조회 API",description = "게시물에 대한 전체 댓글 조회")
-    public ApiResponse<List<CommentDto>> getComment(@PathVariable("post_id") Long postId) {
+    public ApiResponse<List<CommentDto>> getComment(@PathVariable("post-id") Long postId) {
         return ApiResponse.onSuccess(commentService.getComment(postId));
     }
 
     // 댓글 생성
-    @PostMapping("/{post_id}")
+    @PostMapping("/{post-id}")
     @Operation(summary = "댓글 작성 API",description = "게시물에 대한 새로운 댓글 작성")
-    public ApiResponse<CommentDto> writeComment(@RequestBody String content, @PathVariable("post_id") Long postId) {
+    public ApiResponse<CommentDto> writeComment(@RequestBody String content, @PathVariable("post-id") Long postId) {
         Comment createComment = commentService.writeComment(content, postId);
         return ApiResponse.onSuccess(CommentDto.toDto(createComment));
     }
 
     // 댓글 삭제
-    @DeleteMapping("/{comment_id}")
+    @DeleteMapping("/{comment-id}")
     @Operation(summary = "댓글 삭제 API",description = "softDelete")
-    public ApiResponse<CommentDto> deleteComment(@PathVariable("comment_id") Long commentId){
+    public ApiResponse<CommentDto> deleteComment(@PathVariable("comment-id") Long commentId){
         Member member = MemberContext.getMember();
         Comment deleteComment = commentService.deleteComment(commentId, member);
         return ApiResponse.onSuccess(CommentDto.toDto(deleteComment));
