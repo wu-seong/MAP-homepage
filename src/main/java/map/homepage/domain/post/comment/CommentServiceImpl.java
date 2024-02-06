@@ -9,7 +9,6 @@ import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.post.Post;
 import map.homepage.domain.post.PostRepository;
 import map.homepage.domain.post.comment.dto.CommentDto;
-import map.homepage.domain.post.comment.dto.CommentReadCondition;
 import map.homepage.exception.GeneralException;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +25,9 @@ public class CommentServiceImpl implements CommentService{
     private final MemberRepository memberRepository;
 
     @Override
-    public List<CommentDto> getComment(CommentReadCondition condition) {
+    public List<CommentDto> getComment(Long postId) {
         // return 해주기 전에
-        return commentRepository.findAllByPostId(condition.getPostId()).stream()
+        return commentRepository.findAllByPostId(postId).stream()
                 .map(CommentDto::toDto)
                 .collect(Collectors.toList());
     }
