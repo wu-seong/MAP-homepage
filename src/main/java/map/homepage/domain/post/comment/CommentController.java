@@ -1,14 +1,14 @@
 package map.homepage.domain.post.comment;
 
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import map.homepage.apiPayload.ApiResponse;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.post.comment.dto.CommentDto;
-import map.homepage.domain.post.comment.dto.CommentReadCondition;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 // 사용자(Front-End) 와 백엔드를 연결해주는 역할
 @RestController // RestApi 사용 시
@@ -18,11 +18,10 @@ public class CommentController {
     private  final CommentServiceImpl commentService;
 
     // 댓글 조회 (불러오기)
-    @GetMapping("/")
+    @GetMapping("/{post_id}")
     @Operation(summary = "댓글 조회 API",description = "게시물에 대한 전체 댓글 조회")
-    public ApiResponse<?> getComment(@Valid CommentReadCondition commentReadCondition) {
-        // List<CommentDto> commentDtoList = commentService.getComment(commentReadCondition);
-        return ApiResponse.onSuccess(commentService.getComment(commentReadCondition));
+    public ApiResponse<List<CommentDto>> getComment(@PathVariable("post_id") Long postId) {
+        return ApiResponse.onSuccess(commentService.getComment(postId));
     }
 
     // 댓글 생성
