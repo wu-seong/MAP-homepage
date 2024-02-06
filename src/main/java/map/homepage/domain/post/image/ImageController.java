@@ -24,6 +24,7 @@ public class ImageController {
         try {
             // 이미지를 업로드하고 URL을 반환하는 서비스 메소드 호출
             String imageUrl = imageService.uploadImage(postId, file);
+            System.out.println(imageUrl);
             return ResponseEntity.ok(imageUrl);
         } catch (IOException e) {
             throw new ImageUploadException("사진 업로드 중 오류가 발생했습니다.");

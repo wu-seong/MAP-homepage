@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import map.homepage.domain.common.BaseEntity;
 import map.homepage.domain.post.Post;
 
 @Entity
@@ -13,7 +14,7 @@ import map.homepage.domain.post.Post;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Image {
+public class Image extends BaseEntity {
 
     @Id
     @Column(name = "image_id")
@@ -25,5 +26,6 @@ public class Image {
     private Post post;
 
     private String originalName;
-    private String storagePath;
+    private String storageName;
+    private String imageUrl;
 }

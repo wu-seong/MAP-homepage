@@ -27,14 +27,15 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public String uploadImage(Long postId, MultipartFile file) throws IOException {
-        String originalName = file.getOriginalFilename();
-        String storagePath = "images/" + UUID.randomUUID() + "_" + originalName;
+        String originalName = file.getOriginalFilename(); // 원본 이름
+        String storageName = "images/" + UUID.randomUUID() + "_" + originalName;
+        String imageUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + storageName;
 
         // AWS S3에 이미지 업로드
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
         metadata.setContentLength(file.getSize());
-        amazonS3Client.putObject(bucket, storagePath, file.getInputStream(), metadata);
+        amazonS3Client.putObject(bucket, storageName, file.getInputStream(), metadata);
 
         // Post 가져오기 -> 나중에 버튼 누를 때 자동으로 들어가도록 수정
         Post post = postRepository.findById(postId)
@@ -43,12 +44,13 @@ public class ImageServiceImpl implements ImageService {
         // 이미지 정보 저장
         Image image = new Image();
         image.setOriginalName(originalName);
-        image.setStoragePath(storagePath);
+        image.setStorageName(storageName);
+        image.setImageUrl(imageUrl);
         image.setPost(post); // -> 나중에 버튼 누를 때 자동으로 들어가도록 수정
         imageRepository.save(image); // 이미지 정보를 데이터베이스에 저장
 
         // 업로드된 이미지의 URL 반환
-        return "https://" + bucket + "/" + storagePath;
+        return imageUrl;
     }
 
     @Override
@@ -59,7 +61,7 @@ public class ImageServiceImpl implements ImageService {
         imageRepository.delete(image);
 
         // AWS S3에서 이미지 삭제
-        String storagePath = image.getStoragePath();
+        String storagePath = image.getStorageName();
         amazonS3Client.deleteObject(bucket, storagePath);
     }
 }
