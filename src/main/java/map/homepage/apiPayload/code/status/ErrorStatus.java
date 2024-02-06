@@ -17,7 +17,8 @@ public enum ErrorStatus implements BaseCode {
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
 
     // 유저 관련 응답
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4001", "해당 사용자가 존재하지 않습니다.");
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4001", "해당 사용자가 존재하지 않습니다."),
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT4001", "해당 댓글 id가 존재하지 않습니다.");
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;
