@@ -18,13 +18,11 @@ public class ImageController {
 
     // 사진 업로드
     @PostMapping("/{post_id}")
-    public ResponseEntity<String> uploadImage(
-            @PathVariable("post_id") Long postId,
+    public ResponseEntity<String> uploadImage(Long postId,
             @RequestParam("file") MultipartFile file) {
         try {
             // 이미지를 업로드하고 URL을 반환하는 서비스 메소드 호출
-            String imageUrl = imageService.uploadImage(postId, file);
-            System.out.println(imageUrl);
+            String imageUrl = imageService.uploadImage(postId,file);
             return ResponseEntity.ok(imageUrl);
         } catch (IOException e) {
             throw new ImageUploadException("사진 업로드 중 오류가 발생했습니다.");

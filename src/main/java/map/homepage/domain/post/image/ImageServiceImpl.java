@@ -37,16 +37,16 @@ public class ImageServiceImpl implements ImageService {
         metadata.setContentLength(file.getSize());
         amazonS3Client.putObject(bucket, storageName, file.getInputStream(), metadata);
 
-        // Post 가져오기 -> 나중에 버튼 누를 때 자동으로 들어가도록 수정
+        // postId를 사용하여 Post 엔티티를 가져옴
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("해당 ID의 Post를 찾을 수 없습니다."));
+                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
         // 이미지 정보 저장
         Image image = new Image();
         image.setOriginalName(originalName);
         image.setStorageName(storageName);
         image.setImageUrl(imageUrl);
-        image.setPost(post); // -> 나중에 버튼 누를 때 자동으로 들어가도록 수정
+        image.setPost(post);
         imageRepository.save(image); // 이미지 정보를 데이터베이스에 저장
 
         // 업로드된 이미지의 URL 반환
