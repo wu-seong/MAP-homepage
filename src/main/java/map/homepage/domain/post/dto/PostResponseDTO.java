@@ -4,7 +4,6 @@ package map.homepage.domain.post.dto;
 import lombok.*;
 import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.post.Post;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 

@@ -6,7 +6,6 @@ import map.homepage.domain.member.Member;
 import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.post.dto.PostRequestDTO;
 import map.homepage.domain.post.dto.PostResponseDTO;
-import map.homepage.domain.post.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,6 @@ import java.util.List;
 public class PostController {
 
     private PostService postService;
-    private ImageService imageService;
 
     @Autowired
     public PostController(PostService postService) {

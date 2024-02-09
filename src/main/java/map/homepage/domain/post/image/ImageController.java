@@ -1,4 +1,4 @@
-//Imagecontroller.java
+//ImageController.java
 package map.homepage.domain.post.image;
 
 import lombok.RequiredArgsConstructor;
