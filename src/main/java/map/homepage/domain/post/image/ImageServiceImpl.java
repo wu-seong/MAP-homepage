@@ -49,8 +49,8 @@ public class ImageServiceImpl implements ImageService {
         image.setPost(post);
         imageRepository.save(image); // 이미지 정보를 데이터베이스에 저장
 
-        // 업로드된 이미지의 URL 반환
-        return imageUrl;
+        // 업로드된 이미지의 썸네일 URL 반환
+        return "https://d3djt9dt9ouox.cloudfront.net/"+storageName; // 나중에 수정
     }
 
     @Override

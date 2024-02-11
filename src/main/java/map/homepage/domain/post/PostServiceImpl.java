@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -82,15 +83,15 @@ public class PostServiceImpl implements PostService {
         post.setRole(member.getRole());
 
         postRepository.save(post); // 게시글 저장
-
         Long postId = post.getId();
 
-        //List<String> imageUrls = new ArrayList<>();
+        List<String> thumbNails = new ArrayList<>();
         for (MultipartFile f : file) {
-            String newUrl = imageService.uploadImage(postId,f);
-            //imageUrls.add(newUrl);
+            String URL = imageService.uploadImage(postId,f);
+            thumbNails.add(URL); // 넘어오는 썸네일 URL을 저장
         }
 
+        post.setThumbnail(thumbNails.get(0)); // 첫번째 사진을 post에 저장
         return PostResponseDTO.fromEntity(post);
     }
 
