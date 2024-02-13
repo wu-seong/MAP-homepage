@@ -44,6 +44,7 @@ public class Post extends BaseEntity {
     private String dtype; // 게시글 타입
     private int views; // 게시글 조회 수
     private String thumbnail; // 게시글 썸네일
+    private boolean isNotice; // 게시글 공지 유무
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;

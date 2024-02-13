@@ -8,12 +8,12 @@ import map.homepage.domain.post.dto.PostResponseDTO;
 import map.homepage.domain.post.image.Image;
 import map.homepage.domain.post.image.ImageService;
 import map.homepage.exception.PostNotFoundException;
+import map.homepage.exception.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -113,11 +113,7 @@ public class PostServiceImpl implements PostService {
 
         // 현재 사용자의 memberId와 게시글의 작성자의 memberId를 비교하거나 ADMIN 권한 확인
         if (!isAuthorOrAdmin(member, post)) {
-            try {
-                throw new AccessDeniedException("권한이 없습니다.");
-            } catch (AccessDeniedException e) {
-                throw new RuntimeException(e);
-            }
+            throw new AccessDeniedException("권한이 없습니다.");
         }
 
         post.setTitle(postRequestDTO.getTitle()); // 제목
@@ -137,18 +133,28 @@ public class PostServiceImpl implements PostService {
 
         // 현재 사용자의 memberId와 게시글의 작성자의 memberId를 비교하거나 ADMIN 권한 확인
         if (!isAuthorOrAdmin(member, post)) {
-            try {
-                throw new AccessDeniedException("권한이 없습니다.");
-            } catch (AccessDeniedException e) {
-                throw new RuntimeException(e);
-            }
+            throw new AccessDeniedException("권한이 없습니다.");
         }
+
         List<Image> images = post.getImages(); // 해당 게시글의 사진도 삭제
         for (Image image : images) {
             imageService.deleteImage(image.getId());
         }
 
         postRepository.delete(post);
+    }
+
+    // 게시글 고정 또는 해제
+    public void toggleNotice(Member member, Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
+
+        if (!member.isAdmin()) {
+            throw new AccessDeniedException("권한이 없습니다.");
+        }
+
+        post.setNotice(!post.isNotice());
+        postRepository.save(post);
     }
 
     // 권한 확인

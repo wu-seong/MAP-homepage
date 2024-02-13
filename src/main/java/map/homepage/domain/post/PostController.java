@@ -44,7 +44,9 @@ public class PostController {
 
     // 단일 게시글 조회
     @GetMapping("/{postId}")
-    public PostResponseDTO viewPost(@PathVariable Long postId) {
+    public PostResponseDTO viewPost(
+            @PathVariable Long postId
+    ) {
         return postService.viewPost(postId);
     }
 
@@ -77,6 +79,16 @@ public class PostController {
         return postService.updatePost(member, postId, postRequestDTO);
     }
 
+    // 게시글 고정 또는 해제
+    @PatchMapping("/notice/{postId}")
+    public ResponseEntity<Void> toggleNotice(
+            @PathVariable Long postId
+    ) {
+        Member member = MemberContext.getMember();
+        postService.toggleNotice(member, postId);
+        return ResponseEntity.ok().build();
+    }
+
     // 게시글 삭제
     @DeleteMapping("/{postId}")
     public ResponseEntity<String> deletePost(
@@ -87,4 +99,3 @@ public class PostController {
         return ResponseEntity.ok("성공적으로 삭제되었습니다.");
     }
 }
-

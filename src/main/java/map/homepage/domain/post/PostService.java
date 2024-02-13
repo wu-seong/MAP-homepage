@@ -21,5 +21,7 @@ public interface PostService {
     PostResponseDTO createImagePost(Member member, List<MultipartFile> file, PostRequestDTO postRequestDTO) throws IOException; // 사진 게시글 추가
     PostResponseDTO updatePost(Member member, Long postId, PostRequestDTO postRequestDTO); // 게시글 수정
     void deletePost(Member member, Long postId); // 게시글 삭제
-    boolean isAuthorOrAdmin(Member member, Post post); //권한 확인
+    void toggleNotice(Member member, Long postId); // 게시글 고정 또는 해제
+
+    boolean isAuthorOrAdmin(Member member, Post post); // 권한 확인
 }
