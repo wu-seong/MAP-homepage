@@ -7,8 +7,8 @@ import map.homepage.domain.common.BaseEntity;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.post.comment.Comment;
+import map.homepage.domain.post.image.Image;
 
-import java.security.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,8 +30,11 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "member_id") // 외래키
     private Member member; // 게시글 작성자
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Image> images;
 
     @Enumerated(EnumType.STRING) // Role에서 enum으로 가져옴
     private Role role; // 읽기 권한
@@ -40,8 +43,7 @@ public class Post extends BaseEntity {
     private String content; // 게시글 내용
     private String dtype; // 게시글 타입
     private int views; // 게시글 조회 수
-
-    private String accessUrl; // S3 이미지 접근 URL
+    private String thumbnail; // 게시글 썸네일
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;

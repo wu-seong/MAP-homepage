@@ -1,22 +1,24 @@
 // PostController.java
 package map.homepage.domain.post;
 
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.post.dto.PostRequestDTO;
 import map.homepage.domain.post.dto.PostResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
-
-import static org.bouncycastle.asn1.x500.style.RFC4519Style.member;
 
 //http://localhost:8080/swagger-ui/index.html
 @RestController
 @RequestMapping("/posts")
+@RequiredArgsConstructor
 public class PostController {
 
     private PostService postService;
@@ -45,7 +47,17 @@ public class PostController {
             @RequestBody PostRequestDTO postRequestDTO
     ) {
         Member member = MemberContext.getMember();
-        return postService.createPost(member,postRequestDTO);
+        return postService.createPost(member, postRequestDTO);
+    }
+
+    // 사진 게시글 추가
+    @PostMapping(value = "/withImage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public PostResponseDTO createImagePost(
+            @RequestPart(name = "file") List<MultipartFile> file,
+            @RequestPart(name = "postRequestDTO") PostRequestDTO postRequestDTO
+    ) throws IOException {
+        Member member = MemberContext.getMember();
+        return postService.createImagePost(member, file, postRequestDTO);
     }
 
     // 게시글 수정
