@@ -28,10 +28,17 @@ public class PostController {
         this.postService = postService;
     }
 
-    // 게시글 목록 조회
-    @GetMapping("")
-    public ResponseEntity<List<PostResponseDTO>> getPostList() {
-        List<PostResponseDTO> postList = postService.getPostList();
+    // 사진 게시글 목록 조회
+    @GetMapping("/photo")
+    public ResponseEntity<List<PostResponseDTO>> getPhotoPostList() {
+        List<PostResponseDTO> postList = postService.getPhotoPostList();
+        return ResponseEntity.ok(postList);
+    }
+
+    // 일반 게시글 목록 조회
+    @GetMapping("/general")
+    public ResponseEntity<List<PostResponseDTO>> getGeneralPostList() {
+        List<PostResponseDTO> postList = postService.getGeneralPostList();
         return ResponseEntity.ok(postList);
     }
 

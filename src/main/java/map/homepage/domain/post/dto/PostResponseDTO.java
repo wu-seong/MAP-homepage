@@ -18,6 +18,8 @@ public class PostResponseDTO {
     private String title;
     private LocalDateTime createdAt;
 
+    private String nickname;
+
     // 게시글 목록 조회
     public static PostResponseDTO fromEntity(Post post) { 
         PostResponseDTO dto = new PostResponseDTO();
@@ -28,6 +30,8 @@ public class PostResponseDTO {
         dto.setRole(post.getRole());
         dto.setTitle(post.getTitle());
         dto.setCreatedAt(post.getCreatedAt());
+
+        dto.setNickname(post.getMember().getNickname());
         return dto;
     }
 }

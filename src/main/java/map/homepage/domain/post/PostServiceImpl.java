@@ -27,10 +27,19 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final ImageService imageService;
 
-    // 게시글 목록 조회
+    // 사진 게시글 목록 조회
     @Override
-    public List<PostResponseDTO> getPostList() {
-        List<Post> posts = postRepository.findAll();
+    public List<PostResponseDTO> getPhotoPostList() {
+        List<Post> posts = postRepository.findByDtype("photo");
+        return posts.stream()
+                .map(PostResponseDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    // 일반 게시글 목록 조회
+    @Override
+    public List<PostResponseDTO> getGeneralPostList() {
+        List<Post> posts = postRepository.findByDtype("general");
         return posts.stream()
                 .map(PostResponseDTO::fromEntity)
                 .collect(Collectors.toList());
