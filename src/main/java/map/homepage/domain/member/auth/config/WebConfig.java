@@ -26,7 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public FilterRegistrationBean<JwtAuthFilter> jwtFilterRegistration() {
         FilterRegistrationBean<JwtAuthFilter> registration = new FilterRegistrationBean<>();
-        registration.setFilter(new JwtAuthFilter(jwtTokenProvider)); // 필터 인스턴스 설정
+        registration.setFilter(new JwtAuthFilter(jwtTokenProvider, jwtUtil)); // 필터 인스턴스 설정
         registration.addUrlPatterns("/*");
         registration.setOrder(2); // 필터의 순서 설정. 값이 낮을수록 먼저 실행
         return registration;
