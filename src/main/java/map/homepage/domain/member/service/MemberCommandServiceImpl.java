@@ -6,8 +6,13 @@ import map.homepage.domain.member.Member;
 import map.homepage.domain.member.MemberRepository;
 import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.member.dto.MemberRequestDTO;
+import map.homepage.domain.member.enums.Status;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
@@ -35,9 +40,18 @@ public class MemberCommandServiceImpl implements MemberCommandService{
     }
 
     @Override
-    public Member delete() {
+    public Member softDelete() {
         Member member = MemberContext.getMember();
-        memberRepository.delete(member);
+        member.setInactive();
         return member;
+    }
+
+    @Override
+    @Scheduled(cron = "0 0 0 * * *") // 매일 자정에 탈퇴 후 1달 지난 유저 디비 삭제
+    public void hardDelete() {
+        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
+        List<Member> inactiveUsers = memberRepository.findByStatusAndInactiveDateBefore(Status.INACTIVE, oneMonthAgo);
+        inactiveUsers.forEach(memberRepository::delete);
+        // inactiveUsers.forEach(this::disconnectApp); 추후 구현..
     }
 }

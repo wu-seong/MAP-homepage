@@ -8,5 +8,7 @@ public interface MemberCommandService {
 
     public Member update(MemberRequestDTO.MemberUpdateDTO updateDTO);
 
-    public Member delete();
+    public Member softDelete();
+
+    public void hardDelete();
 }

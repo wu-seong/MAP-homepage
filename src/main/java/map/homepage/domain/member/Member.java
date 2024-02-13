@@ -87,5 +87,9 @@ public class Member extends BaseEntity {
     public boolean isAdmin() { //권한 확인
         return Role.ADMIN.equals(this.role);
     }
+
+    public void setInactive(){
+        this.status = Status.INACTIVE;
+    }
 }
 
