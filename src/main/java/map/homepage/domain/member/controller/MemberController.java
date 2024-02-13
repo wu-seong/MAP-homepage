@@ -42,7 +42,7 @@ public class MemberController {
     @DeleteMapping("/me")
     @Operation(summary = "멤버 삭제 API",description = "softDelete로 삭제 했지만 ?일 뒤에 완전 삭제")
     public ApiResponse<MemberResponseDTO.MemberPreviewDTO> deleteMember(){
-        Member deletedMember = memberCommandService.delete();
+        Member deletedMember = memberCommandService.softDelete();
         return ApiResponse.onSuccess(MemberConverter.toMemberPreviewDTO(deletedMember));
     }
     @Operation(summary = "본인 정보 조회 API",description = "기본 정보만 조회")
