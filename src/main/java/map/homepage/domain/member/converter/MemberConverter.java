@@ -47,6 +47,7 @@ public class MemberConverter {
                 .name(member.getName())
                 .nickname(member.getNickname())
                 .grade(member.getGrade())
+                .studentId(member.getStudentId())
                 .build();
     }
     public static MemberResponseDTO.MemberPreviewListDTO toMemberPreviewListDTO(Page<Member> memberPage){

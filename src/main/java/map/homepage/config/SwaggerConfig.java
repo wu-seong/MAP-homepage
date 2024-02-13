@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 
-//http://localhost:8080/swagger-ui/index.html
+//http://dev.study-map.site/swagger-ui/index.html
 @Configuration
 public class SwaggerConfig {
 

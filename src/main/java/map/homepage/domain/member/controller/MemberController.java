@@ -1,4 +1,4 @@
-package map.homepage.domain.member;
+package map.homepage.domain.member.controller;
 
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import lombok.RequiredArgsConstructor;
 import map.homepage.apiPayload.ApiResponse;
+import map.homepage.domain.member.Member;
 import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.member.converter.MemberConverter;
 import map.homepage.domain.member.dto.MemberRequestDTO;
@@ -72,15 +73,8 @@ public class MemberController {
     @Operation(summary = "유저 목록 조회 API",description = "일반 사용자는 민감하지 않은 기본 정보만, 관리자는 세부정보까지 얻음." +
             " 근데 이거 나중에 관리자 기능만 따로 빼서 API path 따로 만들듯 ")
     @GetMapping("")
-    public ApiResponse<?> getMemberInfos(@RequestParam Integer page){
-        Member member = MemberContext.getMember();
-        if(!member.isAdmin()){
-            Page<Member> activeMemberPage = memberQueryService.getAllActive(page);
-            return ApiResponse.onSuccess(MemberConverter.toMemberPreviewListDTO(activeMemberPage));
-        }
-        else{
-            Page<Member> MemberPage = memberQueryService.getAll(page);
-            return ApiResponse.onSuccess(MemberConverter.toMemberDetailListDTO(MemberPage)); //관리자는 세부 정보를 획득
-        }
+    public ApiResponse<MemberResponseDTO.MemberPreviewListDTO> getMemberInfos(@RequestParam Integer page){
+        Page<Member> activeMemberPage = memberQueryService.getAllActive(page);
+        return ApiResponse.onSuccess(MemberConverter.toMemberPreviewListDTO(activeMemberPage));
     }
 }
