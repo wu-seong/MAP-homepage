@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.member.auth.jwt.service.JwtUtil;
+import map.homepage.domain.member.auth.jwt.token.JwtToken;
 import map.homepage.domain.member.service.MemberQueryService;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,6 +33,9 @@ public class MemberInterceptor implements HandlerInterceptor {
             // 조회한 유저 ThreadLocal에 저장하기
 
             MemberContext.setMember(member);
+            // 액세스 토큰 갱신(재발급)
+            JwtToken token = jwtUtil.generateToken(String.valueOf(member.getId()), member.getRole());
+            response.addHeader("Access-Token", token.getAccessToken());
             return true;
         }
         catch (IllegalArgumentException exception){
