@@ -1,6 +1,7 @@
 // PostController.java
 package map.homepage.domain.post;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.auth.MemberContext;
@@ -28,30 +29,37 @@ public class PostController {
         this.postService = postService;
     }
 
-    // 사진 게시글 목록 조회
     @GetMapping("/photo")
+    @Operation(summary = "사진 게시글 조회 API")
     public ResponseEntity<List<PostResponseDTO>> getPhotoPostList() {
         List<PostResponseDTO> postList = postService.getPhotoPostList();
         return ResponseEntity.ok(postList);
     }
 
-    // 일반 게시글 목록 조회
     @GetMapping("/general")
+    @Operation(summary = "일반 게시글 조회 API")
     public ResponseEntity<List<PostResponseDTO>> getGeneralPostList() {
         List<PostResponseDTO> postList = postService.getGeneralPostList();
         return ResponseEntity.ok(postList);
     }
 
-    // 단일 게시글 조회
+    @GetMapping("/notice")
+    @Operation(summary = "공지 게시글 조회 API")
+    public ResponseEntity<List<PostResponseDTO>> getNoticePostList() {
+        List<PostResponseDTO> noticePostList = postService.getNoticePostList();
+        return ResponseEntity.ok(noticePostList);
+    }
+
     @GetMapping("/{postId}")
+    @Operation(summary = "단일 게시글 조회 API")
     public PostResponseDTO viewPost(
             @PathVariable Long postId
     ) {
         return postService.viewPost(postId);
     }
 
-    // 게시글 추가
     @PostMapping("")
+    @Operation(summary = "일반 게시글 작성 API")
     public PostResponseDTO createPost(
             @RequestBody PostRequestDTO postRequestDTO
     ) {
@@ -59,8 +67,8 @@ public class PostController {
         return postService.createPost(member, postRequestDTO);
     }
 
-    // 사진 게시글 추가
     @PostMapping(value = "/withImage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @Operation(summary = "사진 게시글 작성 API")
     public PostResponseDTO createImagePost(
             @RequestPart(name = "file") List<MultipartFile> file,
             @RequestPart(name = "postRequestDTO") PostRequestDTO postRequestDTO
@@ -69,8 +77,8 @@ public class PostController {
         return postService.createImagePost(member, file, postRequestDTO);
     }
 
-    // 게시글 수정
     @PutMapping("/{postId}")
+    @Operation(summary = "게시글 수정 API")
     public PostResponseDTO updatePost(
             @PathVariable Long postId,
             @RequestBody PostRequestDTO postRequestDTO
@@ -79,8 +87,8 @@ public class PostController {
         return postService.updatePost(member, postId, postRequestDTO);
     }
 
-    // 게시글 고정 또는 해제
     @PatchMapping("/notice/{postId}")
+    @Operation(summary = "게시글 공지 등록 또는 해제 API")
     public ResponseEntity<Void> toggleNotice(
             @PathVariable Long postId
     ) {
@@ -89,8 +97,8 @@ public class PostController {
         return ResponseEntity.ok().build();
     }
 
-    // 게시글 삭제
     @DeleteMapping("/{postId}")
+    @Operation(summary = "게시글 삭제 API")
     public ResponseEntity<String> deletePost(
             @PathVariable Long postId
     ) {

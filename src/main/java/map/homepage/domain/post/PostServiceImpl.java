@@ -45,6 +45,15 @@ public class PostServiceImpl implements PostService {
                 .collect(Collectors.toList());
     }
 
+    // 공지 게시글 목록 조회
+    @Override
+    public List<PostResponseDTO> getNoticePostList() {
+        List<Post> noticePosts = postRepository.findAllByIsNoticeTrue();
+        return noticePosts.stream()
+                .map(PostResponseDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
+
     // 단일 게시글 조회
     @Override
     @Transactional
@@ -144,7 +153,7 @@ public class PostServiceImpl implements PostService {
         postRepository.delete(post);
     }
 
-    // 게시글 고정 또는 해제
+    // 게시글 공지 등록 또는 해제
     public void toggleNotice(Member member, Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
