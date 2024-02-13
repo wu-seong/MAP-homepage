@@ -2,14 +2,15 @@ package map.homepage.domain.post.comment;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import map.homepage.apiPayload.code.status.ErrorStatus;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.MemberRepository;
 import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.post.Post;
 import map.homepage.domain.post.PostRepository;
-import map.homepage.domain.post.comment.dto.CommentCreateRequest;
 import map.homepage.domain.post.comment.dto.CommentDto;
 import map.homepage.domain.post.comment.dto.CommentReadCondition;
+import map.homepage.exception.GeneralException;
 import map.homepage.exception.PostNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -34,25 +35,25 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public Comment writeComment(final CommentCreateRequest commentCreateRequest, Long postId) {
+    public Comment writeComment(final String content, Long postId) {
         Member member = MemberContext.getMember();
         Post post = postRepository.findById(postId).orElseThrow(()->new PostNotFoundException("게시물을 찾을 수 없습니다."));
-        Comment comment = new Comment(commentCreateRequest.getContent(), member, post);
+        Comment comment = new Comment(content, member, post);
         return commentRepository.save(comment);
     }
 
     @Override
-    public Comment deleteComment(final Long commentId) {
+    public Comment deleteComment(final Long commentId, Member member) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(()-> new IllegalArgumentException("댓글 id를 찾을 수 없습니다."));
-        Post post = postRepository.findById(comment.getPost().getId()).orElseThrow();
+        validateOwnComment(comment, member);
         commentRepository.delete(comment);
         return comment;
     }
 
-    /* private void validateOwnComment(Comment comment, Member member) {
-        if (!comment.isOwnMember(member.getId())) {
-            throw new MemberNotEqualsException();
+    private void validateOwnComment(Comment comment, Member member) {
+        if (!member.getId().equals(comment.getMember().getId()) || !member.isAdmin()) {
+            throw new GeneralException(ErrorStatus._FORBIDDEN);
         }
-    } */
+    }
 
 }

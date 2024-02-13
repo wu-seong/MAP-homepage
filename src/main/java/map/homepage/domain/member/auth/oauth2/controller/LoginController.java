@@ -35,7 +35,7 @@ public class LoginController {
     private String naverClientId;
     @Value("${naver.redirect-uri}")
     private String naverRedirectUri;
-    @Value("${kakao.client-id}}")
+    @Value("${kakao.client-id}")
     private String kakaoClientId;
     @Value("${kakao.redirect-uri}")
     private String kakaoRedirectUri;
