@@ -35,6 +35,7 @@ public class MemberResponseDTO {
         private String name;
         private String nickname;
         private String grade;
+        private String profileImg;
     }
 
     @Builder

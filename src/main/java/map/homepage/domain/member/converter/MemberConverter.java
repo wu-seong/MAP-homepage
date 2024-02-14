@@ -19,6 +19,7 @@ public class MemberConverter {
                 .oauthId(response.getId())
                 .email(kakaoAccount.getEmail())
                 .name(kakaoAccount.getName())
+                .imageUri(kakaoAccount.getProfile().getImageUri())
                 .socialType(SocialType.KAKAO)
                 .role(Role.USER)
                 .build();
@@ -29,6 +30,7 @@ public class MemberConverter {
                 .oauthId(naverAccount.getId())
                 .email(naverAccount.getEmail())
                 .name(naverAccount.getName())
+                .imageUri(naverAccount.getImageUri())
                 .socialType(SocialType.NAVER)
                 .role(Role.USER)
                 .build();

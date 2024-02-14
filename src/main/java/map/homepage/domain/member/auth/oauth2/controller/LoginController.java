@@ -98,7 +98,6 @@ public class LoginController {
         }
         JwtToken token = jwtUtil.generateToken(String.valueOf(member.getId()), Role.USER);
         response.addHeader("Access-Token", token.getAccessToken());
-        response.addHeader("Refresh-Token", token.getRefreshToken());
         return ApiResponse.of(SuccessStatus._OK, MemberConverter.toLoginDTO(member));
     }
 

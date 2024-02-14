@@ -64,7 +64,8 @@ public class LoginService {
     public KakaoOauth2DTO.UserInfoResponseDTO getKakaoUserInfo(String accessToken) throws JsonProcessingException {
         String emailProperty = "kakao_account.email";
         String nameProperty = "kakao_account.name";
-        List<String> propertyKeysList = Arrays.asList(emailProperty, nameProperty);
+        String profileProperty = "kakao_account.profile";
+        List<String> propertyKeysList = Arrays.asList(emailProperty, nameProperty, profileProperty);
 
         // List -> JSON 형식으로 바꾸어 전달
         ObjectMapper objectMapper = new ObjectMapper();
