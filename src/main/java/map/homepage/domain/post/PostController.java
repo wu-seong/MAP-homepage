@@ -50,10 +50,10 @@ public class PostController {
         return ResponseEntity.ok(noticePostList);
     }
 
-    @GetMapping("/{postId}")
+    @GetMapping("/{post-id}")
     @Operation(summary = "단일 게시글 조회 API")
     public PostResponseDTO viewPost(
-            @PathVariable Long postId
+            @PathVariable("post-id") Long postId
     ) {
         return postService.viewPost(postId);
     }
@@ -77,30 +77,30 @@ public class PostController {
         return postService.createImagePost(member, file, postRequestDTO);
     }
 
-    @PutMapping("/{postId}")
+    @PutMapping("/{post-id}")
     @Operation(summary = "게시글 수정 API")
     public PostResponseDTO updatePost(
-            @PathVariable Long postId,
+            @PathVariable("post-id") Long postId,
             @RequestBody PostRequestDTO postRequestDTO
     ) {
         Member member = MemberContext.getMember();
         return postService.updatePost(member, postId, postRequestDTO);
     }
 
-    @PatchMapping("/notice/{postId}")
+    @PatchMapping("/notice/{post-id}")
     @Operation(summary = "게시글 공지 등록 또는 해제 API")
     public ResponseEntity<Void> toggleNotice(
-            @PathVariable Long postId
+            @PathVariable("post-id") Long postId
     ) {
         Member member = MemberContext.getMember();
         postService.toggleNotice(member, postId);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{postId}")
+    @DeleteMapping("/{post-id}")
     @Operation(summary = "게시글 삭제 API")
     public ResponseEntity<String> deletePost(
-            @PathVariable Long postId
+            @PathVariable("post-id") Long postId
     ) {
         Member member = MemberContext.getMember();
         postService.deletePost(member, postId);

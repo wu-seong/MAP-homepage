@@ -17,9 +17,11 @@ public class ImageController {
     private final ImageService imageService;
 
     // 사진 삭제
-    @DeleteMapping("/{image_id}")
+    @DeleteMapping("/{image-id}")
     @Operation(summary = "사진 삭제 API")
-    public ResponseEntity<String> deleteImage(@PathVariable("image_id") Long imageId) {
+    public ResponseEntity<String> deleteImage(
+            @PathVariable("image-id") Long imageId
+    ) {
         imageService.deleteImage(imageId);
         return ResponseEntity.ok("사진이 성공적으로 삭제되었습니다.");
     }

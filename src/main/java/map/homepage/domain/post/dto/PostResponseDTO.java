@@ -17,6 +17,7 @@ public class PostResponseDTO {
     private Role role;
     private String title;
     private LocalDateTime createdAt;
+    private Long memberId;
 
     private String nickname;
 
@@ -31,6 +32,7 @@ public class PostResponseDTO {
         dto.setTitle(post.getTitle());
         dto.setCreatedAt(post.getCreatedAt());
 
+        dto.setMemberId(post.getMember().getId());
         dto.setNickname(post.getMember().getNickname());
         return dto;
     }
