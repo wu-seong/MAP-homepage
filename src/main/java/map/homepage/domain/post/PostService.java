@@ -13,11 +13,15 @@ import java.util.List;
 @Service
 public interface PostService {
 
-    List<PostResponseDTO> getPostList(); // 게시글 목록 조회
+    List<PostResponseDTO> getPhotoPostList(); // 사진 게시글 목록 조회
+    List<PostResponseDTO> getGeneralPostList(); // 일반 게시글 목록 조회
+    List<PostResponseDTO> getNoticePostList(); // 공지 게시글 목록 조회
     PostResponseDTO viewPost(Long postId); // 단일 게시글 조회
     PostResponseDTO createPost(Member member, PostRequestDTO postRequestDTO); // 게시글 추가
     PostResponseDTO createImagePost(Member member, List<MultipartFile> file, PostRequestDTO postRequestDTO) throws IOException; // 사진 게시글 추가
     PostResponseDTO updatePost(Member member, Long postId, PostRequestDTO postRequestDTO); // 게시글 수정
     void deletePost(Member member, Long postId); // 게시글 삭제
-    boolean isAuthorOrAdmin(Member member, Post post); //권한 확인
+    void toggleNotice(Member member, Long postId); // 게시글 공지 등록 또는 해제
+
+    boolean isAuthorOrAdmin(Member member, Post post); // 권한 확인
 }
