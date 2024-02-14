@@ -50,6 +50,7 @@ public class MemberConverter {
                 .nickname(member.getNickname())
                 .grade(member.getGrade())
                 .studentId(member.getStudentId())
+                .profileImg(member.getImageUri())
                 .build();
     }
     public static MemberResponseDTO.MemberPreviewListDTO toMemberPreviewListDTO(Page<Member> memberPage){
@@ -77,7 +78,7 @@ public class MemberConverter {
                 .nickname(member.getNickname())
                 .grade(member.getGrade())
                 .birth(member.getBirth())
-               // .imageUri(member.getImageUri())
+                .imageUri(member.getImageUri())
                 .infoSet(member.isInfoSet())
                 .role(member.getRole())
                 .status(member.getStatus())

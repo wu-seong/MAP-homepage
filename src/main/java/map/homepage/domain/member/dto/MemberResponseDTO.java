@@ -67,7 +67,7 @@ public class MemberResponseDTO {
         private LocalDateTime inactiveDate;
         private String nickname;
         private LocalDate birth;
-       // private String imageUri; //프로필 이미지 경로
+        private String imageUri; //프로필 이미지 경로
         private SocialType socialType; //oauth2 제공자
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
