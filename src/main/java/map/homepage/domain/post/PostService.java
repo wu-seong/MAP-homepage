@@ -13,9 +13,9 @@ import java.util.List;
 @Service
 public interface PostService {
 
-    List<PostResponseDTO> getPhotoPostList(); // 사진 게시글 목록 조회
-    List<PostResponseDTO> getGeneralPostList(); // 일반 게시글 목록 조회
-    List<PostResponseDTO> getNoticePostList(); // 공지 게시글 목록 조회
+    List<PostResponseDTO> getPhotoPostList(int page, int size); // 사진 게시글 목록 조회
+    List<PostResponseDTO> getGeneralPostList(int page, int size); // 일반 게시글 목록 조회
+    List<PostResponseDTO> getNoticePostList(int page, int size); // 공지 게시글 목록 조회
     PostResponseDTO viewPost(Long postId); // 단일 게시글 조회
     PostResponseDTO createPost(Member member, PostRequestDTO postRequestDTO); // 게시글 추가
     PostResponseDTO createImagePost(Member member, List<MultipartFile> file, PostRequestDTO postRequestDTO) throws IOException; // 사진 게시글 추가

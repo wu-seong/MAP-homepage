@@ -9,6 +9,8 @@ import map.homepage.domain.post.image.Image;
 import map.homepage.domain.post.image.ImageService;
 import map.homepage.exception.PostNotFoundException;
 import map.homepage.exception.AccessDeniedException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,26 +31,29 @@ public class PostServiceImpl implements PostService {
 
     // 사진 게시글 목록 조회
     @Override
-    public List<PostResponseDTO> getPhotoPostList() {
-        List<Post> posts = postRepository.findByDtype("photo");
-        return posts.stream()
+    public List<PostResponseDTO> getPhotoPostList(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<Post> photoPosts = postRepository.findByDtype("photo", pageable);
+        return photoPosts.stream()
                 .map(PostResponseDTO::fromEntity)
                 .collect(Collectors.toList());
     }
 
     // 일반 게시글 목록 조회
     @Override
-    public List<PostResponseDTO> getGeneralPostList() {
-        List<Post> posts = postRepository.findByDtype("general");
-        return posts.stream()
+    public List<PostResponseDTO> getGeneralPostList(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<Post> generalPosts = postRepository.findByDtype("general", pageable);
+        return generalPosts.stream()
                 .map(PostResponseDTO::fromEntity)
                 .collect(Collectors.toList());
     }
 
     // 공지 게시글 목록 조회
     @Override
-    public List<PostResponseDTO> getNoticePostList() {
-        List<Post> noticePosts = postRepository.findAllByIsNoticeTrue();
+    public List<PostResponseDTO> getNoticePostList(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<Post> noticePosts = postRepository.findAllByIsNoticeTrue(pageable);
         return noticePosts.stream()
                 .map(PostResponseDTO::fromEntity)
                 .collect(Collectors.toList());
@@ -171,4 +176,5 @@ public class PostServiceImpl implements PostService {
         // 현재 사용자의 memberId와 게시글의 작성자의 memberId를 비교하거나 ADMIN 권한 확인
         return member.getId().equals(post.getMember().getId()) || member.isAdmin();
     }
+
 }

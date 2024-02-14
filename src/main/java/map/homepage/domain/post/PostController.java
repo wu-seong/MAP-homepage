@@ -31,22 +31,31 @@ public class PostController {
 
     @GetMapping("/photo")
     @Operation(summary = "사진 게시글 조회 API")
-    public ResponseEntity<List<PostResponseDTO>> getPhotoPostList() {
-        List<PostResponseDTO> postList = postService.getPhotoPostList();
-        return ResponseEntity.ok(postList);
+    public ResponseEntity<List<PostResponseDTO>> getPhotoPostList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        List<PostResponseDTO> photoPostList = postService.getPhotoPostList(page, size);
+        return ResponseEntity.ok(photoPostList);
     }
 
     @GetMapping("/general")
     @Operation(summary = "일반 게시글 조회 API")
-    public ResponseEntity<List<PostResponseDTO>> getGeneralPostList() {
-        List<PostResponseDTO> postList = postService.getGeneralPostList();
-        return ResponseEntity.ok(postList);
+    public ResponseEntity<List<PostResponseDTO>> getGeneralPostList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        List<PostResponseDTO> generalPostList = postService.getGeneralPostList(page, size);
+        return ResponseEntity.ok(generalPostList);
     }
 
     @GetMapping("/notice")
     @Operation(summary = "공지 게시글 조회 API")
-    public ResponseEntity<List<PostResponseDTO>> getNoticePostList() {
-        List<PostResponseDTO> noticePostList = postService.getNoticePostList();
+    public ResponseEntity<List<PostResponseDTO>> getNoticePostList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        List<PostResponseDTO> noticePostList = postService.getNoticePostList(page, size);
         return ResponseEntity.ok(noticePostList);
     }
 
