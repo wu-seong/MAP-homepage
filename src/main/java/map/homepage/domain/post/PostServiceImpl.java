@@ -66,14 +66,14 @@ public class PostServiceImpl implements PostService {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isPresent()) {
             Post post = optionalPost.get();
-            post.setViews(post.getViews() + 1); // 조회 수 증가
+            postRepository.incrementViews(postId);
             return PostResponseDTO.fromEntity(post);
         } else {
             throw new PostNotFoundException("게시글을 찾을 수 없습니다.");
         }
     }
 
-    // 게시물 추가
+    // 일반 게시물 작성
     @Transactional
     public PostResponseDTO createPost(Member member, PostRequestDTO postRequestDTO) {
 
@@ -91,7 +91,7 @@ public class PostServiceImpl implements PostService {
         return PostResponseDTO.fromEntity(post);
     }
 
-    // 사진 게시글 추가
+    // 사진 게시글 작성
     @Transactional
     public PostResponseDTO createImagePost(Member member, List<MultipartFile> file, PostRequestDTO postRequestDTO) throws IOException {
 

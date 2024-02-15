@@ -17,8 +17,8 @@ public class PostResponseDTO {
     private Role role;
     private String title;
     private LocalDateTime createdAt;
-    private Long memberId;
 
+    private Long memberId;
     private String nickname;
 
     // 게시글 목록 조회
