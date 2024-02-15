@@ -9,8 +9,10 @@ import map.homepage.domain.post.dto.PostResponseDTO;
 import map.homepage.domain.post.image.Image;
 import map.homepage.domain.post.image.ImageService;
 import map.homepage.exception.GeneralException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,28 +33,24 @@ public class PostServiceImpl implements PostService {
 
     // 사진 게시글 목록 조회
     @Override
-    public List<PostResponseDTO> getPhotoPostList(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        List<Post> photoPosts = postRepository.findByDtype("photo", pageable);
-        return photoPosts.stream()
-                .map(PostResponseDTO::fromEntity)
-                .collect(Collectors.toList());
+    public Page<PostResponseDTO> getPhotoPostPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page-1, size);
+        Page<Post> photoPostPage = postRepository.findByDtype("photo", pageable);
+        return photoPostPage.map(PostResponseDTO::fromEntity);
     }
 
     // 일반 게시글 목록 조회
     @Override
-    public List<PostResponseDTO> getGeneralPostList(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        List<Post> generalPosts = postRepository.findByDtype("general", pageable);
-        return generalPosts.stream()
-                .map(PostResponseDTO::fromEntity)
-                .collect(Collectors.toList());
+    public Page<PostResponseDTO> getGeneralPostPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page-1, size);
+        Page<Post> generalPostPage = postRepository.findByDtype("general", pageable);
+        return generalPostPage.map(PostResponseDTO::fromEntity);
     }
 
     // 공지 게시글 목록 조회
     @Override
     public List<PostResponseDTO> getNoticePostList(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
         List<Post> noticePosts = postRepository.findAllByIsNoticeTrue(pageable);
         return noticePosts.stream()
                 .map(PostResponseDTO::fromEntity)

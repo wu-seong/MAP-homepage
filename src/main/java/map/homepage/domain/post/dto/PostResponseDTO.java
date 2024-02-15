@@ -1,7 +1,7 @@
 // PostResponseDTO.java
 package map.homepage.domain.post.dto;
 
-import lombok.*;
+import lombok.Data;
 import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.post.Post;
 
@@ -17,12 +17,13 @@ public class PostResponseDTO {
     private Role role;
     private String title;
     private LocalDateTime createdAt;
+    private boolean isNotice;
 
     private Long memberId;
     private String nickname;
 
     // 게시글 목록 조회
-    public static PostResponseDTO fromEntity(Post post) { 
+    public static PostResponseDTO fromEntity(Post post) {
         PostResponseDTO dto = new PostResponseDTO();
         dto.setPostId(post.getId());
         dto.setViews(post.getViews());
@@ -31,7 +32,7 @@ public class PostResponseDTO {
         dto.setRole(post.getRole());
         dto.setTitle(post.getTitle());
         dto.setCreatedAt(post.getCreatedAt());
-
+        dto.setNotice(post.isNotice());
         dto.setMemberId(post.getMember().getId());
         dto.setNickname(post.getMember().getNickname());
         return dto;

@@ -10,7 +10,10 @@ import map.homepage.domain.member.Member;
 import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.post.dto.PostRequestDTO;
 import map.homepage.domain.post.dto.PostResponseDTO;
+import map.homepage.domain.post.dto.PostResponseListDTO;
+import map.homepage.domain.post.converter.PostConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,23 +36,25 @@ public class PostController {
 
     @GetMapping("/photo")
     @Operation(summary = "사진 게시글 목록 조회 API")
-    public ApiResponse<List<PostResponseDTO>> getPhotoPostList(
-            @RequestParam(defaultValue = "0") int page
+    public ApiResponse<PostResponseListDTO> getPhotoPosList(
+            @RequestParam(defaultValue = "1") int page
     ) {
-        int size = 10;
-        List<PostResponseDTO> photoPostList = postService.getPhotoPostList(page, size);
-        return ApiResponse.onSuccess(photoPostList);
+        int size = 15;
+        Page<PostResponseDTO> photoPostPage = postService.getPhotoPostPage(page, size);
+        PostResponseListDTO postResponseListDTO = PostConverter.toPostResponseListDTO(photoPostPage,page);
+        return ApiResponse.onSuccess(postResponseListDTO);
     }
 
 
     @GetMapping("/general")
     @Operation(summary = "일반 게시글 목록 조회 API")
-    public ApiResponse<List<PostResponseDTO>> getGeneralPostList(
-            @RequestParam(defaultValue = "0") int page
+    public ApiResponse<PostResponseListDTO> getGeneralPostList(
+            @RequestParam(defaultValue = "1") int page
     ) {
         int size = 10;
-        List<PostResponseDTO> generalPostList = postService.getGeneralPostList(page, size);
-        return ApiResponse.onSuccess(generalPostList);
+        Page<PostResponseDTO> photoPostPage = postService.getGeneralPostPage(page, size);
+        PostResponseListDTO postResponseListDTO = PostConverter.toPostResponseListDTO(photoPostPage,page);
+        return ApiResponse.onSuccess(postResponseListDTO);
     }
 
     @GetMapping("/notice")
