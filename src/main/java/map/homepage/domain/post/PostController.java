@@ -2,6 +2,8 @@
 package map.homepage.domain.post;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import map.homepage.apiPayload.ApiResponse;
 import map.homepage.domain.member.Member;
@@ -80,11 +82,12 @@ public class PostController {
     }
 
 
-    @PostMapping(value = "/withImage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/withImage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "사진 게시글 작성 API")
     public ApiResponse<PostResponseDTO> createImagePost(
             @RequestPart(name = "file") List<MultipartFile> file,
-            @RequestPart(name = "postRequestDTO") PostRequestDTO postRequestDTO
+            @RequestPart(name = "postRequestDTO") @Parameter(schema = @Schema(type = "string", format = "string")) PostRequestDTO postRequestDTO
+
     ) throws IOException {
         Member member = MemberContext.getMember();
         PostResponseDTO createdPost = postService.createImagePost(member, file, postRequestDTO);
