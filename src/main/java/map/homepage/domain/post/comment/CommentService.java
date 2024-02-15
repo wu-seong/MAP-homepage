@@ -1,12 +1,10 @@
 package map.homepage.domain.post.comment;
 
 import map.homepage.domain.member.Member;
-import map.homepage.domain.post.comment.dto.CommentDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface CommentService {
-    public List<CommentDto> getComment(Long postId);
+    public Page<Comment> getComment(Long postId, Integer page);
 
     public Comment writeComment(final String content, Long postId);
 
