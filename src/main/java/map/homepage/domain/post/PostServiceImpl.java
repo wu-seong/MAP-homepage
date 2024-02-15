@@ -2,13 +2,13 @@
 package map.homepage.domain.post;
 
 import lombok.RequiredArgsConstructor;
+import map.homepage.apiPayload.code.status.ErrorStatus;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.post.dto.PostRequestDTO;
 import map.homepage.domain.post.dto.PostResponseDTO;
 import map.homepage.domain.post.image.Image;
 import map.homepage.domain.post.image.ImageService;
-import map.homepage.exception.PostNotFoundException;
-import map.homepage.exception.AccessDeniedException;
+import map.homepage.exception.GeneralException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -69,7 +69,7 @@ public class PostServiceImpl implements PostService {
             postRepository.incrementViews(postId);
             return PostResponseDTO.fromEntity(post);
         } else {
-            throw new PostNotFoundException("게시글을 찾을 수 없습니다.");
+            throw new GeneralException(ErrorStatus.ARTICLE_NOT_FOUND);
         }
     }
 
@@ -94,6 +94,16 @@ public class PostServiceImpl implements PostService {
     // 사진 게시글 작성
     @Transactional
     public PostResponseDTO createImagePost(Member member, List<MultipartFile> file, PostRequestDTO postRequestDTO) throws IOException {
+
+        if (file == null || file.isEmpty()) {
+            throw new GeneralException(ErrorStatus.IMAGE_NOT_FOUND);
+        }
+
+        for (MultipartFile f : file) {
+            if (!isImageFile(f)) {
+                throw new GeneralException(ErrorStatus.IS_NOT_IMAGE);
+            }
+        }
 
         Post post = new Post();
         post.setMember(member);
@@ -123,18 +133,17 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public PostResponseDTO updatePost(Member member, Long postId, PostRequestDTO postRequestDTO) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.ARTICLE_NOT_FOUND));
 
-        // 현재 사용자의 memberId와 게시글의 작성자의 memberId를 비교하거나 ADMIN 권한 확인
         if (!isAuthorOrAdmin(member, post)) {
-            throw new AccessDeniedException("권한이 없습니다.");
+            throw new GeneralException(ErrorStatus._FORBIDDEN);
         }
 
-        post.setTitle(postRequestDTO.getTitle()); // 제목
-        post.setDtype(postRequestDTO.getDtype()); // 종류
-        post.setContent(postRequestDTO.getContent()); // 내용
+        post.setTitle(postRequestDTO.getTitle());
+        post.setDtype(postRequestDTO.getDtype());
+        post.setContent(postRequestDTO.getContent());
 
-        post.setUpdatedAt(LocalDateTime.now()); // 수정 시간
+        post.setUpdatedAt(LocalDateTime.now());
         postRepository.save(post);
         return PostResponseDTO.fromEntity(post);
     }
@@ -143,11 +152,10 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public void deletePost(Member member, Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.ARTICLE_NOT_FOUND));
 
-        // 현재 사용자의 memberId와 게시글의 작성자의 memberId를 비교하거나 ADMIN 권한 확인
         if (!isAuthorOrAdmin(member, post)) {
-            throw new AccessDeniedException("권한이 없습니다.");
+            throw new GeneralException(ErrorStatus._FORBIDDEN);
         }
 
         List<Image> images = post.getImages(); // 해당 게시글의 사진도 삭제
@@ -161,10 +169,10 @@ public class PostServiceImpl implements PostService {
     // 게시글 공지 등록 또는 해제
     public void toggleNotice(Member member, Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.ARTICLE_NOT_FOUND));
 
         if (!member.isAdmin()) {
-            throw new AccessDeniedException("권한이 없습니다.");
+            throw new GeneralException(ErrorStatus._FORBIDDEN);
         }
 
         post.setNotice(!post.isNotice());
@@ -177,4 +185,9 @@ public class PostServiceImpl implements PostService {
         return member.getId().equals(post.getMember().getId()) || member.isAdmin();
     }
 
+    // 파일 형식 확인
+    private boolean isImageFile(MultipartFile file) {
+        String contentType = file.getContentType();
+        return contentType != null && contentType.startsWith("image");
+    }
 }

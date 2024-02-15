@@ -32,20 +32,20 @@ public class PostController {
     @GetMapping("/photo")
     @Operation(summary = "사진 게시글 목록 조회 API")
     public ApiResponse<List<PostResponseDTO>> getPhotoPostList(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "0") int page
     ) {
-            List<PostResponseDTO> photoPostList = postService.getPhotoPostList(page, size);
-            return ApiResponse.onSuccess(photoPostList);
+        int size = 10;
+        List<PostResponseDTO> photoPostList = postService.getPhotoPostList(page, size);
+        return ApiResponse.onSuccess(photoPostList);
     }
 
 
     @GetMapping("/general")
     @Operation(summary = "일반 게시글 목록 조회 API")
     public ApiResponse<List<PostResponseDTO>> getGeneralPostList(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "0") int page
     ) {
+        int size = 10;
         List<PostResponseDTO> generalPostList = postService.getGeneralPostList(page, size);
         return ApiResponse.onSuccess(generalPostList);
     }
@@ -53,9 +53,9 @@ public class PostController {
     @GetMapping("/notice")
     @Operation(summary = "공지 게시글 목록 조회 API")
     public ApiResponse<List<PostResponseDTO>> getNoticePostList(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "0") int page
     ) {
+        int size = 5;
         List<PostResponseDTO> noticePostList = postService.getNoticePostList(page, size);
         return ApiResponse.onSuccess(noticePostList);
     }
