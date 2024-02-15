@@ -2,14 +2,19 @@
 package map.homepage.domain.post;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
+import map.homepage.apiPayload.ApiResponse;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.post.dto.PostRequestDTO;
 import map.homepage.domain.post.dto.PostResponseDTO;
+import map.homepage.domain.post.dto.PostResponseListDTO;
+import map.homepage.domain.post.converter.PostConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,80 +35,98 @@ public class PostController {
     }
 
     @GetMapping("/photo")
-    @Operation(summary = "사진 게시글 조회 API")
-    public ResponseEntity<List<PostResponseDTO>> getPhotoPostList() {
-        List<PostResponseDTO> postList = postService.getPhotoPostList();
-        return ResponseEntity.ok(postList);
+    @Operation(summary = "사진 게시글 목록 조회 API")
+    public ApiResponse<PostResponseListDTO> getPhotoPosList(
+            @RequestParam(defaultValue = "1") int page
+    ) {
+        int size = 15;
+        Page<PostResponseDTO> photoPostPage = postService.getPhotoPostPage(page, size);
+        PostResponseListDTO postResponseListDTO = PostConverter.toPostResponseListDTO(photoPostPage,page);
+        return ApiResponse.onSuccess(postResponseListDTO);
     }
 
+
     @GetMapping("/general")
-    @Operation(summary = "일반 게시글 조회 API")
-    public ResponseEntity<List<PostResponseDTO>> getGeneralPostList() {
-        List<PostResponseDTO> postList = postService.getGeneralPostList();
-        return ResponseEntity.ok(postList);
+    @Operation(summary = "일반 게시글 목록 조회 API")
+    public ApiResponse<PostResponseListDTO> getGeneralPostList(
+            @RequestParam(defaultValue = "1") int page
+    ) {
+        int size = 10;
+        Page<PostResponseDTO> photoPostPage = postService.getGeneralPostPage(page, size);
+        PostResponseListDTO postResponseListDTO = PostConverter.toPostResponseListDTO(photoPostPage,page);
+        return ApiResponse.onSuccess(postResponseListDTO);
     }
 
     @GetMapping("/notice")
-    @Operation(summary = "공지 게시글 조회 API")
-    public ResponseEntity<List<PostResponseDTO>> getNoticePostList() {
-        List<PostResponseDTO> noticePostList = postService.getNoticePostList();
-        return ResponseEntity.ok(noticePostList);
+    @Operation(summary = "공지 게시글 목록 조회 API")
+    public ApiResponse<List<PostResponseDTO>> getNoticePostList(
+            @RequestParam(defaultValue = "0") int page
+    ) {
+        int size = 5;
+        List<PostResponseDTO> noticePostList = postService.getNoticePostList(page, size);
+        return ApiResponse.onSuccess(noticePostList);
     }
 
     @GetMapping("/{post-id}")
     @Operation(summary = "단일 게시글 조회 API")
-    public PostResponseDTO viewPost(
+    public ApiResponse<PostResponseDTO> viewPost(
             @PathVariable("post-id") Long postId
     ) {
-        return postService.viewPost(postId);
+        PostResponseDTO viewedPost = postService.viewPost(postId);
+        return ApiResponse.onSuccess(viewedPost);
     }
 
     @PostMapping("")
     @Operation(summary = "일반 게시글 작성 API")
-    public PostResponseDTO createPost(
+    public ApiResponse<PostResponseDTO> createPost(
             @RequestBody PostRequestDTO postRequestDTO
     ) {
         Member member = MemberContext.getMember();
-        return postService.createPost(member, postRequestDTO);
+        PostResponseDTO createdPost = postService.createPost(member, postRequestDTO);
+        return ApiResponse.onSuccess(createdPost);
     }
 
-    @PostMapping(value = "/withImage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+
+    @PostMapping(value = "/withImage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "사진 게시글 작성 API")
-    public PostResponseDTO createImagePost(
+    public ApiResponse<PostResponseDTO> createImagePost(
             @RequestPart(name = "file") List<MultipartFile> file,
-            @RequestPart(name = "postRequestDTO") PostRequestDTO postRequestDTO
+            @RequestPart(name = "postRequestDTO") @Parameter(schema = @Schema(type = "string", format = "string")) PostRequestDTO postRequestDTO
+
     ) throws IOException {
         Member member = MemberContext.getMember();
-        return postService.createImagePost(member, file, postRequestDTO);
+        PostResponseDTO createdPost = postService.createImagePost(member, file, postRequestDTO);
+        return ApiResponse.onSuccess(createdPost);
     }
 
     @PutMapping("/{post-id}")
     @Operation(summary = "게시글 수정 API")
-    public PostResponseDTO updatePost(
+    public ApiResponse<PostResponseDTO> updatePost(
             @PathVariable("post-id") Long postId,
             @RequestBody PostRequestDTO postRequestDTO
     ) {
         Member member = MemberContext.getMember();
-        return postService.updatePost(member, postId, postRequestDTO);
+        PostResponseDTO upadtedPost = postService.updatePost(member, postId, postRequestDTO);
+        return ApiResponse.onSuccess(upadtedPost);
     }
 
     @PatchMapping("/notice/{post-id}")
     @Operation(summary = "게시글 공지 등록 또는 해제 API")
-    public ResponseEntity<Void> toggleNotice(
+    public ApiResponse<String> toggleNotice(
             @PathVariable("post-id") Long postId
     ) {
         Member member = MemberContext.getMember();
         postService.toggleNotice(member, postId);
-        return ResponseEntity.ok().build();
+        return ApiResponse.onSuccess("성공적으로 변경되었습니다.");
     }
 
     @DeleteMapping("/{post-id}")
     @Operation(summary = "게시글 삭제 API")
-    public ResponseEntity<String> deletePost(
+    public ApiResponse<String> deletePost(
             @PathVariable("post-id") Long postId
     ) {
         Member member = MemberContext.getMember();
         postService.deletePost(member, postId);
-        return ResponseEntity.ok("성공적으로 삭제되었습니다.");
+        return ApiResponse.onSuccess("성공적으로 삭제되었습니다.");
     }
 }
