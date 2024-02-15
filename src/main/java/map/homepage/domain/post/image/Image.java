@@ -2,16 +2,14 @@
 package map.homepage.domain.post.image;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import map.homepage.domain.common.BaseEntity;
 import map.homepage.domain.post.Post;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Image extends BaseEntity {

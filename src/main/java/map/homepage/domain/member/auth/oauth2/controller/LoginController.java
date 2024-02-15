@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import map.homepage.apiPayload.ApiResponse;
 import map.homepage.apiPayload.code.status.SuccessStatus;
 import map.homepage.domain.member.Member;
+import map.homepage.domain.member.ProfileImage;
 import map.homepage.domain.member.auth.oauth2.feignClient.dto.NaverOauth2DTO;
 import map.homepage.domain.member.dto.MemberResponseDTO;
 import map.homepage.domain.member.enums.Role;
@@ -94,11 +95,11 @@ public class LoginController {
         }
         else{
             member = MemberConverter.toMember(userInfoResponseDTO);
+            member.createAndSetProfileImage(userInfoResponseDTO.getKakaoAccount().getProfile().getImageUri());
             member = memberCommandService.create(member);
         }
         JwtToken token = jwtUtil.generateToken(String.valueOf(member.getId()), Role.USER);
         response.addHeader("Access-Token", token.getAccessToken());
-        response.addHeader("Refresh-Token", token.getRefreshToken());
         return ApiResponse.of(SuccessStatus._OK, MemberConverter.toLoginDTO(member));
     }
 
@@ -127,6 +128,7 @@ public class LoginController {
         }
         else{
             member = MemberConverter.toMember(userInfoResponseDTO);
+            member.createAndSetProfileImage(userInfoResponseDTO.getNaverAccount().getImageUri());
             member = memberCommandService.create(member);
         }
         JwtToken token = jwtUtil.generateToken(String.valueOf(member.getId()), Role.USER);
