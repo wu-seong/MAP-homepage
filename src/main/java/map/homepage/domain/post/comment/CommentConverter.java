@@ -10,9 +10,10 @@ public class CommentConverter {
 
     public static CommentDto.CommentDetailDTO toDto(Comment comment) {
         return CommentDto.CommentDetailDTO.builder()
-                .id(comment.getId())
-                .content(comment.getContent())
+                .commentId(comment.getId())
                 .writer(comment.getMember().getName())
+                .memberId(comment.getMember().getId())
+                .content(comment.getContent())
                 .build();
     }
 

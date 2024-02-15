@@ -13,9 +13,10 @@ public class CommentDto {
     @AllArgsConstructor // 모든 필드 값을 파라미터로 받는 생성자를 만듬
     @NoArgsConstructor
     public static class CommentDetailDTO {
-        private Long id;
-        private String content;
+        private Long commentId;
         private String writer;
+        private Long memberId;
+        private String content;
     }
 
     /* public static CommentDto toDto(Comment comment) {
