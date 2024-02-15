@@ -42,7 +42,7 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public Comment deleteComment(final Long commentId, Member member) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(()-> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()-> new GeneralException(ErrorStatus.COMMENT_NOT_FOUND));
         validateOwnComment(comment, member);
         commentRepository.delete(comment);
         return comment;

@@ -18,6 +18,7 @@ public enum ErrorStatus implements BaseCode {
 
     // 유저 관련 응답
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4001", "해당 사용자가 존재하지 않습니다."),
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT4001", "해당 댓글 id가 존재하지 않습니다."),
 
     // 게시글 관련 응답
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4001", "게시글이 존재하지 않습니다."),
