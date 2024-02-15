@@ -28,7 +28,6 @@ public class CommentController {
     public ApiResponse<List<CommentDto>> getComment(@Valid @PathVariable("post-id") Long postId) {
         return ApiResponse.onSuccess(commentService.getComment(postId));
     }
-
     // 댓글 생성
     @PostMapping("/{post-id}")
     @Operation(summary = "댓글 작성 API",description = "게시물에 대한 새로운 댓글 작성")

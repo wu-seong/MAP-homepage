@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 public class MemberConverter {
     public static Member toMember(KakaoOauth2DTO.UserInfoResponseDTO response){
         KakaoOauth2DTO.KakaoAccountDTO kakaoAccount = response.getKakaoAccount();
+
         return Member.builder()
                 .oauthId(response.getId())
                 .email(kakaoAccount.getEmail())
                 .name(kakaoAccount.getName())
-                .imageUri(kakaoAccount.getProfile().getImageUri())
                 .socialType(SocialType.KAKAO)
                 .role(Role.USER)
                 .build();
@@ -30,7 +30,6 @@ public class MemberConverter {
                 .oauthId(naverAccount.getId())
                 .email(naverAccount.getEmail())
                 .name(naverAccount.getName())
-                .imageUri(naverAccount.getImageUri())
                 .socialType(SocialType.NAVER)
                 .role(Role.USER)
                 .build();
@@ -50,7 +49,7 @@ public class MemberConverter {
                 .nickname(member.getNickname())
                 .grade(member.getGrade())
                 .studentId(member.getStudentId())
-                .profileImg(member.getImageUri())
+                .profileImg(member.getProfileImage().getImageUrl())
                 .build();
     }
     public static MemberResponseDTO.MemberPreviewListDTO toMemberPreviewListDTO(Page<Member> memberPage){
@@ -78,7 +77,7 @@ public class MemberConverter {
                 .nickname(member.getNickname())
                 .grade(member.getGrade())
                 .birth(member.getBirth())
-                .imageUri(member.getImageUri())
+                .imageUri(member.getProfileImage().getImageUrl())
                 .infoSet(member.isInfoSet())
                 .role(member.getRole())
                 .status(member.getStatus())
