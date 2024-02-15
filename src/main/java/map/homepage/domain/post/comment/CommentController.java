@@ -1,9 +1,9 @@
 package map.homepage.domain.post.comment;
 
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import map.homepage.apiPayload.ApiResponse;
 import map.homepage.domain.member.Member;
@@ -32,7 +32,7 @@ public class CommentController {
     // 댓글 생성
     @PostMapping("/{post-id}")
     @Operation(summary = "댓글 작성 API",description = "게시물에 대한 새로운 댓글 작성")
-    public ApiResponse<CommentDto.CommentDetailDTO> writeComment(@RequestBody String content, @Valid @PathVariable("post-id") Long postId) {
+    public ApiResponse<CommentDto.CommentDetailDTO> writeComment(@Size(min=1, max=100, message = "댓글은 1자 이상 100자 이하여야합니다.") @RequestBody String content, @NotNull @Positive @PathVariable("post-id") Long postId) {
         Comment createComment = commentService.writeComment(content, postId);
         return ApiResponse.onSuccess(CommentConverter.toDto(createComment));
     }
