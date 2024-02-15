@@ -19,15 +19,6 @@ public class CommentDto {
         private String content;
     }
 
-    /* public static CommentDto toDto(Comment comment) {
-        String writer = (comment.getMember() != null) ? comment.getMember().getName() : null;
-        return CommentDto.builder()
-                .id(comment.getId())
-                .content(comment.getContent())
-                .writer(writer)
-                .build();
-    }*/
-
     @Builder
     @AllArgsConstructor
     @Getter
