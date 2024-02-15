@@ -23,6 +23,7 @@ public class MemberResponseDTO {
     public static class LoginDTO{
         private Long id;
         private boolean infoSet;
+        private String role;
         private LocalDateTime createdAt;
     }
 
