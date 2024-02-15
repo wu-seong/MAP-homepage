@@ -8,12 +8,10 @@ import map.homepage.domain.member.MemberRepository;
 import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.post.Post;
 import map.homepage.domain.post.PostRepository;
-import map.homepage.domain.post.comment.dto.CommentDto;
 import map.homepage.exception.GeneralException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 // Repository에게 받은 정보를 가공해서 Controller에게 주거나, Controller에게 받은 정보를 Repository한테 주는 역할
 @RequiredArgsConstructor
@@ -25,11 +23,8 @@ public class CommentServiceImpl implements CommentService{
     private final MemberRepository memberRepository;
 
     @Override
-    public List<CommentDto> getComment(Long postId) {
-        // return 해주기 전에
-        return commentRepository.findAllByPostId(postId).stream()
-                .map(CommentDto::toDto)
-                .collect(Collectors.toList());
+    public Page<Comment> getComment(Long postId, Integer page) {
+        return commentRepository.findAllByPostId(postId, PageRequest.of(page, 10));
     }
 
     @Override
@@ -49,7 +44,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     private void validateOwnComment(Comment comment, Member member) {
-        if (!member.getId().equals(comment.getMember().getId()) || !member.isAdmin()) {
+        if (!member.getId().equals(comment.getMember().getId()) && !member.isAdmin()) {
             throw new GeneralException(ErrorStatus._FORBIDDEN);
         }
     }
