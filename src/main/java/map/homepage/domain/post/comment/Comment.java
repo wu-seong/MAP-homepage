@@ -1,6 +1,7 @@
 package map.homepage.domain.post.comment;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,9 +20,10 @@ public class Comment extends BaseEntity {
 
     @Id
     @Column(name = "comment_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //기본키 자동 생성
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본키 자동 생성
     private Long id;
 
+    @Size(min=1, max=100, message = "닉네임은 1자 이상 100자 이하여야합니다.") // 댓글 길이 제한
     private String content;
 
     // 외래키

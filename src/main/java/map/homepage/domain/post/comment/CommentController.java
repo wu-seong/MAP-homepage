@@ -24,7 +24,7 @@ public class CommentController {
     // 댓글 조회 (불러오기)
     @GetMapping("/{post-id}")
     @Operation(summary = "댓글 조회 API",description = "게시물에 대한 전체 댓글 조회")
-    public ApiResponse<CommentDto.CommentListDTO> getComment(@Valid @PathVariable("post-id") Long postId, @RequestParam(name = "page") Integer page) {
+    public ApiResponse<CommentDto.CommentListDTO> getComment(@NotNull @Positive @PathVariable("post-id") Long postId, @RequestParam(name = "page") Integer page) {
         Page<Comment> activeCommentPage = commentService.getComment(postId, page);
         return ApiResponse.onSuccess(CommentConverter.commentListDto(activeCommentPage));
     }
