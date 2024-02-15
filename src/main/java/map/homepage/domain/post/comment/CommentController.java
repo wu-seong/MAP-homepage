@@ -2,6 +2,8 @@ package map.homepage.domain.post.comment;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import map.homepage.apiPayload.ApiResponse;
 import map.homepage.domain.member.Member;
@@ -38,7 +40,7 @@ public class CommentController {
     // 댓글 삭제
     @DeleteMapping("/{comment-id}")
     @Operation(summary = "댓글 삭제 API",description = "softDelete")
-    public ApiResponse<CommentDto> deleteComment(@Valid @PathVariable("comment-id") Long commentId){
+    public ApiResponse<CommentDto> deleteComment(@NotNull @Positive @PathVariable("comment-id") Long commentId){
         Member member = MemberContext.getMember();
         Comment deleteComment = commentService.deleteComment(commentId, member);
         return ApiResponse.onSuccess(CommentDto.toDto(deleteComment));
