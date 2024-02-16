@@ -4,8 +4,10 @@ package map.homepage.domain.post.image;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
+import map.homepage.apiPayload.code.status.ErrorStatus;
 import map.homepage.domain.post.Post;
 import map.homepage.domain.post.PostRepository;
+import map.homepage.exception.GeneralException;
 import map.homepage.exception.PostNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,7 +29,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public String uploadImage(Long postId, MultipartFile file) throws IOException {
-        String originalName = file.getOriginalFilename(); // 원본 이름
+        String originalName = file.getOriginalFilename();
         String storageName = "images/" + UUID.randomUUID() + "_" + originalName;
         String imageUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + storageName;
 
@@ -39,7 +41,7 @@ public class ImageServiceImpl implements ImageService {
 
         // postId를 사용하여 Post 엔티티를 가져옴
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.ARTICLE_NOT_FOUND));
 
         // 이미지 정보 저장
         Image image = new Image();
@@ -51,6 +53,24 @@ public class ImageServiceImpl implements ImageService {
 
         // 업로드된 이미지의 썸네일 URL 반환
         return "https://d3djt9dt9ouox.cloudfront.net/"+storageName; // 나중에 수정
+    }
+
+
+
+    @Override
+    public String uploadFile(MultipartFile file) throws IOException {
+
+        String originalName = file.getOriginalFilename();
+        String storageName = "files/" + UUID.randomUUID() + "_" + originalName; // 나중에 수정
+        String fileUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + storageName;
+
+        // AWS S3에 파일 업로드
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(file.getContentType());
+        metadata.setContentLength(file.getSize());
+        amazonS3Client.putObject(bucket, storageName, file.getInputStream(), metadata);
+
+        return fileUrl;
     }
 
     @Override
