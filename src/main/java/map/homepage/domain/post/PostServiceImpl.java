@@ -73,7 +73,7 @@ public class PostServiceImpl implements PostService {
 
     // 일반 게시물 작성
     @Transactional
-    public PostResponseDTO createPost(Member member, PostRequestDTO postRequestDTO) {
+    public PostResponseDTO createPost(Member member, MultipartFile file, PostRequestDTO postRequestDTO) {
 
         Post post = new Post();
         post.setMember(member);
@@ -86,6 +86,16 @@ public class PostServiceImpl implements PostService {
         post.setRole(member.getRole());
 
         postRepository.save(post);
+
+        if (file != null && !file.isEmpty()) {
+            try {
+                String uploadedFile = imageService.uploadFile(file);
+                post.setAccessUrl(uploadedFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         return PostResponseDTO.fromEntity(post);
     }
 
