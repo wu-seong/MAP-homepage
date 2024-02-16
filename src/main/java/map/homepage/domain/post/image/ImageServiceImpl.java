@@ -8,7 +8,6 @@ import map.homepage.apiPayload.code.status.ErrorStatus;
 import map.homepage.domain.post.Post;
 import map.homepage.domain.post.PostRepository;
 import map.homepage.exception.GeneralException;
-import map.homepage.exception.PostNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,8 +54,6 @@ public class ImageServiceImpl implements ImageService {
         return "https://d3djt9dt9ouox.cloudfront.net/"+storageName; // 나중에 수정
     }
 
-
-
     @Override
     public String uploadFile(MultipartFile file) throws IOException {
 
@@ -77,11 +74,17 @@ public class ImageServiceImpl implements ImageService {
     public void deleteImage(Long imageId) {
         // 이미지 정보를 데이터베이스에서 삭제
         Image image = imageRepository.findById(imageId)
-                .orElseThrow(() -> new PostNotFoundException("해당 ID의 Image를 찾을 수 없습니다."));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.IS_NOT_IMAGE));
         imageRepository.delete(image);
 
         // AWS S3에서 이미지 삭제
         String storagePath = image.getStorageName();
+        amazonS3Client.deleteObject(bucket, storagePath);
+    }
+
+    @Override
+    public void deleteFile(String url){
+        String storagePath = url.substring(("https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/").length());
         amazonS3Client.deleteObject(bucket, storagePath);
     }
 }

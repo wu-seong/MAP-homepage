@@ -166,7 +166,14 @@ public class PostServiceImpl implements PostService {
             throw new GeneralException(ErrorStatus._FORBIDDEN);
         }
 
-        List<Image> images = post.getImages(); // 해당 게시글의 사진도 삭제
+        // 일반 게시글에 첨부 파일이 있다면 삭제
+        String url = post.getAccessUrl();
+        if (url != null) {
+            imageService.deleteFile(url);
+        }
+
+        // 사진 게시글이라면 사진 삭제
+        List<Image> images = post.getImages();
         for (Image image : images) {
             imageService.deleteImage(image.getId());
         }
