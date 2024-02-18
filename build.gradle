@@ -38,6 +38,8 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
 
+	// validation 커스텀
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	//swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 

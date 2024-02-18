@@ -1,5 +1,8 @@
 package map.homepage.domain.post.comment.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,5 +32,15 @@ public class CommentDto {
         private Long totalElements;
         private Boolean isFirst;
         private Boolean isLast;
+    }
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class CreateCommentRequestDTO{
+        @Size(max = 100)
+        @NotNull
+        @NotBlank
+        private String content;
     }
 }

@@ -23,7 +23,7 @@ public class Comment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본키 자동 생성
     private Long id;
 
-    @Size(min=1, max=100, message = "댓글은 1자 이상 100자 이하여야합니다.") // 댓글 길이 제한
+    //@Size(min=1, max=100, message = "COMMENT_TOO_LONG") // 댓글 길이 제한
     private String content;
 
     // 외래키

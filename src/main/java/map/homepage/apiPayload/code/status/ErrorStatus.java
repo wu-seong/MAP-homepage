@@ -18,10 +18,16 @@ public enum ErrorStatus implements BaseCode {
 
     // 유저 관련 응답
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4001", "해당 사용자가 존재하지 않습니다."),
-    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT4001", "해당 댓글 id가 존재하지 않습니다.");
+
+    // 댓글 관련 응답
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT4001", "해당 댓글 id가 존재하지 않습니다."),
+    COMMENT_IS_EMPTY(HttpStatus.BAD_REQUEST, "COMMENT4002", "댓글은 null일 수 없습니다."),
+    COMMENT_IS_BLANK(HttpStatus.BAD_REQUEST, "COMMENT4003", "댓글은 공백일 수 없습니다."),
+    COMMENT_TOO_LONG(HttpStatus.BAD_REQUEST, "COMMENT4004", "해당 댓글의 길이가 100을 넘어갑니다.");
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;
+
 
 
     @Override
