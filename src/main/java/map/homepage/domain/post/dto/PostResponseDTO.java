@@ -12,12 +12,14 @@ public class PostResponseDTO {
 
     private Long postId;
     private int views;
+
     private String content;
     private String dtype;
     private Role role;
     private String title;
     private LocalDateTime createdAt;
     private boolean isNotice;
+    private String accessUrl;
 
     private Long memberId;
     private String nickname;
@@ -33,6 +35,7 @@ public class PostResponseDTO {
         dto.setTitle(post.getTitle());
         dto.setCreatedAt(post.getCreatedAt());
         dto.setNotice(post.isNotice());
+        dto.setAccessUrl(post.getAccessUrl());
         dto.setMemberId(post.getMember().getId());
         dto.setNickname(post.getMember().getNickname());
         return dto;

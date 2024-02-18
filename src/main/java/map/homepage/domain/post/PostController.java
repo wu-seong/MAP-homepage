@@ -2,16 +2,15 @@
 package map.homepage.domain.post;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import map.homepage.apiPayload.ApiResponse;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.auth.MemberContext;
+import map.homepage.domain.post.converter.PostConverter;
 import map.homepage.domain.post.dto.PostRequestDTO;
 import map.homepage.domain.post.dto.PostResponseDTO;
 import map.homepage.domain.post.dto.PostResponseListDTO;
-import map.homepage.domain.post.converter.PostConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -22,6 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 //http://localhost:8080/swagger-ui/index.html
+//http://localhost:8080/oauth2/authorize/kakao
 @RestController
 @RequestMapping("/posts")
 @RequiredArgsConstructor
@@ -76,23 +76,23 @@ public class PostController {
         return ApiResponse.onSuccess(viewedPost);
     }
 
-    @PostMapping("")
+    @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "일반 게시글 작성 API")
     public ApiResponse<PostResponseDTO> createPost(
-            @RequestBody PostRequestDTO postRequestDTO
-    ) {
+            @RequestPart(name = "postRequestDTO") @Valid PostRequestDTO postRequestDTO,
+            @RequestPart(name = "file", required = false) MultipartFile file
+    ){
         Member member = MemberContext.getMember();
-        PostResponseDTO createdPost = postService.createPost(member, postRequestDTO);
+        PostResponseDTO createdPost = postService.createPost(member, file, postRequestDTO);
         return ApiResponse.onSuccess(createdPost);
     }
 
 
-    @PostMapping(value = "/withImage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/withImage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "사진 게시글 작성 API")
     public ApiResponse<PostResponseDTO> createImagePost(
-            @RequestPart(name = "file") List<MultipartFile> file,
-            @RequestPart(name = "postRequestDTO") @Parameter(schema = @Schema(type = "string", format = "string")) PostRequestDTO postRequestDTO
-
+            @RequestPart(name = "postRequestDTO") @Valid PostRequestDTO postRequestDTO,
+            @RequestPart(name = "file") List<MultipartFile> file
     ) throws IOException {
         Member member = MemberContext.getMember();
         PostResponseDTO createdPost = postService.createImagePost(member, file, postRequestDTO);
@@ -106,8 +106,8 @@ public class PostController {
             @RequestBody PostRequestDTO postRequestDTO
     ) {
         Member member = MemberContext.getMember();
-        PostResponseDTO upadtedPost = postService.updatePost(member, postId, postRequestDTO);
-        return ApiResponse.onSuccess(upadtedPost);
+        PostResponseDTO updatedPost = postService.updatePost(member, postId, postRequestDTO);
+        return ApiResponse.onSuccess(updatedPost);
     }
 
     @PatchMapping("/notice/{post-id}")
