@@ -1,6 +1,7 @@
 package map.homepage.domain.post.comment;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -9,6 +10,7 @@ import map.homepage.apiPayload.ApiResponse;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.auth.MemberContext;
 import map.homepage.domain.post.comment.dto.CommentDto;
+import map.homepage.exception.validation.annotation.CommentValidation;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +33,8 @@ public class CommentController {
     // 댓글 생성
     @PostMapping("/{post-id}")
     @Operation(summary = "댓글 작성 API",description = "게시물에 대한 새로운 댓글 작성")
-    public ApiResponse<CommentDto.CommentDetailDTO> writeComment(@Size(min=1, max=100, message = "댓글은 1자 이상 100자 이하여야합니다.") @RequestBody String content, @NotNull @Positive @PathVariable("post-id") Long postId) {
-        Comment createComment = commentService.writeComment(content, postId);
+    public ApiResponse<CommentDto.CommentDetailDTO> writeComment(@Valid @RequestBody CommentDto.CreateCommentRequestDTO requestBody, @NotNull @Positive @PathVariable("post-id") Long postId) {
+        Comment createComment = commentService.writeComment(requestBody.getContent(), postId);
         return ApiResponse.onSuccess(CommentConverter.toDto(createComment));
     }
 
