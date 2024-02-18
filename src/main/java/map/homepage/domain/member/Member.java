@@ -12,8 +12,10 @@ import map.homepage.domain.member.enums.SocialType;
 import map.homepage.domain.member.enums.Status;
 import map.homepage.domain.post.Post;
 import map.homepage.domain.post.comment.Comment;
+import map.homepage.domain.post.image.Image;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDate;
@@ -27,7 +29,6 @@ import java.util.List;
 @AllArgsConstructor //builder 사용을 위해서 추가, 빌더만 추가하면 오류남
 @DynamicInsert // null이 아닌 속성만을 SQL 쿼리에 포함
 @DynamicUpdate // 변경 속성만 쿼리에 포함 -> 성능 향상
-@SQLDelete(sql = "UPDATE member SET status = 'INACTIVE' WHERE id = ?") //soft delete
 public class Member extends BaseEntity {
 
     @Id
@@ -58,7 +59,8 @@ public class Member extends BaseEntity {
 
     private LocalDate birth;
 
-    private String imageUri; //프로필 이미지 경로
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    private ProfileImage profileImage; //프로필 이미지 경로
 
     @Enumerated(EnumType.STRING)
     private SocialType socialType; //oauth2 제공자
@@ -90,6 +92,14 @@ public class Member extends BaseEntity {
 
     public void setInactive(){
         this.status = Status.INACTIVE;
+    }
+
+    public void createAndSetProfileImage(String imageUri){
+        ProfileImage profileImage = ProfileImage.builder()
+                .imageUrl(imageUri)
+                .member(this)
+                .build();
+        this.profileImage = profileImage;
     }
 }
 

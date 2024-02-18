@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class MemberConverter {
     public static Member toMember(KakaoOauth2DTO.UserInfoResponseDTO response){
         KakaoOauth2DTO.KakaoAccountDTO kakaoAccount = response.getKakaoAccount();
+
         return Member.builder()
                 .oauthId(response.getId())
                 .email(kakaoAccount.getEmail())
@@ -37,6 +38,7 @@ public class MemberConverter {
     public static MemberResponseDTO.LoginDTO toLoginDTO(Member member){
         return MemberResponseDTO.LoginDTO.builder()
                 .id(member.getId())
+                .role(member.getRole().name())
                 .infoSet(member.isInfoSet())
                 .createdAt(member.getCreatedAt())
                 .build();
@@ -48,6 +50,7 @@ public class MemberConverter {
                 .nickname(member.getNickname())
                 .grade(member.getGrade())
                 .studentId(member.getStudentId())
+                .profileImg(member.getProfileImage().getImageUrl())
                 .build();
     }
     public static MemberResponseDTO.MemberPreviewListDTO toMemberPreviewListDTO(Page<Member> memberPage){
@@ -75,7 +78,7 @@ public class MemberConverter {
                 .nickname(member.getNickname())
                 .grade(member.getGrade())
                 .birth(member.getBirth())
-               // .imageUri(member.getImageUri())
+                .imageUri(member.getProfileImage().getImageUrl())
                 .infoSet(member.isInfoSet())
                 .role(member.getRole())
                 .status(member.getStatus())

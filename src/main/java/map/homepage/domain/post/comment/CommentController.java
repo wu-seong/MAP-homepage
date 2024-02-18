@@ -30,7 +30,6 @@ public class CommentController {
         Page<Comment> activeCommentPage = commentService.getComment(postId, page);
         return ApiResponse.onSuccess(CommentConverter.commentListDto(activeCommentPage));
     }
-
     // 댓글 생성
     @PostMapping("/{post-id}")
     @Operation(summary = "댓글 작성 API",description = "게시물에 대한 새로운 댓글 작성")

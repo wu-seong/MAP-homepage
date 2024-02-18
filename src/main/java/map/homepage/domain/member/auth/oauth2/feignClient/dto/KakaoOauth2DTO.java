@@ -30,17 +30,19 @@ public class KakaoOauth2DTO {
     @Getter
     @ToString
     public static class KakaoAccountDTO{
+        // 프로필 동의항목
+        private Profile profile;
         // 이메일 동의항목
-//        private boolean has_email;
-//        private boolean email_needs_agreement;
-//        private boolean is_email_valid;
-//        private boolean is_email_verified;
         private String email;
 
         // 이름 동의 항목
-//        private boolean name_needs_agreement;
         private String name;
+    }
 
-
+    @Getter
+    @ToString
+    public static class Profile{
+        @JsonProperty("profile_image_url")
+        private String imageUri;
     }
 }
