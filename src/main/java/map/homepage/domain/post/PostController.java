@@ -76,7 +76,7 @@ public class PostController {
         return ApiResponse.onSuccess(viewedPost);
     }
 
-    @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "일반 게시글 작성 API")
     public ApiResponse<PostResponseDTO> createPost(
             @RequestPart(name = "postRequestDTO") @Valid PostRequestDTO postRequestDTO,
