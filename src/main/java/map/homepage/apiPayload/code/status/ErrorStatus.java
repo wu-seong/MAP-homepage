@@ -18,7 +18,7 @@ public enum ErrorStatus implements BaseCode {
 
     // 유저 관련 응답
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4001", "해당 사용자가 존재하지 않습니다."),
-
+    USER_PROFILE_IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4002", "해당 사용자의 프로필 이미지가 존재하지 않습니다."),
     // 게시글 관련 응답
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4001", "게시글이 존재하지 않습니다."),
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4002", "첨부된 사진이 없습니다."),
