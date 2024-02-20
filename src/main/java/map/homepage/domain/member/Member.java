@@ -10,13 +10,11 @@ import map.homepage.domain.common.BaseEntity;
 import map.homepage.domain.member.enums.Role;
 import map.homepage.domain.member.enums.SocialType;
 import map.homepage.domain.member.enums.Status;
+import map.homepage.domain.member.profileImage.ProfileImage;
 import map.homepage.domain.post.Post;
 import map.homepage.domain.post.comment.Comment;
-import map.homepage.domain.post.image.Image;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -99,6 +97,16 @@ public class Member extends BaseEntity {
                 .imageUrl(imageUri)
                 .member(this)
                 .build();
+        this.profileImage = profileImage;
+    }
+    public void setRoleAdmin(){
+        this.role = Role.ADMIN;
+    }
+    public void setRoleUser(){
+        this.role = Role.USER;
+    }
+
+    public void setProfileImage(ProfileImage profileImage) {
         this.profileImage = profileImage;
     }
 }
