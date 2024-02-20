@@ -18,7 +18,6 @@ import map.homepage.domain.member.service.MemberQueryService;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -64,14 +63,8 @@ public class MemberController {
         return ApiResponse.onSuccess(MemberConverter.toMemberPreviewDTO(other));
     }
 
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "206", description = "일반 유저 성공 응답, 기본 정보만",
-                    content = @Content(schema = @Schema(implementation = MemberResponseDTO.ApiResponseMemberPreviewListDTO.class))),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description =" 관리자 성공 응답, 세부 정보 까지",
-                    content = @Content(schema = @Schema(implementation = MemberResponseDTO.ApiResponseMemberDetailListDTO.class)))
-    })
-    @Operation(summary = "유저 목록 조회 API",description = "일반 사용자는 민감하지 않은 기본 정보만, 관리자는 세부정보까지 얻음." +
-            " 근데 이거 나중에 관리자 기능만 따로 빼서 API path 따로 만들듯 ")
+
+    @Operation(summary = "유저 목록 조회 API",description = "유저 기본 정보 목록을 조회합니다.")
     @GetMapping("")
     public ApiResponse<MemberResponseDTO.MemberPreviewListDTO> getMemberInfos(@RequestParam Integer page){
         Page<Member> activeMemberPage = memberQueryService.getAllActive(page);

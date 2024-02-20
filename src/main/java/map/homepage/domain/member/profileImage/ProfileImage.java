@@ -1,4 +1,4 @@
-package map.homepage.domain.member;
+package map.homepage.domain.member.profileImage;
 
 
 import jakarta.persistence.*;
@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import map.homepage.domain.post.Post;
+import map.homepage.domain.member.Member;
 
 @Entity
 @Builder
@@ -25,4 +25,8 @@ public class ProfileImage{
     private String originalName;
     private String storageName;
     private String imageUrl;
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
 }
