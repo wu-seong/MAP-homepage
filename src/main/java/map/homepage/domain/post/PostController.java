@@ -76,8 +76,8 @@ public class PostController {
         return ApiResponse.onSuccess(viewedPost);
     }
 
-    @PostMapping(value = "", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+            //produces = {MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "일반 게시글 작성 API")
     public ApiResponse<PostResponseDTO> createPost(
             @RequestPart(name = "postRequestDTO") @Valid PostRequestDTO postRequestDTO,
@@ -89,8 +89,8 @@ public class PostController {
     }
 
 
-    @PostMapping(value = "/withImage", consumes = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE,MediaType.APPLICATION_JSON_VALUE},
-                produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/withImage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE})
+                //produces = {MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "사진 게시글 작성 API")
     public ApiResponse<PostResponseDTO> createImagePost(
             @RequestPart(name = "postRequestDTO") @Valid PostRequestDTO postRequestDTO,
