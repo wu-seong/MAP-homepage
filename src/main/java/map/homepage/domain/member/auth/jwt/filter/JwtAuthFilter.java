@@ -50,7 +50,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 // admin role이 필요한 요청
                 String requesterRole = jwtUtil.getRole(accessToken);
                 log.info("requesterRole = {} ", requesterRole);
-                if(!requesterRole.endsWith(Role.ADMIN.getValue())){
+                if(!requesterRole.equals(Role.ADMIN.toString())){
                     // 요청자가 admin Role이 아니면 인가하지 않음
                     response.sendError(401, "Unauthorized");
                 }
