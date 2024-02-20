@@ -23,4 +23,7 @@ public interface PostService {
     PostResponseDTO updatePost(Member member, Long postId, PostRequestDTO postRequestDTO); // 게시글 수정
     void deletePost(Member member, Long postId); // 게시글 삭제
     void toggleNotice(Member member, Long postId); // 게시글 공지 등록 또는 해제
+
+    boolean isAuthorOrAdmin(Member member, Post post); // 권한 확인
+    boolean isImageFile(MultipartFile file); // 이미지 확인
 }
