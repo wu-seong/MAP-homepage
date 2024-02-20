@@ -107,11 +107,11 @@ public class PostServiceImpl implements PostService {
             throw new GeneralException(ErrorStatus.IMAGE_NOT_FOUND);
         }
 
-        for (MultipartFile f : file) {
-            if (!isImageFile(f)) {
-                throw new GeneralException(ErrorStatus.IS_NOT_IMAGE);
-            }
-        }
+//        for (MultipartFile f : file) {
+//            if (!isImageFile(f)) {
+//                throw new GeneralException(ErrorStatus.IS_NOT_IMAGE);
+//            }
+//        }
 
         Post post = new Post();
         post.setMember(member);
@@ -143,7 +143,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.ARTICLE_NOT_FOUND));
 
-        if (!isAuthorOrAdmin(member, post)) {
+        if (!member.getId().equals(post.getMember().getId()) && !member.isAdmin()) {
             throw new GeneralException(ErrorStatus._FORBIDDEN);
         }
 
@@ -162,7 +162,8 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.ARTICLE_NOT_FOUND));
 
-        if (!isAuthorOrAdmin(member, post)) {
+        // 권한 확인
+        if (!member.getId().equals(post.getMember().getId()) && !member.isAdmin()) {
             throw new GeneralException(ErrorStatus._FORBIDDEN);
         }
 
@@ -192,17 +193,5 @@ public class PostServiceImpl implements PostService {
 
         post.setNotice(!post.isNotice());
         postRepository.save(post);
-    }
-
-    // 권한 확인
-    public boolean isAuthorOrAdmin(Member member, Post post) {
-        // 현재 사용자의 memberId와 게시글의 작성자의 memberId를 비교하거나 ADMIN 권한 확인
-        return member.getId().equals(post.getMember().getId()) || member.isAdmin();
-    }
-
-    // 파일 형식 확인
-    private boolean isImageFile(MultipartFile file) {
-        String contentType = file.getContentType();
-        return contentType != null && contentType.startsWith("image");
     }
 }
