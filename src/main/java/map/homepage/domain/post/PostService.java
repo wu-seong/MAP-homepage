@@ -25,5 +25,5 @@ public interface PostService {
     void toggleNotice(Member member, Long postId); // 게시글 공지 등록 또는 해제
 
     boolean isAuthorOrAdmin(Member member, Post post); // 권한 확인
-    boolean isImageFile(MultipartFile file); // 이미지 확인
+    boolean isImageFile(MultipartFile fil); // 이미지 확인
 }
