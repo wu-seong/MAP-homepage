@@ -107,11 +107,11 @@ public class PostServiceImpl implements PostService {
             throw new GeneralException(ErrorStatus.IMAGE_NOT_FOUND);
         }
 
-//        for (MultipartFile f : file) {
-//            if (!isImageFile(f)) {
-//                throw new GeneralException(ErrorStatus.IS_NOT_IMAGE);
-//            }
-//        }
+        for (MultipartFile f : file) {
+            if (!isImageFile(f)) {
+                throw new GeneralException(ErrorStatus.IS_NOT_IMAGE);
+            }
+        }
 
         Post post = new Post();
         post.setMember(member);
