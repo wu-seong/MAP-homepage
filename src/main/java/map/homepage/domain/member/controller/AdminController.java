@@ -22,7 +22,7 @@ public class AdminController {
     @Operation(summary = "관리자 전용 유저 목록 조회 API",description = "유저의 세부 정보를 조회합니다.")
     @GetMapping("/members")
     public ApiResponse<MemberResponseDTO.MemberDetailListDTO> getMemberInfos(@RequestParam Integer page){
-            Page<Member> MemberPage = memberQueryService.getAll(page);
+            Page<Member> MemberPage = memberQueryService.getAll(page-1);
             return ApiResponse.onSuccess(MemberConverter.toMemberDetailListDTO(MemberPage)); //관리자는 세부 정보를 획득
     }
     @Operation(summary = "관리자 전용 유저 추방 API",description = "지정된 회원을 회원 탈퇴 시킵니다.")
