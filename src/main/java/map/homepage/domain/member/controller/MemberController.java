@@ -67,7 +67,7 @@ public class MemberController {
     @Operation(summary = "유저 목록 조회 API",description = "유저 기본 정보 목록을 조회합니다.")
     @GetMapping("")
     public ApiResponse<MemberResponseDTO.MemberPreviewListDTO> getMemberInfos(@RequestParam Integer page){
-        Page<Member> activeMemberPage = memberQueryService.getAllActive(page);
+        Page<Member> activeMemberPage = memberQueryService.getAllActive(page-1);
         return ApiResponse.onSuccess(MemberConverter.toMemberPreviewListDTO(activeMemberPage));
     }
 }
