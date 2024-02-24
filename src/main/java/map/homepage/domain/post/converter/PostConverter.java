@@ -76,8 +76,6 @@ public class PostConverter {
 
     }
     public static GeneralPostPreviewResponseDTO fromEntityToPreview(Post post) {
-        AttachedFile attachedFile = post.getAttachedFile();
-        AttachedFileResponseDTO attachedFileResponseDTO = AttachedFileConverter.fromEntity(attachedFile);
         return GeneralPostPreviewResponseDTO.builder()
                 .postId(post.getId())
                 .view(post.getViews())
