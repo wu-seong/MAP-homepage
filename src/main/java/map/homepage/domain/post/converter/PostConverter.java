@@ -55,8 +55,11 @@ public class PostConverter {
     }
 
     public static GeneralPostResponseDTO fromEntityToDetail(Post post, int totalComment) {
+        AttachedFileResponseDTO attachedFileResponseDTO = null;
         AttachedFile attachedFile = post.getAttachedFile();
-        AttachedFileResponseDTO attachedFileResponseDTO = AttachedFileConverter.fromEntity(attachedFile);
+        if (attachedFile != null){ // 첨부파일이 존재 하면
+            attachedFileResponseDTO = AttachedFileConverter.fromEntity(attachedFile);
+        }
         return GeneralPostResponseDTO.builder()
                 .postId(post.getId())
                 .views(post.getViews())
