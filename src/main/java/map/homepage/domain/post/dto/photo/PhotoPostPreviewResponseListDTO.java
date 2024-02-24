@@ -1,16 +1,17 @@
-package map.homepage.domain.post.dto;
+package map.homepage.domain.post.dto.photo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+
 @Builder
 @AllArgsConstructor
-@Getter
-public class PostResponseListDTO {
-    private List<PostResponseDTO> postResponseDTOList;
+@NoArgsConstructor
+public class PhotoPostPreviewResponseListDTO {
+    private List<PhotoPostPreviewResponseDTO> photoPostResponseDTOList;
     private Integer listSize;
     private Integer totalPage;
     private Long totalElements;

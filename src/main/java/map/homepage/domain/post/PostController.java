@@ -7,11 +7,14 @@ import lombok.RequiredArgsConstructor;
 import map.homepage.apiPayload.ApiResponse;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.auth.MemberContext;
+import map.homepage.domain.post.comment.Comment;
+import map.homepage.domain.post.comment.CommentService;
 import map.homepage.domain.post.converter.PostConverter;
+import map.homepage.domain.post.dto.general.GeneralPostPreviewResponseListDTO;
 import map.homepage.domain.post.dto.PostRequestDTO;
-import map.homepage.domain.post.dto.PostResponseDTO;
-import map.homepage.domain.post.dto.PostResponseListDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import map.homepage.domain.post.dto.general.GeneralPostResponseDTO;
+import map.homepage.domain.post.dto.photo.PhotoPostPreviewResponseListDTO;
+import map.homepage.domain.post.dto.photo.PhotoPostResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //http://localhost:8080/swagger-ui/index.html
 //http://localhost:8080/oauth2/authorize/kakao
@@ -27,92 +31,99 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
 
-    private PostService postService;
-
-    @Autowired
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
+    private final PostService  postService;
+    private final CommentService commentService;
 
     @GetMapping("/photo")
     @Operation(summary = "사진 게시글 목록 조회 API")
-    public ApiResponse<PostResponseListDTO> getPhotoPosList(
+    public ApiResponse<PhotoPostPreviewResponseListDTO> getPhotoPosList(
             @RequestParam(defaultValue = "1") int page
     ) {
         int size = 15;
-        Page<PostResponseDTO> photoPostPage = postService.getPhotoPostPage(page, size);
-        PostResponseListDTO postResponseListDTO = PostConverter.toPostResponseListDTO(photoPostPage,page);
-        return ApiResponse.onSuccess(postResponseListDTO);
+        Page<Post> photoPostPage = postService.getPhotoPostPage(page, size);
+        return ApiResponse.onSuccess(PostConverter.toPhotoPostPreviewResponseListDTO(photoPostPage,page));
     }
 
 
     @GetMapping("/general")
     @Operation(summary = "일반 게시글 목록 조회 API")
-    public ApiResponse<PostResponseListDTO> getGeneralPostList(
+    public ApiResponse<GeneralPostPreviewResponseListDTO> getGeneralPostList(
             @RequestParam(defaultValue = "1") int page
     ) {
         int size = 10;
-        Page<PostResponseDTO> photoPostPage = postService.getGeneralPostPage(page, size);
-        PostResponseListDTO postResponseListDTO = PostConverter.toPostResponseListDTO(photoPostPage,page);
-        return ApiResponse.onSuccess(postResponseListDTO);
+        Page<Post> generalPostPage = postService.getGeneralPostPage(page, size);
+        return ApiResponse.onSuccess(PostConverter.toPostPreviewResponseListDTO(generalPostPage, page));
     }
 
-    @GetMapping("/notice")
+    @GetMapping("/general/notice")
     @Operation(summary = "공지 게시글 목록 조회 API")
-    public ApiResponse<List<PostResponseDTO>> getNoticePostList(
+    public ApiResponse<GeneralPostPreviewResponseListDTO> getNoticePostList(
             @RequestParam(defaultValue = "0") int page
     ) {
         int size = 5;
-        List<PostResponseDTO> noticePostList = postService.getNoticePostList(page, size);
-        return ApiResponse.onSuccess(noticePostList);
+        List<Post> noticePostList = postService.getNoticePostList(page, size);
+        return ApiResponse.onSuccess(PostConverter
+                .toNotificationPostPreviewResponseListDTO(noticePostList));
     }
 
-    @GetMapping("/{post-id}")
-    @Operation(summary = "단일 게시글 조회 API")
-    public ApiResponse<PostResponseDTO> viewPost(
+    @GetMapping("/general/{post-id}")
+    @Operation(summary = "일반 게시글 단일 조회 API")
+    public ApiResponse<GeneralPostResponseDTO> viewGeneralPost(
             @PathVariable("post-id") Long postId
     ) {
-        PostResponseDTO viewedPost = postService.viewPost(postId);
-        return ApiResponse.onSuccess(viewedPost);
-    }
+        Post post = postService.viewPost(postId);
+        Page<Comment> comment = commentService.getComment(postId, 0);
+        int totalComment = comment.getTotalPages();
 
-    @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-            //produces = {MediaType.APPLICATION_JSON_VALUE})
+        return ApiResponse.onSuccess(PostConverter.fromEntityToDetail(post, totalComment));
+    }
+    @GetMapping("/photo/{post-id}")
+    @Operation(summary = "사진 게시글 단일 조회 API")
+    public ApiResponse<PhotoPostResponseDTO> viewImagePost(
+            @PathVariable("post-id") Long postId
+    ) {
+        Post post = postService.viewPost(postId);
+        Page<Comment> comment = commentService.getComment(postId, 0);
+        int totalComment = comment.getTotalPages();
+        return ApiResponse.onSuccess(PostConverter.fromEntityToImageDetail(post, totalComment));
+    }
+    @PostMapping(value = "/general", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE} )
     @Operation(summary = "일반 게시글 작성 API")
-    public ApiResponse<PostResponseDTO> createPost(
+    public ApiResponse<GeneralPostResponseDTO> createPost(
             @RequestPart(name = "postRequestDTO") @Valid PostRequestDTO postRequestDTO,
             @RequestPart(name = "file", required = false) MultipartFile file
     ){
         Member member = MemberContext.getMember();
-        PostResponseDTO createdPost = postService.createPost(member, file, postRequestDTO);
-        return ApiResponse.onSuccess(createdPost);
+        return ApiResponse.onSuccess(PostConverter
+                .fromEntityToDetail(postService.createPost(member, file, postRequestDTO), 0) );
     }
 
-
-    @PostMapping(value = "/withImage", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE})
-                //produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/photo", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE} )
     @Operation(summary = "사진 게시글 작성 API")
-    public ApiResponse<PostResponseDTO> createImagePost(
+    public ApiResponse<PhotoPostResponseDTO> createImagePost(
             @RequestPart(name = "postRequestDTO") @Valid PostRequestDTO postRequestDTO,
             @RequestPart(name = "file") List<MultipartFile> file
     ) throws IOException {
         Member member = MemberContext.getMember();
-        PostResponseDTO createdPost = postService.createImagePost(member, file, postRequestDTO);
-        return ApiResponse.onSuccess(createdPost);
+        return ApiResponse.onSuccess(PostConverter
+                .fromEntityToImageDetail(postService.createImagePost(member, file, postRequestDTO), 0) );
     }
 
-    @PutMapping("/{post-id}")
+    @PutMapping(value = "/{post-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE} )
     @Operation(summary = "게시글 수정 API")
-    public ApiResponse<PostResponseDTO> updatePost(
+    public ApiResponse<GeneralPostResponseDTO> updatePost(
             @PathVariable("post-id") Long postId,
-            @RequestBody PostRequestDTO postRequestDTO
+            @RequestPart(name = "postRequestDTO") @Valid PostRequestDTO postRequestDTO,
+            @RequestPart(name = "file", required = false) MultipartFile file
     ) {
         Member member = MemberContext.getMember();
-        PostResponseDTO updatedPost = postService.updatePost(member, postId, postRequestDTO);
-        return ApiResponse.onSuccess(updatedPost);
+        Page<Comment> comment = commentService.getComment(postId, 0);
+        int totalComment = comment.getTotalPages();
+        return ApiResponse.onSuccess(PostConverter
+                .fromEntityToDetail(postService.updatePost(member, file ,postId, postRequestDTO), totalComment ) );
     }
 
-    @PatchMapping("/notice/{post-id}")
+    @PatchMapping("/general/{post-id}/notice")
     @Operation(summary = "게시글 공지 등록 또는 해제 API")
     public ApiResponse<String> toggleNotice(
             @PathVariable("post-id") Long postId

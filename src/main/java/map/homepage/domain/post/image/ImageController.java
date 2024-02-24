@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ImageController {
 
-    private final ImageService imageService;
+    private final FileManagementService fileManagementService;
 
     // 사진 삭제
     @DeleteMapping("/{image-id}")
@@ -22,7 +22,7 @@ public class ImageController {
     public ResponseEntity<String> deleteImage(
             @PathVariable("image-id") Long imageId
     ) {
-        imageService.deleteImage(imageId);
+        fileManagementService.deleteImage(imageId);
         return ResponseEntity.ok("사진이 성공적으로 삭제되었습니다.");
     }
 }

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import map.homepage.domain.common.BaseEntity;
 import map.homepage.domain.member.Member;
 
 @Entity
@@ -13,7 +14,7 @@ import map.homepage.domain.member.Member;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class ProfileImage{
+public class ProfileImage extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

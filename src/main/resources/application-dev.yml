@@ -24,7 +24,7 @@ spring:
 cloud:
   aws:
     s3:
-      bucket: test-map-s3 #나중에 수정
+      bucket: ${S3_BUCKET}
     region:
       static: ap-northeast-2
     stack:
