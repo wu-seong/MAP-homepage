@@ -13,6 +13,7 @@ import map.homepage.domain.post.image.dto.ImageResponseDTO;
 import map.homepage.domain.post.image.dto.ImageResponseListDTO;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ public class PhotoPostPreviewResponseDTO {
     private boolean notice;
     private String title;
     private Integer view;
-    private LocalDate uploadedTime;
+    private LocalDateTime uploadedTime;
     private Long writerId;
     private String writerName;
     private String thumbnail;

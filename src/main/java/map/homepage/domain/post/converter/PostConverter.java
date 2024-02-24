@@ -43,7 +43,7 @@ public class PostConverter {
     }
     public static PhotoPostPreviewResponseListDTO toPhotoPostPreviewResponseListDTO(Page<Post> photoPostPage, int page) {
         photoPostPage.stream()
-                .map(PostConverter::fromEntityToPreview).collect(Collectors.toList());
+                .map(PostConverter::fromEntityToImagePreview).collect(Collectors.toList());
         return PhotoPostPreviewResponseListDTO.builder()
                 .listSize(photoPostPage.getNumberOfElements())
                 .totalPage(photoPostPage.getTotalPages())
@@ -83,7 +83,7 @@ public class PostConverter {
                 .writerName(post.getMember().getName())
                 .writerId(post.getMember().getId())
                 .notice(post.isNotice())
-                .uploadedTime(post.getCreatedAt().toLocalDate())
+                .uploadedTime(post.getCreatedAt())
                 .build();
     }
     public static PhotoPostPreviewResponseDTO fromEntityToImagePreview(Post post) {
@@ -94,7 +94,7 @@ public class PostConverter {
                 .writerName(post.getMember().getName())
                 .writerId(post.getMember().getId())
                 .notice(post.isNotice())
-                .uploadedTime(post.getCreatedAt().toLocalDate())
+                .uploadedTime(post.getCreatedAt())
                 .thumbnail(post.getThumbnail())
                 .build();
     }
