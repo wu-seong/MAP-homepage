@@ -83,8 +83,7 @@ public class PostServiceImpl implements PostService {
         post.setDtype(postRequestDTO.getDtype());
         post.setTitle(postRequestDTO.getTitle());
         post.setRole(member.getRole());
-
-        //JPA 변경감지 기능 때문에 없어도 됨!  postRepository.save(post);
+        postRepository.save(post);
 
 
         if (file != null && !file.isEmpty()) {
