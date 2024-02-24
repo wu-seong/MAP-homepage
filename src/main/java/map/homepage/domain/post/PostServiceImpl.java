@@ -83,7 +83,6 @@ public class PostServiceImpl implements PostService {
         post.setDtype(postRequestDTO.getDtype());
         post.setTitle(postRequestDTO.getTitle());
         post.setRole(member.getRole());
-        postRepository.save(post);
 
 
         if (file != null && !file.isEmpty()) {
@@ -94,7 +93,7 @@ public class PostServiceImpl implements PostService {
                 throw new RuntimeException(e);
             }
         }
-
+        postRepository.save(post);
         return post;
     }
 
