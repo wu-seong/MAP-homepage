@@ -6,6 +6,7 @@ import lombok.*;
 import map.homepage.domain.common.BaseEntity;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.enums.Role;
+import map.homepage.domain.post.attachedFile.AttachedFile;
 import map.homepage.domain.post.comment.Comment;
 import map.homepage.domain.post.image.Image;
 
@@ -45,12 +46,18 @@ public class Post extends BaseEntity {
     private int views; // 게시글 조회 수
     private String thumbnail; // 게시글 썸네일
     private boolean isNotice; // 게시글 공지 유무
-    private String accessUrl; // 파일 접근 경로
+
+    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL)
+    private AttachedFile attachedFile; // 첨부 파일 양방향 매핑
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public boolean isGeneral(){
+        return this.dtype.equals("general");
     }
 }

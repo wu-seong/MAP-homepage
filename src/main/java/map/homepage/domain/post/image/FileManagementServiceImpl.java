@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import map.homepage.apiPayload.code.status.ErrorStatus;
 import map.homepage.domain.post.Post;
 import map.homepage.domain.post.PostRepository;
+import map.homepage.domain.post.attachedFile.AttachedFile;
 import map.homepage.exception.GeneralException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ImageServiceImpl implements ImageService {
+public class FileManagementServiceImpl implements FileManagementService {
 
     private final AmazonS3Client amazonS3Client;
     private final ImageRepository imageRepository;
@@ -27,7 +28,7 @@ public class ImageServiceImpl implements ImageService {
     private String bucket;
 
     @Override
-    public String uploadImage(Long postId, MultipartFile file) throws IOException {
+    public Image uploadImage(Long postId, MultipartFile file) throws IOException {
         String originalName = file.getOriginalFilename();
         String storageName = "images/" + UUID.randomUUID() + "_" + originalName;
         String imageUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + storageName;
@@ -51,15 +52,21 @@ public class ImageServiceImpl implements ImageService {
         imageRepository.save(image); // 이미지 정보를 데이터베이스에 저장
 
         // 업로드된 이미지의 썸네일 URL 반환
-        return "https://d3djt9dt9ouox.cloudfront.net/"+storageName; // 나중에 수정
+        return image; // 나중에 수정
     }
 
     @Override
-    public String uploadFile(MultipartFile file) throws IOException {
-
+    public AttachedFile uploadFile(MultipartFile file) throws IOException {
         String originalName = file.getOriginalFilename();
         String storageName = "files/" + UUID.randomUUID() + "_" + originalName; // 나중에 수정
         String fileUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + storageName;
+
+        AttachedFile attachedFile = AttachedFile.builder()
+                .originalName(originalName)
+                .storageName(storageName)
+                .fileUrl(fileUrl)
+                //.post()
+                .build();
 
         // AWS S3에 파일 업로드
         ObjectMetadata metadata = new ObjectMetadata();
@@ -67,7 +74,7 @@ public class ImageServiceImpl implements ImageService {
         metadata.setContentLength(file.getSize());
         amazonS3Client.putObject(bucket, storageName, file.getInputStream(), metadata);
 
-        return fileUrl;
+        return attachedFile;
     }
 
     @Override
@@ -83,7 +90,8 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void deleteFile(String url){
+    public void deleteFile(AttachedFile attachedFile){
+        String url = attachedFile.getFileUrl();
         String storagePath = url.substring(("https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/").length());
         amazonS3Client.deleteObject(bucket, storagePath);
     }
