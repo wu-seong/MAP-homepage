@@ -42,9 +42,10 @@ public class PostConverter {
                 .build();
     }
     public static PhotoPostPreviewResponseListDTO toPhotoPostPreviewResponseListDTO(Page<Post> photoPostPage, int page) {
-        photoPostPage.stream()
+        List<PhotoPostPreviewResponseDTO> photoPostPreviewResponseDTOList = photoPostPage.stream()
                 .map(PostConverter::fromEntityToImagePreview).collect(Collectors.toList());
         return PhotoPostPreviewResponseListDTO.builder()
+                .photoPostResponseDTOList(photoPostPreviewResponseDTOList)
                 .listSize(photoPostPage.getNumberOfElements())
                 .totalPage(photoPostPage.getTotalPages())
                 .totalElements(photoPostPage.getTotalElements())
