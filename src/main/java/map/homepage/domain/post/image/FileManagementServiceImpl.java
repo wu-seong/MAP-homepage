@@ -28,7 +28,7 @@ public class FileManagementServiceImpl implements FileManagementService {
     private String bucket;
 
     @Override
-    public Image uploadImage(Long postId, MultipartFile file) throws IOException {
+    public Image uploadImage(Post post, MultipartFile file) {
         String originalName = file.getOriginalFilename();
         String storageName = "images/" + UUID.randomUUID() + "_" + originalName;
         String imageUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + storageName;
@@ -37,11 +37,11 @@ public class FileManagementServiceImpl implements FileManagementService {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
         metadata.setContentLength(file.getSize());
-        amazonS3Client.putObject(bucket, storageName, file.getInputStream(), metadata);
-
-        // postId를 사용하여 Post 엔티티를 가져옴
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.ARTICLE_NOT_FOUND));
+        try {
+            amazonS3Client.putObject(bucket, storageName, file.getInputStream(), metadata);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // 이미지 정보 저장
         Image image = new Image();
@@ -49,14 +49,12 @@ public class FileManagementServiceImpl implements FileManagementService {
         image.setStorageName(storageName);
         image.setImageUrl(imageUrl);
         image.setPost(post);
-        imageRepository.save(image); // 이미지 정보를 데이터베이스에 저장
-
         // 업로드된 이미지의 썸네일 URL 반환
         return image; // 나중에 수정
     }
 
     @Override
-    public AttachedFile uploadFile(MultipartFile file) throws IOException {
+    public AttachedFile uploadFile(Post post, MultipartFile file) throws IOException {
         String originalName = file.getOriginalFilename();
         String storageName = "files/" + UUID.randomUUID() + "_" + originalName; // 나중에 수정
         String fileUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + storageName;
@@ -65,7 +63,7 @@ public class FileManagementServiceImpl implements FileManagementService {
                 .originalName(originalName)
                 .storageName(storageName)
                 .fileUrl(fileUrl)
-                //.post()
+                .post(post)
                 .build();
 
         // AWS S3에 파일 업로드
