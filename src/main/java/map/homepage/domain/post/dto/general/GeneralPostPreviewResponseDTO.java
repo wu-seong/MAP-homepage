@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import map.homepage.domain.post.Post;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public class GeneralPostPreviewResponseDTO {
     private Long postId;
     private String title;
     private Integer view;
-    private LocalDate uploadedTime;
+    private LocalDateTime uploadedTime;
     private Long writerId;
     private String writerName;
 
