@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -87,7 +88,7 @@ public class PostServiceImpl implements PostService {
 
         if (file != null && !file.isEmpty()) {
             try {
-                AttachedFile attachedFile = fileManagementService.uploadFile(file);
+                AttachedFile attachedFile = fileManagementService.uploadFile(post, file);
                 post.setAttachedFile(attachedFile);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -116,17 +117,14 @@ public class PostServiceImpl implements PostService {
         post.setTitle(postRequestDTO.getTitle());
         post.setRole(member.getRole());
 
-        postRepository.save(post); // 게시글 저장
-        Long postId = post.getId();
-
-        boolean isFirst = true;
-        for (MultipartFile f : file) {
-            Image image = fileManagementService.uploadImage(postId, f);
-            if(isFirst){
-                post.setThumbnail(image.getImageUrl());
-                isFirst = false;
-            }
+        List<Image> imageList = file.stream()
+                .map(f -> fileManagementService.uploadImage(post, f)).collect(Collectors.toList());
+        if(imageList.isEmpty()){
+            throw new GeneralException(ErrorStatus.MINIMUM_IMAGE_REQUIREMENT_NOT_MET);
         }
+        post.setThumbnail(imageList.get(0).getImageUrl());
+        post.setImages(imageList);
+        postRepository.save(post);
         return post;
     }
 
@@ -150,13 +148,12 @@ public class PostServiceImpl implements PostService {
                     fileManagementService.deleteFile(olderAttachedFile);
                 }
                 // 새로운 파일 업로드
-                AttachedFile attachedFile = fileManagementService.uploadFile(file);
+                AttachedFile attachedFile = fileManagementService.uploadFile(post, file);
                 post.setAttachedFile(attachedFile);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-
         post.setTitle(postRequestDTO.getTitle());
         post.setDtype(postRequestDTO.getDtype());
         post.setContent(postRequestDTO.getContent());

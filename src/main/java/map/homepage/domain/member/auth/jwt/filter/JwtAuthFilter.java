@@ -30,6 +30,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("currentURI = {}", request.getRequestURI());
         // 지정된 Path는 건너뛰기
         String currentPath = request.getServletPath();
         for(String ignorePath: ignorePrefix){
