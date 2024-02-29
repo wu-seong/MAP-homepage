@@ -38,6 +38,8 @@ public class MemberConverter {
     public static MemberResponseDTO.LoginDTO toLoginDTO(Member member){
         return MemberResponseDTO.LoginDTO.builder()
                 .id(member.getId())
+                .name(member.getName())
+                .nickname(member.getNickname())
                 .role(member.getRole().name())
                 .infoSet(member.isInfoSet())
                 .createdAt(member.getCreatedAt())

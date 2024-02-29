@@ -24,6 +24,8 @@ public class MemberResponseDTO {
         private Long id;
         private boolean infoSet;
         private String role;
+        private String name;
+        private String nickname;
         private LocalDateTime createdAt;
     }
 
