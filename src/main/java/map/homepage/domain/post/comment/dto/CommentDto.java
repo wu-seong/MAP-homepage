@@ -19,6 +19,7 @@ public class CommentDto {
     public static class CommentDetailDTO {
         private Long commentId;
         private String writer;
+        private String writerProfileURI;
         private Long memberId;
         private String content;
         private LocalDateTime createdAt;

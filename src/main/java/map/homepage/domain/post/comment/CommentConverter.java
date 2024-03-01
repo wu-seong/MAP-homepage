@@ -13,6 +13,7 @@ public class CommentConverter {
                 .commentId(comment.getId())
                 .writer(comment.getMember().getName())
                 .memberId(comment.getMember().getId())
+                .writerProfileURI(comment.getMember().getProfileImage().getImageUrl())
                 .content(comment.getContent())
                 .createdAt(comment.getCreatedAt())
                 .build();
