@@ -38,14 +38,14 @@ public class PostServiceImpl implements PostService {
     // 사진 게시글 목록 조회
     @Override
     public Page<Post> getPhotoPostPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page-1, size, Sort.by(Sort.Order.desc("createdAt")) );
         return postRepository.findByDtype("photo", pageable);
     }
 
     // 일반 게시글 목록 조회
     @Override
     public Page<Post> getGeneralPostPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page-1, size, Sort.by(Sort.Order.desc("createdAt")) );
         return postRepository.findByDtype("general", pageable);
     }
 
