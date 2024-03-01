@@ -14,6 +14,7 @@ public class CommentConverter {
                 .writer(comment.getMember().getName())
                 .memberId(comment.getMember().getId())
                 .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
                 .build();
     }
 
