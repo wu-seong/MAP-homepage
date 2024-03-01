@@ -35,6 +35,10 @@ public class NaverOauth2DTO {
         private String email;
         @JsonProperty("profile_image")
         private String imageUri;
+        private String birthday;
+        private String birthyear;
+        @JsonProperty("mobile")
+        private String phoneNumber;
     }
 
 

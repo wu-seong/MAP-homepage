@@ -37,6 +37,14 @@ public class KakaoOauth2DTO {
 
         // 이름 동의 항목
         private String name;
+
+        // 출생 연도 동의 항목
+        private String birthyear;
+        // 생일 동의 항목
+        private String birthday;
+        // 휴대폰 번호 동의 항목
+        @JsonProperty("phone_number")
+        private String phoneNumber;
     }
 
     @Getter
