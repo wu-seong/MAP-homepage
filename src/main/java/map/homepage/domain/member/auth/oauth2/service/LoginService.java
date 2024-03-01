@@ -65,7 +65,11 @@ public class LoginService {
         String emailProperty = "kakao_account.email";
         String nameProperty = "kakao_account.name";
         String profileProperty = "kakao_account.profile";
-        List<String> propertyKeysList = Arrays.asList(emailProperty, nameProperty, profileProperty);
+        String birthdayProperty = "kakao_account.birthday";
+        String birthYearProperty = "kakao_account.birthyear";
+        String phoneNumberProperty = "kakao_account.phone_number";
+        List<String> propertyKeysList = Arrays.asList(emailProperty, nameProperty, profileProperty,
+                birthdayProperty, birthYearProperty, phoneNumberProperty);
 
         // List -> JSON 형식으로 바꾸어 전달
         ObjectMapper objectMapper = new ObjectMapper();

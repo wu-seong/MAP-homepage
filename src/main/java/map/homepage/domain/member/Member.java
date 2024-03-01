@@ -57,6 +57,8 @@ public class Member extends BaseEntity {
 
     private LocalDate birth;
 
+    private String phoneNumber;
+
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private ProfileImage profileImage; //프로필 이미지 경로
 
