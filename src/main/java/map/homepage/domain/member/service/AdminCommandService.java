@@ -6,4 +6,5 @@ public interface AdminCommandService {
     public void grantAdmin(Long memberId);
 
     public void depriveAdmin(Long memberId);
+
 }

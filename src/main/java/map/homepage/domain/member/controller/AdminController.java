@@ -4,13 +4,18 @@ package map.homepage.domain.member.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import map.homepage.apiPayload.ApiResponse;
+import map.homepage.domain.feedback.Feedback;
 import map.homepage.domain.member.Member;
 import map.homepage.domain.member.converter.MemberConverter;
 import map.homepage.domain.member.dto.MemberResponseDTO;
 import map.homepage.domain.member.service.AdminCommandService;
+import map.homepage.domain.member.service.AdminQueryService;
 import map.homepage.domain.member.service.MemberQueryService;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
     private final MemberQueryService memberQueryService;
     private final AdminCommandService adminCommandService;
+    private final AdminQueryService adminQueryService;
     @Operation(summary = "관리자 전용 유저 목록 조회 API",description = "유저의 세부 정보를 조회합니다.")
     @GetMapping("/members")
     public ApiResponse<MemberResponseDTO.MemberDetailListDTO> getMemberInfos(@RequestParam Integer page){
@@ -43,5 +49,15 @@ public class AdminController {
     public ApiResponse<String> depriveAdminRole(@PathVariable(value = "member-id") Long memberId){
         adminCommandService.depriveAdmin(memberId);
         return ApiResponse.onSuccess(String.valueOf(memberId) + "번 회원 관리자 권한 회수");
+    }
+
+    @Operation(summary = "피드백 조회 API")
+    @GetMapping("/feedbacks")
+    public ApiResponse<List<String>> getFeedbacks(){
+        List<Feedback> feedbackList = adminQueryService.getFeedbackList();
+        List<String> feedbackContentList = feedbackList.stream()
+                .map(feedback -> feedback.getContent())
+                .collect(Collectors.toList());
+        return ApiResponse.onSuccess(feedbackContentList);
     }
 }

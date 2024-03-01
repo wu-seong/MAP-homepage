@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 public class CommentServiceImpl implements CommentService{
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
-    private final MemberRepository memberRepository;
 
     @Override
     public Page<Comment> getComment(Long postId, Integer page) {
