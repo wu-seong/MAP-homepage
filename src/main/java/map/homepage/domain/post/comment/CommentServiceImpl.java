@@ -11,6 +11,7 @@ import map.homepage.domain.post.PostRepository;
 import map.homepage.exception.GeneralException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 // Repository에게 받은 정보를 가공해서 Controller에게 주거나, Controller에게 받은 정보를 Repository한테 주는 역할
@@ -24,7 +25,7 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public Page<Comment> getComment(Long postId, Integer page) {
-        return commentRepository.findAllByPostId(postId, PageRequest.of(page, 10));
+        return commentRepository.findAllByPostId(postId, PageRequest.of(page, 10, Sort.by(Sort.Order.desc("createdAt") ) ) );
     }
 
     @Override

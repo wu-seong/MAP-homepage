@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class CommentDto {
@@ -20,6 +21,7 @@ public class CommentDto {
         private String writer;
         private Long memberId;
         private String content;
+        private LocalDateTime createdAt;
     }
 
     @Builder

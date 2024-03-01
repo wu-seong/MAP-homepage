@@ -39,7 +39,7 @@ public class PostController {
     public ApiResponse<PhotoPostPreviewResponseListDTO> getPhotoPosList(
             @RequestParam(defaultValue = "1") int page
     ) {
-        int size = 15;
+        int size = 6;
         Page<Post> photoPostPage = postService.getPhotoPostPage(page, size);
         return ApiResponse.onSuccess(PostConverter.toPhotoPostPreviewResponseListDTO(photoPostPage,page));
     }
