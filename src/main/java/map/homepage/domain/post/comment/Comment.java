@@ -24,6 +24,8 @@ public class Comment extends BaseEntity {
     private Long id;
 
     //@Size(min=1, max=100, message = "COMMENT_TOO_LONG") // 댓글 길이 제한
+    @Column(columnDefinition = "TEXT")
+    @Size(max=300, message = "COMMENT_TOO_LONG")
     private String content;
 
     // 외래키
