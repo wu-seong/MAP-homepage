@@ -35,6 +35,6 @@ cloud:
 
 server:
   ssl:
-    key-store: classpath:localhost.p12 #dev.study-map.site.p12
+    key-store: classpath:dev.study-map.site.p12
     key-store-type: PKCS12
     key-store-password: changeit
