@@ -41,7 +41,7 @@ public class CommentDto {
     @NoArgsConstructor
     @Getter
     public static class CreateCommentRequestDTO{
-        @Size(max = 100)
+        @Size(max = 300)
         @NotNull
         @NotBlank
         private String content;

@@ -41,6 +41,7 @@ public class Post extends BaseEntity {
     private Role role; // 읽기 권한
 
     private String title; // 게시글 제목
+    @Column(columnDefinition = "TEXT")
     private String content; // 게시글 내용
     private String dtype; // 게시글 타입
     private int views; // 게시글 조회 수
