@@ -33,8 +33,8 @@ cloud:
       accessKey: ${AWS_ACCESS_KEY_ID} #나중에 수정
       secretKey: ${AWS_SECRET_ACCESS_KEY} #나중에 수정
 
-server:
-  ssl:
-    key-store: classpath:dev.study-map.site.p12
-    key-store-type: PKCS12
-    key-store-password: changeit
+#server:
+#  ssl:
+#    key-store: classpath:localhost.p12 #dev.study-map.site.p12
+#    key-store-type: PKCS12
+#    key-store-password: changeit
